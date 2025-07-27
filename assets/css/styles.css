@@ -16,7 +16,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start; /* Alinea al inicio verticalmente */
-  min-height: 100vh; /* Asegura que ocupe al menos toda la altura de la vista */
+  min-height: 100vh; /* Asegura que el body ocupe al menos el 100% del alto de la ventana */
   position: relative;
 }
 
@@ -48,8 +48,8 @@ body {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Sombra para el contenedor */
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 40px); /* Altura mínima del contenedor, dejando 20px de padding arriba y abajo del body */
-  justify-content: space-between; /* Espacio entre secciones */
+  min-height: calc(100vh - 40px); /* Ocupa el 100% de la altura de la ventana menos el padding del body */
+  justify-content: space-between; /* Distribuye el espacio entre los elementos hijos */
   z-index: 5; /* Z-index del contenedor principal, menor que el backdrop */
   position: relative; /* Necesario para que z-index funcione correctamente */
 }
@@ -67,9 +67,9 @@ body {
 
 .logo {
   /* Fondo blanco sólido para el marco del logo */
-  background-color: rgb(200, 199, 212); /* Solo fondo blanco */
-  border-radius: 10px; /* Bordes redondeados */
-  padding: 1px; /* Espacio entre el marco y el logo */
+  background-color: white; /* Solo fondo blanco */
+  border-radius: 12px; /* Bordes redondeados */
+  padding: 8px; /* Espacio entre el marco y el logo */
   display: flex; /* Para centrar la imagen dentro del marco */
   justify-content: center;
   align-items: center;
@@ -77,11 +77,11 @@ body {
 }
 
 .logo img {
-  height: 40px; /* Tamaño del logo */
+  height: 50px; /* Tamaño del logo */
   display: block; /* Asegura que la imagen no tenga espacio extra inferior */
-  padding: 0; /* No necesitamos padding aquí, ya lo maneja el contenedor .logo */
-  border-radius: 0; /* No necesitamos border-radius aquí */
-  background-color: transparent; /* Asegurarse de que la imagen en sí no tenga un fondo adicional si el marco ya lo tiene */
+  padding: 0;
+  border-radius: 0;
+  background-color: transparent;
 }
 
 .app-name {
@@ -104,7 +104,7 @@ body {
   margin-bottom: 1.5rem;
   border-bottom: 1px dashed #0f3460;
   padding-bottom: 1.5rem;
-  flex-grow: 1; /* Permite que la sección crezca y ocupe espacio disponible */
+  flex-grow: 1; /* Permite que las secciones crezcan para ocupar el espacio disponible */
 }
 
 .section-header {
