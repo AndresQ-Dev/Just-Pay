@@ -44,7 +44,7 @@ body {
   max-width: 600px; /* Ancho máximo para el contenedor principal */
   background-color: #16213e; /* Fondo del contenedor */
   border-radius: 1rem;
-  padding: 1rem;
+  padding: 0.8rem; /* AJUSTADO: Reducido para móviles */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Sombra para el contenedor */
   display: flex;
   flex-direction: column;
@@ -56,9 +56,9 @@ body {
 
 /* --- Encabezado de la aplicación --- */
 .header {
-  padding-bottom: 1rem;
+  padding-bottom: 0.8rem; /* AJUSTADO: Reducido para móviles */
   border-bottom: 2px solid #0f3460; /* Separador */
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem; /* AJUSTADO: Reducido para móviles */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -66,8 +66,7 @@ body {
 }
 
 .logo {
-  /* Fondo blanco sólido para el marco del logo */
-  background-color: white; /* Solo fondo blanco */
+  background-color: white; /* Fondo blanco sólido para el marco del logo */
   border-radius: 12px; /* Bordes redondeados */
   padding: 8px; /* Espacio entre el marco y el logo */
   display: flex; /* Para centrar la imagen dentro del marco */
@@ -101,11 +100,11 @@ body {
 
 /* --- Secciones individuales (Participantes, Gastos) --- */
 .section {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem; /* AJUSTADO: Reducido para móviles */
   border-bottom: 1px dashed #0f3460;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem; /* AJUSTADO: Reducido para móviles */
   flex-grow: 1; /* Permite que las secciones crezcan para ocupar el espacio disponible */
-  min-height: 100px; /* Altura mínima para la sección, para que se vea compacta cuando está vacía */
+  min-height: 80px; /* AJUSTADO: Reducido aún más la altura mínima de la sección vacía */
 }
 
 .section-header {
@@ -437,22 +436,22 @@ button:disabled {
 /* --- Estados Vacíos (con íconos Font Awesome) --- */
 .empty-state {
   text-align: center;
-  padding: 0.8rem 0; /* Menos padding vertical para hacerlo más compacto */
+  padding: 0.5rem 0; /* AJUSTADO: Reducido para móviles */
   color: #a0a0a0;
-  font-size: 0.9rem; /* Texto un poco más pequeño */
+  font-size: 0.85rem; /* AJUSTADO: Texto un poco más pequeño */
 }
 
 .empty-icon {
-  font-size: 2rem; /* Icono más pequeño para móviles */
+  font-size: 1.8rem; /* AJUSTADO: Icono más pequeño para móviles */
   display: block;
-  margin-bottom: 0.5rem; /* Menos margen inferior */
+  margin-bottom: 0.4rem; /* AJUSTADO: Menos margen inferior */
   color: #a0a0a0; /* Color explícito para asegurar visibilidad */
 }
 
 /* --- Media Query para Desktop (ajustes para pantallas más grandes) --- */
 @media (min-width: 600px) {
   .container {
-    padding: 2rem;
+    padding: 2rem; /* Revertido a tamaño desktop */
   }
 
   .logo img {
@@ -469,8 +468,15 @@ button:disabled {
     font-size: 1rem; /* Vuelve al tamaño original para desktop */
   }
 
-  /* Revertimos la altura mínima de la sección en desktop */
+  /* Revertimos los ajustes de espaciado para desktop */
+  .header {
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
   .section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
     min-height: auto; /* Vuelve a su altura normal */
   }
 
@@ -498,8 +504,7 @@ button:disabled {
   }
 
   .empty-icon {
-    font-size: 2.8rem; /* Tamaño original del icono en desktop */
+    font-size: 2.8rem;
     margin-bottom: 1rem;
-    color: #a0a0a0; /* Color explícito para asegurar visibilidad */
   }
 }
