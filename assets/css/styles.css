@@ -44,7 +44,7 @@ body {
   max-width: 600px; /* Ancho máximo para el contenedor principal */
   background-color: #16213e; /* Fondo del contenedor */
   border-radius: 1rem;
-  padding: 0.8rem; /* **AJUSTADO:** Reducido para móviles */
+  padding: 0.5rem; /* AJUSTADO: Reducido un poco más para móviles */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Sombra para el contenedor */
   display: flex;
   flex-direction: column;
@@ -56,9 +56,9 @@ body {
 
 /* --- Encabezado de la aplicación --- */
 .header {
-  padding-bottom: 0.8rem; /* **AJUSTADO:** Reducido para móviles */
+  padding-bottom: 0.5rem; /* AJUSTADO: Reducido para móviles */
   border-bottom: 2px solid #0f3460; /* Separador */
-  margin-bottom: 1rem; /* **AJUSTADO:** Reducido para móviles */
+  margin-bottom: 0.8rem; /* AJUSTADO: Reducido para móviles */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -100,18 +100,18 @@ body {
 
 /* --- Secciones individuales (Participantes, Gastos) --- */
 .section {
-  margin-bottom: 0.5rem; /* **AJUSTADO:** Reducimos aún más el margen inferior */
+  margin-bottom: 0.3rem; /* **AJUSTADO:** Reducimos drásticamente el margen inferior */
   border-bottom: 1px dashed #0f3460;
-  padding-bottom: 0.5rem; /* **AJUSTADO:** Reducimos aún más el padding inferior */
+  padding-bottom: 0.3rem; /* **AJUSTADO:** Reducimos drásticamente el padding inferior */
   flex-grow: 1;
-  min-height: auto; /* **IMPORTANTE:** La altura se ajusta al contenido. La min-height para vacío va en .empty-state */
+  min-height: auto; /* La altura se ajusta al contenido */
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem; /* AJUSTADO: Reducimos el margen inferior */
 }
 
 .section h2 {
@@ -125,10 +125,10 @@ body {
   background: linear-gradient(45deg, #4e00ff, #9b00ff);
   border: none;
   color: white;
-  padding: 0.6em 1em; /* Ajuste para pantallas pequeñas */
+  padding: 0.5em 0.8em; /* AJUSTADO: Reducido para móviles */
   border-radius: 0.8rem;
   cursor: pointer;
-  font-size: 0.9rem; /* Ajuste para pantallas pequeñas */
+  font-size: 0.85rem; /* AJUSTADO: Texto un poco más pequeño */
   font-weight: 500;
   transition: transform 0.2s, opacity 0.2s;
   white-space: nowrap; /* Evita que el texto del botón se rompa */
@@ -140,8 +140,9 @@ body {
 
 /* Sección del botón "Calcular" */
 .calculate-section {
-  padding-top: 1.5rem;
+  padding-top: 0.8rem; /* AJUSTADO: Reducido para acercarlo a las secciones */
   border-top: 2px solid #0f3460;
+  margin-bottom: 0; /* Aseguramos que no haya margen inferior */
 }
 
 .calculate-btn {
@@ -259,7 +260,7 @@ button:disabled {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Csvg%3E");
   background-repeat: no-repeat;
   background-position: right 0.9rem center;
   background-size: 1.2em;
@@ -360,10 +361,12 @@ button:disabled {
 /* Añadimos estilos para las listas de participantes y gastos */
 #participantList,
 #expenseList {
-  max-height: 250px; /* Altura máxima para las listas en pantallas pequeñas */
+  max-height: 200px; /* AJUSTADO: Altura máxima para las listas en pantallas muy pequeñas */
   overflow-y: auto; /* Permite desplazamiento vertical si el contenido excede la altura */
   padding-right: 5px; /* Pequeño padding para que la barra de scroll no se superponga al texto */
-  margin-bottom: 0; /* **AJUSTADO:** Eliminamos el margen inferior de la lista */
+  margin-bottom: 0; /* AJUSTADO: Aseguramos que no haya margen inferior aquí */
+  padding-top: 0; /* AJUSTADO: Aseguramos que no haya padding superior aquí */
+  padding-bottom: 0; /* AJUSTADO: Aseguramos que no haya padding inferior aquí */
 }
 
 /* Ocultar la barra de desplazamiento si no es necesaria */
@@ -375,7 +378,7 @@ button:disabled {
 
 .participants,
 .expenses {
-  /* **AJUSTADO:** Eliminamos el padding superior e inferior que podrían añadir espacio extra */
+  /* AJUSTADO: Eliminamos el padding superior e inferior que podrían añadir espacio extra */
   padding-top: 0;
   padding-bottom: 0;
   margin-top: 0;
@@ -445,22 +448,22 @@ button:disabled {
 /* --- Estados Vacíos (con íconos Font Awesome) --- */
 .empty-state {
   text-align: center;
-  padding: 0.1rem 0; /* **AJUSTADO:** Padding vertical casi nulo */
+  padding: 0.1rem 0; /* AJUSTADO: Padding vertical casi nulo */
   color: #a0a0a0;
-  font-size: 0.75rem; /* **AJUSTADO:** Texto aún más pequeño */
+  font-size: 0.7rem; /* AJUSTADO: Texto aún más pequeño */
   display: flex; /* Para centrar verticalmente el icono y el texto */
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 50px; /* **AJUSTADO:** Altura mínima para el bloque vacío */
-  margin-top: 0; /* **AJUSTADO:** Eliminamos margen superior */
-  margin-bottom: 0; /* **AJUSTADO:** Eliminamos margen inferior */
+  min-height: 45px; /* AJUSTADO: Altura mínima para el bloque vacío */
+  margin-top: 0; /* AJUSTADO: Eliminamos margen superior */
+  margin-bottom: 0; /* AJUSTADO: Eliminamos margen inferior */
 }
 
 .empty-icon {
-  font-size: 1.2rem; /* **AJUSTADO:** Icono más pequeño para móviles */
+  font-size: 1.1rem; /* AJUSTADO: Icono más pequeño para móviles */
   display: block;
-  margin-bottom: 0.2rem; /* **AJUSTADO:** Menos margen inferior */
+  margin-bottom: 0.15rem; /* AJUSTADO: Menos margen inferior */
   color: #a0a0a0; /* Color explícito para asegurar visibilidad */
 }
 
@@ -496,6 +499,10 @@ button:disabled {
     min-height: auto; /* Vuelve a su altura normal */
   }
 
+  .section-header {
+    margin-bottom: 1rem;
+  }
+
   /* Revertimos la altura máxima en desktop para que crezcan libremente */
   #participantList,
   #expenseList {
@@ -503,6 +510,8 @@ button:disabled {
     overflow-y: visible;
     padding-right: 0;
     margin-bottom: 1rem; /* Revertido a tamaño desktop */
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   /* Revertimos los estados vacíos a su tamaño original para desktop */
@@ -510,10 +519,17 @@ button:disabled {
     padding: 1.5rem 0;
     font-size: 1rem;
     min-height: auto; /* No necesitamos altura mínima fija en desktop */
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
   .empty-icon {
     font-size: 2.8rem;
     margin-bottom: 1rem;
+  }
+
+  .calculate-section {
+    padding-top: 1.5rem;
+    margin-bottom: 0;
   }
 }
