@@ -357,6 +357,15 @@ button:disabled {
 }
 
 /* --- Listas (Participantes y Gastos) --- */
+/* Añadimos estilos para las listas de participantes y gastos */
+#participantList,
+#expenseList {
+  max-height: 250px; /* Altura máxima para las listas en pantallas pequeñas */
+  overflow-y: auto; /* Permite desplazamiento vertical si el contenido excede la altura */
+  padding-right: 5px; /* Pequeño padding para que la barra de scroll no se superponga al texto */
+  margin-bottom: 1rem; /* Espacio para separar del siguiente elemento */
+}
+
 .participants {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Columnas responsivas */
@@ -455,6 +464,14 @@ button:disabled {
   .add-form button {
     padding: 0.7em 1.25em; /* Vuelve al tamaño original para desktop */
     font-size: 1rem; /* Vuelve al tamaño original para desktop */
+  }
+
+  /* Revertimos la altura máxima en desktop para que crezcan libremente */
+  #participantList,
+  #expenseList {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
   }
 
   .participants {
