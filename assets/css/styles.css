@@ -1,0 +1,468 @@
+/* --- Estilos Globales y Reseteo --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px; /* Base para la unidad rem */
+}
+
+body {
+  margin: 0;
+  padding: 20px 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #1a1a2e; /* Color de fondo oscuro */
+  color: #fff; /* Texto blanco por defecto */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Alinea al inicio verticalmente */
+  min-height: 100vh; /* Asegura que ocupe al menos toda la altura de la vista */
+  position: relative;
+}
+
+/* --- Capa de Fondo (Backdrop) y Contenedor Principal --- */
+.backdrop {
+  position: fixed; /* Fijo en la ventana de visualización */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Negro semi-transparente para opacar el fondo */
+  z-index: 10; /* Debe estar por debajo del modal, pero por encima del contenido principal */
+  display: none; /* Por defecto oculto */
+  opacity: 0; /* Por defecto transparente para la transición */
+  transition: opacity 0.3s ease-in-out; /* Transición suave para aparición/desaparición */
+}
+
+.backdrop.active {
+  display: block; /* Muestra el backdrop */
+  opacity: 1; /* Se vuelve completamente opaco */
+}
+
+.container {
+  width: 95%;
+  max-width: 600px; /* Ancho máximo para el contenedor principal */
+  background-color: #16213e; /* Fondo del contenedor */
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Sombra para el contenedor */
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 40px); /* Altura mínima del contenedor, dejando 20px de padding arriba y abajo del body */
+  justify-content: space-between; /* Espacio entre secciones */
+  z-index: 5; /* Z-index del contenedor principal, menor que el backdrop */
+  position: relative; /* Necesario para que z-index funcione correctamente */
+}
+
+/* --- Encabezado de la aplicación --- */
+.header {
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #0f3460; /* Separador */
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.logo {
+  /* Fondo blanco sólido para el marco del logo */
+  background-color: rgb(200, 199, 212); /* Solo fondo blanco */
+  border-radius: 50px; /* Bordes redondeados */
+  padding: 1px; /* Espacio entre el marco y el logo */
+  display: flex; /* Para centrar la imagen dentro del marco */
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra para profundidad */
+}
+
+.logo img {
+  height: 80px; /* Tamaño del logo */
+  display: block; /* Asegura que la imagen no tenga espacio extra inferior */
+  padding: 0; /* No necesitamos padding aquí, ya lo maneja el contenedor .logo */
+  border-radius: 0; /* No necesitamos border-radius aquí */
+  background-color: transparent; /* Asegurarse de que la imagen en sí no tenga un fondo adicional si el marco ya lo tiene */
+}
+
+.app-name {
+  position: absolute; /* Posiciona el nombre de la app en el centro */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+  white-space: nowrap; /* Evita que el texto se rompa */
+}
+
+.menu {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* --- Secciones individuales (Participantes, Gastos) --- */
+.section {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px dashed #0f3460;
+  padding-bottom: 1.5rem;
+  flex-grow: 1; /* Permite que la sección crezca y ocupe espacio disponible */
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section h2 {
+  font-size: 1.25rem;
+  margin: 0;
+  color: #d1d1d1;
+}
+
+/* Estilos para los botones "Agregar Participante" y "Agregar Gasto" */
+.add-form button {
+  background: linear-gradient(45deg, #4e00ff, #9b00ff);
+  border: none;
+  color: white;
+  padding: 0.6em 1em; /* Ajuste para pantallas pequeñas */
+  border-radius: 0.8rem;
+  cursor: pointer;
+  font-size: 0.9rem; /* Ajuste para pantallas pequeñas */
+  font-weight: 500;
+  transition: transform 0.2s, opacity 0.2s;
+  white-space: nowrap; /* Evita que el texto del botón se rompa */
+}
+
+.add-form button:hover:not(:disabled) {
+  transform: scale(1.05); /* Efecto al pasar el ratón */
+}
+
+/* Sección del botón "Calcular" */
+.calculate-section {
+  padding-top: 1.5rem;
+  border-top: 2px solid #0f3460;
+}
+
+.calculate-btn {
+  background: linear-gradient(45deg, #4e00ff, #9b00ff);
+  border: none;
+  color: white;
+  padding: 0.75em;
+  border-radius: 1rem;
+  width: 100%; /* Ocupa todo el ancho disponible */
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.calculate-btn:active:not(:disabled) {
+  transform: scale(0.98); /* Efecto al hacer clic */
+}
+
+/* Estilos para botones deshabilitados */
+button:disabled {
+  background: #4e00ff; /* Mantiene el color base, pero reduce la opacidad */
+  cursor: not-allowed; /* Cambia el cursor para indicar que no es clickable */
+  opacity: 0.6; /* Hace el botón más transparente */
+}
+
+/* --- Estilos del Modal (pop-up) --- */
+.modal {
+  position: fixed; /* Fijo en la ventana de visualización */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20; /* Importante: z-index mayor que el backdrop (10) */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centra el contenido del modal */
+  opacity: 0; /* Por defecto transparente para la transición */
+  visibility: hidden; /* Por defecto oculto para la transición */
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Transición suave */
+}
+
+.modal.active {
+  opacity: 1; /* Se vuelve visible */
+  visibility: visible; /* Se asegura que sea visible */
+  display: flex; /* Mantiene el display flex */
+}
+
+.modal-content {
+  background-color: #16213e; /* Fondo del contenido del modal */
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Sombra para el modal */
+  width: 90%; /* Ancho responsivo */
+  max-width: 350px; /* Ancho máximo para evitar que sea demasiado grande en pantallas amplias */
+  position: relative;
+  max-height: 90vh; /* Altura máxima del contenido del modal para evitar desbordamiento */
+  overflow-y: auto; /* Permite scroll si el contenido excede la altura máxima */
+  padding-top: 3rem; /* Espacio adicional superior para el botón de cerrar */
+  z-index: 25; /* Z-index para asegurar que el contenido esté por encima de todo */
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #fff;
+  transition: color 0.2s;
+  z-index: 10; /* Asegura que el botón de cierre esté sobre el contenido del modal */
+}
+
+.close-btn:hover {
+  color: #ff4444; /* Rojo al pasar el ratón */
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* Espacio entre los elementos del formulario */
+}
+
+.modal-form input,
+.modal-form select {
+  padding: 0.9rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #0f3460;
+  color: #fff;
+  font-size: 1rem;
+  width: 100%;
+  transition: background-color 0.2s;
+}
+
+.modal-form input:focus,
+.modal-form select:focus {
+  background-color: #1a4060;
+  outline: none; /* Elimina el contorno de foco por defecto */
+}
+
+/* Ocultar las flechas (spin buttons) de los inputs tipo number */
+.modal-form input[type="number"]::-webkit-inner-spin-button,
+.modal-form input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.modal-form input[type="number"] {
+  -moz-appearance: textfield; /* Para Firefox */
+}
+
+/* Estilos para el select personalizado (elimina la flecha por defecto y añade una SVG) */
+.modal-form select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  background-size: 1.2em;
+  padding-right: 2.5rem; /* Ajustar padding para que la flecha no tape el texto */
+}
+
+.modal-form button {
+  background: linear-gradient(45deg, #4e00ff, #9b00ff);
+  border: none;
+  color: white;
+  padding: 0.9em;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  width: 100%;
+  transition: transform 0.2s;
+}
+
+.modal-form button:hover {
+  transform: scale(1.05);
+}
+
+/* --- Estilos para la exclusión de participantes en el modal de gastos --- */
+.excluded-participants-section {
+  background-color: #0f3460;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.excluded-participants-section h3 {
+  font-size: 1rem;
+  color: #d1d1d1;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.excluded-participants-list {
+  display: flex;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan a la siguiente línea */
+  gap: 0.75rem; /* Espacio entre los checkboxes */
+  max-height: 120px; /* Limita la altura del contenedor */
+  overflow-y: auto; /* Permite desplazamiento si hay muchos participantes */
+  padding-right: 5px; /* Para evitar que la barra de desplazamiento oculte el texto */
+}
+
+.excluded-participant-item {
+  display: flex;
+  align-items: center;
+  background-color: #1a2e4e;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.excluded-participant-item:hover {
+  background-color: #2a4060;
+}
+
+.excluded-participant-item input[type="checkbox"] {
+  margin-right: 0.5rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 1em;
+  height: 1em;
+  border: 2px solid #fff;
+  border-radius: 0.2em;
+  background-color: transparent;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.excluded-participant-item input[type="checkbox"]:checked {
+  background-color: #4e00ff;
+  border-color: #4e00ff;
+}
+
+.excluded-participant-item input[type="checkbox"]:checked::after {
+  content: '✓'; /* Checkmark para cuando está marcado */
+  font-size: 0.8em;
+  color: #fff;
+}
+
+.excluded-participant-item span {
+  font-size: 0.95rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* --- Listas (Participantes y Gastos) --- */
+.participants {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Columnas responsivas */
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.participant {
+  background: #0f3460;
+  padding: 1.5rem 0.5rem 0.8rem 0.5rem;
+  border-radius: 0.8rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.participant span:first-child {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Puntos suspensivos si el texto es muy largo */
+  padding-right: 0.5rem;
+  text-align: center;
+}
+
+.participant .remove-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0.2em 0.4em;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: #fff;
+  transition: background-color 0.2s, color 0.2s;
+  z-index: 1;
+}
+
+.participant .remove-btn:hover {
+  color: #ff4444;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.participant:hover {
+  transform: scale(1.02);
+}
+
+.expense-item {
+  background-color: #0f3460;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+  gap: 0.5rem;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Estados Vacíos (con íconos Font Awesome) --- */
+.empty-state {
+  text-align: center;
+  padding: 1.5rem 0;
+  color: #a0a0a0;
+}
+
+.empty-icon {
+  font-size: 2.8rem; /* Tamaño del icono */
+  display: block; /* Asegura que ocupe su propia línea */
+  margin-bottom: 1rem;
+}
+
+/* --- Media Query para Desktop (ajustes para pantallas más grandes) --- */
+@media (min-width: 600px) {
+  .container {
+    padding: 2rem;
+  }
+
+  .logo img {
+    height: 60px; /* Ajuste el tamaño del logo para desktop */
+  }
+
+  .app-name {
+    font-size: 1.75rem;
+  }
+
+  /* Ajustar el tamaño del botón 'Agregar' en pantallas grandes */
+  .add-form button {
+    padding: 0.7em 1.25em; /* Vuelve al tamaño original para desktop */
+    font-size: 1rem; /* Vuelve al tamaño original para desktop */
+  }
+
+  .participants {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+  
+  .participant {
+    max-width: none;
+  }
+}
