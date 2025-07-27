@@ -105,6 +105,7 @@ body {
   border-bottom: 1px dashed #0f3460;
   padding-bottom: 1.5rem;
   flex-grow: 1; /* Permite que las secciones crezcan para ocupar el espacio disponible */
+  min-height: 100px; /* Altura mínima para la sección, para que se vea compacta cuando está vacía */
 }
 
 .section-header {
@@ -436,14 +437,15 @@ button:disabled {
 /* --- Estados Vacíos (con íconos Font Awesome) --- */
 .empty-state {
   text-align: center;
-  padding: 1.5rem 0;
+  padding: 0.8rem 0; /* Menos padding vertical para hacerlo más compacto */
   color: #a0a0a0;
+  font-size: 0.9rem; /* Texto un poco más pequeño */
 }
 
 .empty-icon {
-  font-size: 2.8rem; /* Tamaño del icono */
-  display: block; /* Asegura que ocupe su propia línea */
-  margin-bottom: 1rem;
+  font-size: 2rem; /* Icono más pequeño */
+  display: block;
+  margin-bottom: 0.5rem; /* Menos margen inferior */
 }
 
 /* --- Media Query para Desktop (ajustes para pantallas más grandes) --- */
@@ -466,6 +468,11 @@ button:disabled {
     font-size: 1rem; /* Vuelve al tamaño original para desktop */
   }
 
+  /* Revertimos la altura mínima de la sección en desktop */
+  .section {
+    min-height: auto; /* Vuelve a su altura normal */
+  }
+
   /* Revertimos la altura máxima en desktop para que crezcan libremente */
   #participantList,
   #expenseList {
@@ -481,5 +488,16 @@ button:disabled {
   
   .participant {
     max-width: none;
+  }
+
+  /* Revertimos los estados vacíos a su tamaño original para desktop */
+  .empty-state {
+    padding: 1.5rem 0;
+    font-size: 1rem;
+  }
+
+  .empty-icon {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
   }
 }
