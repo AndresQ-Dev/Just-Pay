@@ -9,199 +9,232 @@ html {
 
 body {
   margin: 0;
-  padding: 20px 0;
+  padding: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: #1a1a2e; /* Color de fondo oscuro */
-  color: #fff; /* Texto blanco por defecto */
+  /* Degradado radial menos claro en el centro (ajustado según la última solicitud) */
+  background:radial-gradient(at 74.66291976475527% 33.59636644446846%, hsla(248.1818181818182, 40.74074074074074%, 10.588235294117647%, 1) 0%, hsla(248.1818181818182, 40.74074074074074%, 10.588235294117647%, 0) 100%), radial-gradient(at 18.537292996460387% 50.713633955508676%, hsla(207.972972972973, 80.43478260869567%, 36.07843137254902%, 1) 0%, hsla(207.972972972973, 80.43478260869567%, 36.07843137254902%, 0) 100%), radial-gradient(at 59.57365029328492% 92.94809542831514%, hsla(208.00000000000003, 70.86614173228347%, 49.80392156862745%, 1) 0%, hsla(208.00000000000003, 70.86614173228347%, 49.80392156862745%, 0) 100%), radial-gradient(at 46.228319291459655% 29.92738701801445%, hsla(209.99999999999997, 8.47457627118644%, 23.137254901960784%, 1) 0%, hsla(209.99999999999997, 8.47457627118644%, 23.137254901960784%, 0) 100%), radial-gradient(at 19.879885628012552% 86.14043586817574%, hsla(0, 0%, 94.90196078431372%, 1) 0%, hsla(0, 0%, 94.90196078431372%, 0) 100%), radial-gradient(at 68.98392209896174% 0.3122073821022475%, hsla(248.1818181818182, 40.74074074074074%, 10.588235294117647%, 1) 0%, hsla(248.1818181818182, 40.74074074074074%, 10.588235294117647%, 0) 100%), radial-gradient(at 46.39597239154809% 47.39373517605854%, hsla(207.972972972973, 80.43478260869567%, 36.07843137254902%, 1) 0%, hsla(207.972972972973, 80.43478260869567%, 36.07843137254902%, 0) 100%), radial-gradient(at 16.884529076944798% 28.86242022575598%, hsla(208.00000000000003, 70.86614173228347%, 49.80392156862745%, 1) 0%, hsla(208.00000000000003, 70.86614173228347%, 49.80392156862745%, 0) 100%);
+  color: #F0F0F0; /* Texto principal en blanco o gris muy claro */
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Alinea al inicio verticalmente */
-  min-height: 100vh; /* Asegura que el body ocupe al menos el 100% del alto de la ventana */
+  align-items: flex-start;
+  min-height: 100vh;
   position: relative;
+  overflow-y: auto;
 }
 
 /* --- Capa de Fondo (Backdrop) y Contenedor Principal --- */
 .backdrop {
-  position: fixed; /* Fijo en la ventana de visualización */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Negro semi-transparente para opacar el fondo */
-  z-index: 10; /* Debe estar por debajo del modal, pero por encima del contenido principal */
-  display: none; /* Por defecto oculto */
-  opacity: 0; /* Por defecto transparente para la transición */
-  transition: opacity 0.3s ease-in-out; /* Transición suave para aparición/desaparición */
+  background-color: rgba(0, 0, 0, 0.8); /* Fondo más oscuro para el modal */
+  z-index: 10;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .backdrop.active {
-  display: block; /* Muestra el backdrop */
-  opacity: 1; /* Se vuelve completamente opaco */
+  display: block;
+  opacity: 1;
 }
 
 .container {
-  width: 95%;
-  max-width: 600px; /* Ancho máximo para el contenedor principal */
-  background-color: #16213e; /* Fondo del contenedor */
+  width: 95vw;
+  max-width: 600px;
+  /* Degradado para el fondo del contenedor */
+  background: linear-gradient(160deg, rgba(13, 23, 41, 0.6), rgba(27, 49, 77, 0.5), rgba(13, 23, 41, 0.6));
   border-radius: 1rem;
-  padding: 0.8rem; /* **AJUSTADO:** Reducido para móviles */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Sombra para el contenedor */
+  padding: 0.8rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 40px); /* Ocupa el 100% de la altura de la ventana menos el padding del body */
-  justify-content: space-between; /* Distribuye el espacio entre los elementos hijos */
-  z-index: 5; /* Z-index del contenedor principal, menor que el backdrop */
-  position: relative; /* Necesario para que z-index funcione correctamente */
+  min-height: 100vh;
+  justify-content: space-between;
+  z-index: 5;
+  position: relative;
+  backdrop-filter: blur(10px); /* Efecto glassmorphism */
+  -webkit-backdrop-filter: blur(10px); /* Para compatibilidad con Safari */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil del contenedor general */
 }
 
 /* --- Encabezado de la aplicación --- */
 .header {
-  padding-bottom: 0.8rem; /* **AJUSTADO:** Reducido para móviles */
-  border-bottom: 2px solid #0f3460; /* Separador */
-  margin-bottom: 1rem; /* **AJUSTADO:** Reducido para móviles */
+  background-color: rgba(27, 49, 77, 0.4);
+  padding: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
+  border-radius: 0.8rem 0.8rem 0 0;
 }
 
 .logo {
-  background-color: white; /* Fondo blanco sólido para el marco del logo */
-  border-radius: 12px; /* Bordes redondeados */
-  padding: 8px; /* Espacio entre el marco y el logo */
-  display: flex; /* Para centrar la imagen dentro del marco */
+  display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra para profundidad */
 }
 
 .logo img {
-  height: 50px; /* Tamaño del logo */
-  display: block; /* Asegura que la imagen no tenga espacio extra inferior */
-  padding: 0;
-  border-radius: 0;
-  background-color: transparent;
+  height: 70px;
+  width: auto;
+  display: block;
+  filter: brightness(1.5); /* Hacer el logo más brillante */
 }
 
 .app-name {
-  position: absolute; /* Posiciona el nombre de la app en el centro */
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-family: 'Anton', sans-serif; /* FUENTE ESTILIZADA */
+  font-size: 1.8rem;
+  font-weight: normal;
   margin: 0;
-  white-space: nowrap; /* Evita que el texto se rompa */
+  white-space: nowrap;
+  /* Degradado sutil en tonos claros */
+  background: linear-gradient(90deg, #FFFFFF 0%, #D3E0EA 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  flex-grow: 1;
+  text-align: center;
 }
 
-.menu {
-  font-size: 2rem;
+.menu-icon {
+  font-size: 1.5rem;
   cursor: pointer;
+  color: #D3E0EA; /* Icono en tono claro */
 }
 
 /* --- Secciones individuales (Participantes, Gastos) --- */
 .section {
-  margin-bottom: 0.5rem; /* **AJUSTADO:** Reducimos aún más el margen inferior */
-  border-bottom: 1px dashed #0f3460;
-  padding-bottom: 0.5rem; /* **AJUSTADO:** Reducimos aún más el padding inferior */
+  background-color: rgba(13, 23, 41, 0.8); /* Fondo más sólido para las secciones */
+  border: 1px solid rgba(255, 255, 255, 0.15); /* Borde sutil pero visible */
+  border-radius: 0.8rem; /* Bordes redondeados para las secciones */
+  padding: 1rem; /* Padding interno para el contenido de la sección */
+  margin-bottom: 1.5rem; /* Separación vertical entre secciones */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra para que "floten" */
+
   flex-grow: 1;
-  min-height: auto; /* **IMPORTANTE:** La altura se ajusta al contenido. La min-height para vacío va en .empty-state */
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.section:last-of-type {
+    margin-bottom: 0; /* Asegura que la última sección no tenga margen inferior */
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem; /* Mantenemos el margen dentro de la sección */
 }
 
 .section h2 {
   font-size: 1.25rem;
   margin: 0;
-  color: #d1d1d1;
+  color: #D3E0EA; /* Título de sección en tono claro */
 }
 
 /* Estilos para los botones "Agregar Participante" y "Agregar Gasto" */
 .add-form button {
-  background: linear-gradient(45deg, #4e00ff, #9b00ff);
+  background: linear-gradient(135deg, #1C395E 0%, #172D40 100%);
   border: none;
   color: white;
-  padding: 0.6em 1em; /* Ajuste para pantallas pequeñas */
+  padding: 0.7em 1.1em;
   border-radius: 0.8rem;
   cursor: pointer;
-  font-size: 0.9rem; /* Ajuste para pantallas pequeñas */
+  font-size: 0.95rem;
   font-weight: 500;
-  transition: transform 0.2s, opacity 0.2s;
-  white-space: nowrap; /* Evita que el texto del botón se rompa */
+  transition: transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.05); /* Sombra interior muy sutil */
 }
 
 .add-form button:hover:not(:disabled) {
-  transform: scale(1.05); /* Efecto al pasar el ratón */
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+.add-form button:active:not(:disabled) {
+  transform: scale(0.98);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.05);
 }
 
 /* Sección del botón "Calcular" */
 .calculate-section {
-  padding-top: 1.5rem;
-  border-top: 2px solid #0f3460;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 0;
 }
 
 .calculate-btn {
-  background: linear-gradient(45deg, #4e00ff, #9b00ff);
+  background: linear-gradient(135deg, #2DD4BF 0%, #118AB2 100%); /* Tonos turquesa/cian */
   border: none;
-  color: white;
-  padding: 0.75em;
+  color: #0A1128; /* Texto oscuro sobre el acento */
+  padding: 0.8em;
   border-radius: 1rem;
-  width: 100%; /* Ocupa todo el ancho disponible */
-  font-size: 1.25rem;
+  width: 100%;
+  font-size: 1.3rem;
   font-weight: bold;
   cursor: pointer;
-  transition: transform 0.2s, opacity 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), inset 0 3px 6px rgba(255, 255, 255, 0.2);
 }
 
 .calculate-btn:active:not(:disabled) {
-  transform: scale(0.98); /* Efecto al hacer clic */
+  transform: scale(0.98);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 1px 3px rgba(255, 255, 255, 0.1);
 }
 
 /* Estilos para botones deshabilitados */
 button:disabled {
-  background: #4e00ff; /* Mantiene el color base, pero reduce la opacidad */
-  cursor: not-allowed; /* Cambia el cursor para indicar que no es clickable */
-  opacity: 0.6; /* Hace el botón más transparente */
+  background: rgba(172, 174, 175, 0.5); /* Gris sutil semi-transparente */
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
 }
 
 /* --- Estilos del Modal (pop-up) --- */
 .modal {
-  position: fixed; /* Fijo en la ventana de visualización */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 20; /* Importante: z-index mayor que el backdrop (10) */
+  z-index: 20;
   display: flex;
   justify-content: center;
-  align-items: center; /* Centra el contenido del modal */
-  opacity: 0; /* Por defecto transparente para la transición */
-  visibility: hidden; /* Por defecto oculto para la transición */
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Transición suave */
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
 .modal.active {
-  opacity: 1; /* Se vuelve visible */
-  visibility: visible; /* Se asegura que sea visible */
-  display: flex; /* Mantiene el display flex */
+  opacity: 1;
+  visibility: visible;
+  display: flex;
 }
 
 .modal-content {
-  background-color: #16213e; /* Fondo del contenido del modal */
+  background-color: rgba(27, 49, 77, 0.8); /* Fondo del modal oscuro semi-transparente */
   padding: 1.5rem;
   border-radius: 1rem;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Sombra para el modal */
-  width: 90%; /* Ancho responsivo */
-  max-width: 350px; /* Ancho máximo para evitar que sea demasiado grande en pantallas amplias */
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+  width: 90vw;
+  max-width: 350px;
   position: relative;
-  max-height: 90vh; /* Altura máxima del contenido del modal para evitar desbordamiento */
-  overflow-y: auto; /* Permite scroll si el contenido excede la altura máxima */
-  padding-top: 3rem; /* Espacio adicional superior para el botón de cerrar */
-  z-index: 25; /* Z-index para asegurar que el contenido esté por encima de todo */
+  max-height: 90vh;
+  overflow-y: auto;
+  padding-top: 3rem;
+  z-index: 25;
+  /* backdrop-filter: blur(15px); /* Descomentar si se desea el efecto glass en el modal */ */
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .close-btn {
@@ -210,64 +243,69 @@ button:disabled {
   right: 15px;
   font-size: 2rem;
   cursor: pointer;
-  color: #fff;
+  color: #D3E0EA; /* Botón de cierre en tono claro */
   transition: color 0.2s;
-  z-index: 10; /* Asegura que el botón de cierre esté sobre el contenido del modal */
+  z-index: 10;
 }
 
 .close-btn:hover {
-  color: #ff4444; /* Rojo al pasar el ratón */
+  color: #2DD4BF; /* Color de acento al hacer hover */
 }
 
 .modal-form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem; /* Espacio entre los elementos del formulario */
+  gap: 1.25rem;
 }
 
 .modal-form input,
 .modal-form select {
   padding: 0.9rem;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.5rem;
-  background-color: #0f3460;
-  color: #fff;
+  background-color: rgba(13, 23, 41, 0.8); /* Fondo oscuro para los inputs */
+  color: #F0F0F0;
   font-size: 1rem;
   width: 100%;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.modal-form input::placeholder {
+  color: rgba(204, 214, 223, 0.6);
 }
 
 .modal-form input:focus,
 .modal-form select:focus {
-  background-color: #1a4060;
-  outline: none; /* Elimina el contorno de foco por defecto */
+  background-color: #1E3A8A; /* Un azul más intenso al enfocar */
+  border-color: #2DD4BF; /* Borde con color de acento al enfocar */
+  outline: none;
 }
 
 /* Ocultar las flechas (spin buttons) de los inputs tipo number */
-.modal-form input[type="number"]::-webkit-inner-spin-button,
-.modal-form input[type="number"]::-webkit-outer-spin-button {
+.modal-form input::-webkit-inner-spin-button,
+.modal-form input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.modal-form input[type="number"] {
-  -moz-appearance: textfield; /* Para Firefox */
+.modal-form input {
+  -moz-appearance: textfield;
 }
 
-/* Estilos para el select personalizado (elimina la flecha por defecto y añade una SVG) */
+/* Estilos para el select personalizado */
 .modal-form select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23F0F0F0'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); /* Flecha SVG en blanco */
   background-repeat: no-repeat;
   background-position: right 0.9rem center;
   background-size: 1.2em;
-  padding-right: 2.5rem; /* Ajustar padding para que la flecha no tape el texto */
+  padding-right: 2.5rem;
 }
 
 .modal-form button {
-  background: linear-gradient(45deg, #4e00ff, #9b00ff);
+  background: linear-gradient(135deg, #1C395E 0%, #172D40 100%); /* Degradado sutil en azules oscuros */
   border: none;
   color: white;
   padding: 0.9em;
@@ -275,60 +313,68 @@ button:disabled {
   cursor: pointer;
   font-size: 1.1rem;
   width: 100%;
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.05);
 }
 
 .modal-form button:hover {
   transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+}
+.modal-form button:active:not(:disabled) {
+  transform: scale(0.98);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 0.5px 1px rgba(255, 255, 255, 0.05);
 }
 
 /* --- Estilos para la exclusión de participantes en el modal de gastos --- */
 .excluded-participants-section {
-  background-color: #0f3460;
+  background-color: rgba(27, 49, 77, 0.6); /* Fondo oscuro semi-transparente */
   border-radius: 0.5rem;
   padding: 1rem;
   margin-top: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .excluded-participants-section h3 {
   font-size: 1rem;
-  color: #d1d1d1;
+  color: #D3E0EA;
   margin-top: 0;
   margin-bottom: 0.75rem;
 }
 
 .excluded-participants-list {
   display: flex;
-  flex-wrap: wrap; /* Permite que los elementos se envuelvan a la siguiente línea */
-  gap: 0.75rem; /* Espacio entre los checkboxes */
-  max-height: 120px; /* Limita la altura del contenedor */
-  overflow-y: auto; /* Permite desplazamiento si hay muchos participantes */
-  padding-right: 5px; /* Para evitar que la barra de desplazamiento oculte el texto */
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  max-height: 120px;
+  overflow-y: auto;
+  padding-right: 5px;
 }
 
 .excluded-participant-item {
   display: flex;
   align-items: center;
-  background-color: #1a2e4e;
+  background-color: rgba(13, 23, 41, 0.8); /* Fondo oscuro para los items */
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  color: #F0F0F0;
 }
 
 .excluded-participant-item:hover {
-  background-color: #2a4060;
+  background-color: rgba(30, 58, 138, 0.7); /* Hover más intenso */
 }
 
-.excluded-participant-item input[type="checkbox"] {
+.excluded-participant-item input {
   margin-right: 0.5rem;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   width: 1em;
   height: 1em;
-  border: 2px solid #fff;
+  border: 2px solid #2DD4BF; /* Borde con color de acento */
   border-radius: 0.2em;
   background-color: transparent;
   cursor: pointer;
@@ -339,181 +385,286 @@ button:disabled {
   transition: background-color 0.2s, border-color 0.2s;
 }
 
-.excluded-participant-item input[type="checkbox"]:checked {
-  background-color: #4e00ff;
-  border-color: #4e00ff;
+.excluded-participant-item input:checked {
+  background-color: #2DD4BF; /* Fondo con color de acento al marcar */
+  border-color: #2DD4BF;
 }
 
-.excluded-participant-item input[type="checkbox"]:checked::after {
-  content: '✓'; /* Checkmark para cuando está marcado */
+.excluded-participant-item input:checked::after {
+  content: '✓';
   font-size: 0.8em;
-  color: #fff;
+  color: #0A1128; /* Checkmark en color oscuro */
 }
 
 .excluded-participant-item span {
   font-size: 0.95rem;
-  color: #fff;
   cursor: pointer;
 }
 
 /* --- Listas (Participantes y Gastos) --- */
-/* Añadimos estilos para las listas de participantes y gastos */
-#participantList,
-#expenseList {
-  max-height: 250px; /* Altura máxima para las listas en pantallas pequeñas */
-  overflow-y: auto; /* Permite desplazamiento vertical si el contenido excede la altura */
-  padding-right: 5px; /* Pequeño padding para que la barra de scroll no se superponga al texto */
-  margin-bottom: 0; /* **AJUSTADO:** Eliminamos el margen inferior de la lista */
+.list-content {
+  max-height: calc(100vh - 350px);
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-/* Ocultar la barra de desplazamiento si no es necesaria */
-#participantList::-webkit-scrollbar,
-#expenseList::-webkit-scrollbar {
+/* Ocultar la barra de desplazamiento si no es necesaria por defecto en el list-content */
+.list-content::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
-
-.participants,
-.expenses {
-  /* **AJUSTADO:** Eliminamos el padding superior e inferior que podrían añadir espacio extra */
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-top: 0;
-  margin-bottom: 0;
+/* Estilos para el track y thumb de la barra de desplazamiento si se hace visible */
+.list-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+.list-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+.list-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
+/* *** ESTILOS PARA LA LISTA DE PARTICIPANTES ESPECÍFICAMENTE *** */
+#participantList {
+  display: grid; /* Usar Grid para el layout de columnas */
+  /* Por defecto, 2 columnas flexibles para pantallas pequeñas */
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  /* Ajustado gap verticalmente para acercar los nombres */
+  gap: 0.6rem 1rem; /* row-gap (vertical) column-gap (horizontal) */
+  padding-right: 0; /* No necesitamos el padding-right del .list-content general aquí para la grid */
+  overflow-y: visible; /* Dejar que los elementos fluyan si es necesario, el scroll lo manejará el padre */
+  max-height: none; /* Dejar que crezca con el contenido */
+}
+
+/* Estilos para cada item de participante (tarjeta rectangular) */
 .participant {
-  background: #0f3460;
-  padding: 1.5rem 0.5rem 0.8rem 0.5rem;
+  background-color: rgba(13, 23, 41, 0.8); /* Fondo oscuro semi-transparente */
+  padding: 0.4rem 0.5rem; /* Ajuste para hacerlos más rectangulares y reducir espacio interno */
+  height: 55px; /* Altura fija para hacerlos rectangulares y más compactos */
+  min-height: auto; /* Remover min-height para que 'height' sea el dominante */
+  
   border-radius: 0.8rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   font-size: 1.1rem;
   font-weight: 500;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.45);
   transition: transform 0.2s;
   position: relative;
+  margin-bottom: 0; /* El gap de la cuadrícula manejará la separación */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center; /* Centrar el texto del nombre */
 }
 
+/* El span del nombre del participante */
 .participant span:first-child {
+  color: #FFFFFF; /* Blanco puro para que resalte más */
   flex-grow: 1;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
   overflow: hidden;
-  text-overflow: ellipsis; /* Puntos suspensivos si el texto es muy largo */
-  padding-right: 0.5rem;
+  text-overflow: ellipsis;
+  padding-right: 0;
   text-align: center;
+  width: 100%;
+  display: flex;
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  line-height: 1.1; /* Ajustar el line-height si el texto salta de línea */
 }
 
 .participant .remove-btn {
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 2px; /* Ajustar posición del botón X */
+  right: 2px; /* Ajustar posición del botón X */
   font-weight: bold;
   cursor: pointer;
-  font-size: 1.25rem;
+  font-size: 1rem; /* Hacer la X un poco más pequeña si es necesario */
   line-height: 1;
-  padding: 0.2em 0.4em;
-  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0.05em 0.25em; /* Ajustar padding del botón X */
+  background-color: rgba(255, 255, 255, 0.1); /* Fondo blanco muy sutil */
   border-radius: 50%;
-  color: #fff;
+  color: #F0F0F0;
   transition: background-color 0.2s, color 0.2s;
   z-index: 1;
 }
 
 .participant .remove-btn:hover {
-  color: #ff4444;
+  color: #FF6B6B; /* Rojo al hacer hover */
   background-color: rgba(255, 255, 255, 0.2);
 }
 
 .participant:hover {
   transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
 }
 
 .expense-item {
-  background-color: #0f3460;
+  background-color: rgba(13, 23, 41, 0.8); /* Fondo oscuro semi-transparente */
   padding: 1rem;
   border-radius: 0.75rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+  flex-wrap: wrap;
   gap: 0.5rem;
   font-size: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.45);
+  color: #F0F0F0;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* --- Estados Vacíos (con íconos Font Awesome) --- */
+.expense-item:last-child {
+  margin-bottom: 0;
+}
+
+.expense-item .delete-btn {
+  color: #FF6B6B; /* Rojo para el botón de eliminar */
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: color 0.2s;
+}
+
+.expense-item .delete-btn:hover {
+  color: #E53E3E; /* Rojo más oscuro al hacer hover */
+}
+
+/* --- Estados Vacíos --- */
 .empty-state {
   text-align: center;
-  padding: 0.1rem 0; /* **AJUSTADO:** Padding vertical casi nulo */
-  color: #a0a0a0;
-  font-size: 0.75rem; /* **AJUSTADO:** Texto aún más pequeño */
-  display: flex; /* Para centrar verticalmente el icono y el texto */
+  padding: 1rem 0;
+  color: rgba(204, 214, 223, 0.6); /* Gris claro semi-transparente */
+  font-size: 1.2rem;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 50px; /* **AJUSTADO:** Altura mínima para el bloque vacío */
-  margin-top: 0; /* **AJUSTADO:** Eliminamos margen superior */
-  margin-bottom: 0; /* **AJUSTADO:** Eliminamos margen inferior */
+  min-height: 100px;
+  margin: auto;
 }
 
 .empty-icon {
-  font-size: 1.2rem; /* **AJUSTADO:** Icono más pequeño para móviles */
+  font-size: 3rem;
   display: block;
-  margin-bottom: 0.2rem; /* **AJUSTADO:** Menos margen inferior */
-  color: #a0a0a0; /* Color explícito para asegurar visibilidad */
+  margin-bottom: 0.5rem;
+  color: rgba(204, 214, 223, 0.6); /* Icono en gris claro semi-transparente */
 }
 
-/* --- Media Query para Desktop (ajustes para pantallas más grandes) --- */
+/* --- Footer de la aplicación --- */
+.footer {
+  background-color: rgba(27, 49, 77, 0.4);
+  color: #D3E0EA;
+  text-align: center;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  border-radius: 0 0 0.8rem 0.8rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.85rem;
+}
+
+/* --- Media Query para Desktop --- */
 @media (min-width: 600px) {
+  body {
+    padding: 20px 0;
+  }
+
   .container {
-    padding: 2rem; /* Revertido a tamaño desktop */
+    padding: 2rem;
+    min-height: calc(100vh - 40px);
+  }
+
+  .header {
+    padding: 1rem 2rem;
   }
 
   .logo img {
-    height: 60px; /* Ajuste el tamaño del logo para desktop */
+    height: 60px;
   }
 
   .app-name {
-    font-size: 1.75rem;
+    font-size: 2.5rem;
   }
 
-  /* Ajustar el tamaño del botón 'Agregar' en pantallas grandes */
+  .menu-icon {
+    font-size: 2.5rem;
+  }
+
   .add-form button {
-    padding: 0.7em 1.25em; /* Vuelve al tamaño original para desktop */
-    font-size: 1rem; /* Vuelve al tamaño original para desktop */
-  }
-
-  /* Revertimos los ajustes de espaciado para desktop */
-  .header {
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem;
+    padding: 0.7em 1.25em;
+    font-size: 1rem;
   }
 
   .section {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-    min-height: auto; /* Vuelve a su altura normal */
+    margin-bottom: 1.8rem; /* Más separación en desktop */
+    padding-bottom: 1.8rem; /* Ajustar el padding si se necesita más espacio interno en desktop */
+    min-height: auto;
   }
 
-  /* Revertimos la altura máxima en desktop para que crezcan libremente */
-  #participantList,
-  #expenseList {
+  .section-header {
+    margin-bottom: 1rem;
+  }
+
+  /* *** AJUSTES PARA #participantList EN DESKTOP *** */
+  #participantList {
+    /* En pantallas más grandes, muestra hasta 4 columnas */
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); /* Mantener para 4 columnas en desktop */
+    /* Un poco más de espacio vertical en desktop para la lista, 1rem horizontal */
+    gap: 0.8rem 1rem; 
+  }
+
+  /* Ajustes opcionales para el participante en desktop si quieres más altura, pero manteniendo rectangular */
+  .participant {
+    height: 60px; /* Un poco más de altura en desktop si lo prefieres */
+    padding: 0.5rem 0.5rem; /* Ajustar padding en desktop */
+  }
+
+  .list-content {
     max-height: none;
     overflow-y: visible;
     padding-right: 0;
-    margin-bottom: 1rem; /* Revertido a tamaño desktop */
+    margin-bottom: 1rem;
+    justify-content: flex-start;
   }
 
-  /* Revertimos los estados vacíos a su tamaño original para desktop */
+  /* Hacer visible la barra de desplazamiento en desktop para list-content si hay mucho contenido */
+  .list-content::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  /* Las propiedades track y thumb ya están definidas globalmente para list-content */
+
   .empty-state {
     padding: 1.5rem 0;
-    font-size: 1rem;
-    min-height: auto; /* No necesitamos altura mínima fija en desktop */
+    font-size: 1.4rem;
+    min-height: auto;
+    margin: 0;
   }
 
   .empty-icon {
-    font-size: 2.8rem;
-    margin-bottom: 1rem;
+    font-size: 3.5rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .calculate-section {
+    padding-top: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  .footer {
+    padding: 1rem;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
   }
 }

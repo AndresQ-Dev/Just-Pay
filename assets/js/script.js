@@ -242,12 +242,23 @@ function renderExpenses() {
     expenses.forEach(expense => {
       const div = document.createElement('div');
       div.className = 'expense-item';
-      let excludedText = '';
+
+      let excludedHtml = '';
       // Muestra la lista de excluidos si existe y no está vacía
       if (expense.excludedParticipants && expense.excludedParticipants.length > 0) {
-        excludedText = ` (Excluidos: ${expense.excludedParticipants.join(', ')})`;
+        excludedHtml = `<span class="excluded-info">Excluidos: ${expense.excludedParticipants.join(', ')}</span>`;
       }
-      div.innerHTML = `${expense.description} <span>$${expense.amount.toFixed(2)}</span> <span>Pagado por: ${expense.payer}${excludedText}</span>`;
+
+      // Estructura HTML modificada para la nueva disposición
+      div.innerHTML = `
+        <div class="expense-details">
+            <div class="expense-description">${expense.description}</div>
+            <div class="expense-payer">Pagado por: ${expense.payer}</div>
+            ${excludedHtml ? `<div class="expense-excluded">${excludedHtml}</div>` : ''}
+        </div>
+        <div class="expense-amount">$${expense.amount.toFixed(2)}</div>
+      `;
+
       expenseList.appendChild(div);
     });
   }
@@ -302,3 +313,5 @@ document.querySelector('.calculate-btn').addEventListener('click', () => {
   }
   alert(calculationDetails);
 });
+
+// background:radial-gradient(at 74.66291976475527% 33.59636644446846%, hsla(248.1818181818182, 40.74074074074074%, 10.588235294117647%, 1) 0%, hsla(248.1818181818182, 40.74074074074074%, 10.588235294117647%, 0) 100%), radial-gradient(at 18.537292996460387% 50.713633955508676%, hsla(207.972972972973, 80.43478260869567%, 36.07843137254902%, 1) 0%, hsla(207.972972972973, 80.43478260869567%, 36.07843137254902%, 0) 100%), radial-gradient(at 59.57365029328492% 92.94809542831514%, hsla(208.00000000000003, 70.86614173228347%, 49.80392156862745%, 1) 0%, hsla(208.00000000000003, 70.86614173228347%, 49.80392156862745%, 0) 100%), radial-gradient(at 46.228319291459655% 29.92738701801445%, hsla(209.99999999999997, 8.47457627118644%, 23.137254901960784%, 1) 0%, hsla(209.99999999999997, 8.47457627118644%, 23.137254901960784%, 0) 100%), radial-gradient(at 19.879885628012552% 86.14043586817574%, hsla(0, 0%, 94.90196078431372%, 1) 0%, hsla(0, 0%, 94.90196078431372%, 0) 100%), radial-gradient(at 68.98392209896174% 0.3122073821022475%, hsla(248.1818181818182, 40.74074074074074%, 10.588235294117647%, 1) 0%, hsla(248.1818181818182, 40.74074074074074%, 10.588235294117647%, 0) 100%), radial-gradient(at 46.39597239154809% 47.39373517605854%, hsla(207.972972972973, 80.43478260869567%, 36.07843137254902%, 1) 0%, hsla(207.972972972973, 80.43478260869567%, 36.07843137254902%, 0) 100%), radial-gradient(at 16.884529076944798% 28.86242022575598%, hsla(208.00000000000003, 70.86614173228347%, 49.80392156862745%, 1) 0%, hsla(208.00000000000003, 70.86614173228347%, 49.80392156862745%, 0) 100%);
