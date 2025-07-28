@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="./assets/css/styles.css">
 </head>
 <body>
-    <div class="backdrop"></div>
+    <div id="backdrop" class="backdrop"></div>
+
     <div class="container">
         <header class="header">
             <div class="header-left">
@@ -21,41 +22,38 @@
             </div>
             <h1 class="app-name">Just Pay</h1>
             <div class="header-right">
-                <i class="fas fa-bars menu-icon"></i> </div>
+                <i class="fas fa-bars menu-icon" id="openMenu"></i>
+            </div>
         </header>
 
-        <section class="section participant-section">
+        <section class="section participants-section">
             <div class="section-header">
                 <h2>Participantes</h2>
-                <form id="addParticipantForm" class="add-form">
-                    <button type="submit">Agregar</button>
-                </form>
+                <button id="openAddParticipantModal" class="add-form">Agregar</button>
             </div>
             <div id="participantList" class="list-content">
-                <div class="empty-state">
-                    <i class="fas fa-users-slash empty-icon"></i>
-                    <span>Aún no hay participantes.<br>¡Agrega uno!</span>
                 </div>
+            <div id="emptyParticipantsState" class="empty-state">
+                <i class="fas fa-users-slash empty-icon"></i>
+                <p>Aún no hay participantes.<br>¡Comienza agregando algunos!</p>
             </div>
         </section>
 
-        <section class="section expense-section">
+        <section class="section expenses-section">
             <div class="section-header">
                 <h2>Gastos</h2>
-                <form id="addExpenseForm" class="add-form">
-                    <button type="submit">Agregar</button>
-                </form>
+                <button id="openAddExpenseModal" class="add-form">Agregar</button>
             </div>
             <div id="expenseList" class="list-content">
-                <div class="empty-state">
-                    <i class="fas fa-money-bill-wave-alt empty-icon"></i>
-                    <span>Aún no hay gastos.<br>¡Agrega uno!</span>
                 </div>
+            <div id="emptyExpensesState" class="empty-state">
+                <i class="fas fa-receipt empty-icon"></i>
+                <p>Aún no hay gastos registrados.<br>¡Añade tus primeros gastos!</p>
             </div>
         </section>
 
         <section class="calculate-section">
-            <button id="calculateBtn" class="calculate-btn" disabled>Calcular</button>
+            <button id="calculateBtn" class="calculate-btn" disabled>Calcular Gastos</button>
         </section>
 
         <footer class="footer">
@@ -63,6 +61,52 @@
         </footer>
     </div>
 
-    <script src="./assets/js/script.js"></script>
+    <div id="addParticipantModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Agregar Nuevo Participante</h2>
+            <form id="addParticipantForm" class="modal-form">
+                <input type="text" id="participantName" placeholder="Nombre del participante" required>
+                <button type="submit">Añadir Participante</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="addExpenseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Agregar Nuevo Gasto</h2>
+            <form id="addExpenseForm" class="modal-form">
+                <input type="text" id="expenseDescription" placeholder="Descripción del gasto (ej. Cena, Cine)" required>
+                <input type="number" id="expenseAmount" placeholder="Monto (ej. 45.50)" step="0.01" min="0.01" required>
+                <select id="expensePayer" required>
+                    <option value="" disabled selected>Selecciona quien pagó</option>
+                    </select>
+
+                <div class="excluded-participants-section">
+                    <h3>¿Quiénes no participan de este gasto?</h3>
+                    <div id="excludedParticipantsList" class="excluded-participants-list">
+                        </div>
+                </div>
+
+                <button type="submit">Añadir Gasto</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="resultsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Resultados del Cálculo</h2>
+            <div id="resultsText">
+                </div>
+            <div class="modal-button-container">
+                <button id="shareWhatsappBtn" class="modal-action-btn"><i class="fab fa-whatsapp"></i> Compartir por WhatsApp</button>
+                <button id="copyResultsBtn" class="modal-action-btn"><i class="far fa-copy"></i> Copiar Resultados</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./assets/js/script.js"></script> 
 </body>
 </html>

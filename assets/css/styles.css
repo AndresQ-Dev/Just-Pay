@@ -231,10 +231,17 @@ button:disabled {
   position: relative;
   max-height: 90vh;
   overflow-y: auto;
-  padding-top: 3rem;
+  padding-top: 3rem; /* Espacio para el botón de cierre */
   z-index: 25;
-  /* backdrop-filter: blur(15px); /* Descomentar si se desea el efecto glass en el modal */ */
+  backdrop-filter: blur(15px); /* Descomentar si se desea el efecto glass en el modal */
+  -webkit-backdrop-filter: blur(15px); /* Para compatibilidad con Safari */
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal.active .modal-content {
+    /* Puedes añadir una animación de entrada aquí si lo deseas */
+    /* Por ejemplo: transform: translateY(0); opacity: 1; */
+    /* transition: transform 0.3s ease-out 0.1s, opacity 0.3s ease-out 0.1s; */
 }
 
 .close-btn {
@@ -252,6 +259,15 @@ button:disabled {
   color: #2DD4BF; /* Color de acento al hacer hover */
 }
 
+/* Título dentro del modal (se aplica tanto al modal de formulario como al de resultados) */
+.modal-content h2 {
+    font-size: 1.5rem; /* Ajusta el tamaño si es necesario */
+    color: #D3E0EA;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* Estilos para el formulario dentro del modal (modal de añadir) */
 .modal-form {
   display: flex;
   flex-direction: column;
@@ -400,6 +416,61 @@ button:disabled {
   font-size: 0.95rem;
   cursor: pointer;
 }
+
+/* --- ESTILOS ESPECÍFICOS PARA EL MODAL DE RESULTADOS (NUEVO) --- */
+
+.modal-result-text {
+  background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro para el texto */
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  white-space: pre-wrap; /* Mantiene saltos de línea y espacios, pero permite que el texto se ajuste */
+  word-break: break-word; /* Rompe palabras largas */
+  font-family: 'monospace', monospace; /* Fuente monoespaciada para alineación y legibilidad del código/texto */
+  font-size: 0.95rem;
+  color: #E0E0E0;
+  max-height: 60vh; /* Limita la altura si el contenido es muy largo */
+  overflow-y: auto; /* Permite el scroll si excede la altura */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-button-container {
+  display: flex;
+  flex-direction: column; /* Botones apilados en móvil */
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.modal-action-btn {
+  background: linear-gradient(135deg, #1C395E 0%, #118AB2 100%); /* Degradado similar al de los botones de acción */
+  border: none;
+  color: white;
+  padding: 0.8em;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-action-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.modal-action-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.05);
+}
+
+.modal-action-btn i {
+  margin-right: 0.5rem; /* Espacio entre el icono y el texto */
+}
+
 
 /* --- Listas (Participantes y Gastos) --- */
 .list-content {
@@ -666,5 +737,14 @@ button:disabled {
     padding: 1rem;
     margin-top: 1.5rem;
     font-size: 0.9rem;
+  }
+
+  /* Media Query Específica para los botones del modal de resultados */
+  .modal-button-container {
+    flex-direction: row; /* Botones en fila en desktop */
+    justify-content: space-around;
+  }
+  .modal-action-btn {
+    flex-grow: 1; /* Permite que los botones ocupen el espacio disponible equitativamente */
   }
 }
