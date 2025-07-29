@@ -246,10 +246,14 @@ button:disabled {
   z-index: 20;
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* CAMBIO CLAVE AQUÍ: Alinea el contenido en la parte superior */
+  align-items: flex-start; /* Antes estaba en 'center' */
+  padding-top: 20px; /* Agrega un padding superior para un pequeño margen */
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  overflow-y: auto; /* Permite el scroll del modal si el contenido es largo */
+  -webkit-overflow-scrolling: touch; /* Mejora el scroll en iOS */
 }
 
 .modal.active {
@@ -273,6 +277,8 @@ button:disabled {
   backdrop-filter: blur(15px); /* Descomentar si se desea el efecto glass en el modal */
   -webkit-backdrop-filter: blur(15px); /* Para compatibilidad con Safari */
   border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 10px; /* Pequeño margen adicional si lo deseas */
+  margin-bottom: 10px; 
 }
 
 .modal.active .modal-content {
@@ -779,6 +785,11 @@ button:disabled {
     padding: 1rem;
     margin-top: 1.5rem;
     font-size: 0.9rem;
+  }
+
+  .modal {
+    align-items: center; /* Vuelve a centrar en desktop para una mejor UX */
+    padding-top: 0; /* Elimina el padding superior en desktop */
   }
 
   /* Media Query Específica para los botones del modal de resultados */
