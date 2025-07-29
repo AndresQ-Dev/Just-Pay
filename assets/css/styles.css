@@ -1,3 +1,5 @@
+/* assets/css/style.css */
+
 /* --- Estilos Globales y Reseteo --- */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -9,17 +11,17 @@ html {
 
 body {
   margin: 0;
-  padding: 0;
+  padding: 0; /* Asegurarse de que el body no tenga padding que empuje el container */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  /* Degradado radial menos claro en el centro (ajustado según la última solicitud) */
+  /* Degradado radial menos claro en el centro */
   background:radial-gradient(at 74.66291976475527% 33.59636644446846%, hsla(248.1818181818182, 40.74074074074074%, 10.588235294117647%, 1) 0%, hsla(248.1818181818182, 40.74074074074074%, 10.588235294117647%, 0) 100%), radial-gradient(at 18.537292996460387% 50.713633955508676%, hsla(207.972972972973, 80.43478260869567%, 36.07843137254902%, 1) 0%, hsla(207.972972972973, 80.43478260869567%, 36.07843137254902%, 0) 100%), radial-gradient(at 59.57365029328492% 92.94809542831514%, hsla(208.00000000000003, 70.86614173228347%, 49.80392156862745%, 1) 0%, hsla(208.00000000000003, 70.86614173228347%, 49.80392156862745%, 0) 100%), radial-gradient(at 46.228319291459655% 29.92738701801445%, hsla(209.99999999999997, 8.47457627118644%, 23.137254901960784%, 1) 0%, hsla(209.99999999999997, 8.47457627118644%, 23.137254901960784%, 0) 100%), radial-gradient(at 19.879885628012552% 86.14043586817574%, hsla(0, 0%, 94.90196078431372%, 1) 0%, hsla(0, 0%, 94.90196078431372%, 0) 100%), radial-gradient(at 68.98392209896174% 0.3122073821022475%, hsla(248.1818181818182, 40.74074074074074%, 10.588235294117647%, 1) 0%, hsla(248.1818181818182, 40.74074074074074%, 10.588235294117647%, 0) 100%), radial-gradient(at 46.39597239154809% 47.39373517605854%, hsla(207.972972972973, 80.43478260869567%, 36.07843137254902%, 1) 0%, hsla(207.972972972973, 80.43478260869567%, 36.07843137254902%, 0) 100%), radial-gradient(at 16.884529076944798% 28.86242022575598%, hsla(208.00000000000003, 70.86614173228347%, 49.80392156862745%, 1) 0%, hsla(208.00000000000003, 70.86614173228347%, 49.80392156862745%, 0) 100%);
   color: #F0F0F0; /* Texto principal en blanco o gris muy claro */
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: flex-start; /* Alinea el contenido del body al inicio (arriba) */
   min-height: 100vh;
   position: relative;
-  overflow-y: auto;
+  overflow-y: auto; /* Permite el scroll si el contenido desborda */
 }
 
 /* --- Capa de Fondo (Backdrop) y Contenedor Principal --- */
@@ -51,46 +53,51 @@ body {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: auto; /* IMPORTANTE: Ahora el contenedor se ajusta a su contenido en móvil */
   justify-content: space-between;
   z-index: 5;
   position: relative;
   backdrop-filter: blur(10px); /* Efecto glassmorphism */
   -webkit-backdrop-filter: blur(10px); /* Para compatibilidad con Safari */
   border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil del contenedor general */
+  margin-top: 10px; /* Pequeño margen superior para que no se pegue al borde de la pantalla */
+  margin-bottom: 10px; /* Pequeño margen inferior */
 }
 
 /* --- Encabezado de la aplicación --- */
 .header {
   background-color: rgba(27, 49, 77, 0.4);
-  padding: 0.8rem;
+  padding: 0.5rem 0.8rem; /* Reducido para ser más compacto en móvil por defecto */
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem; /* Reducir margen inferior */
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
   border-radius: 0.8rem 0.8rem 0 0;
+  position: sticky; /* Sticky para que se quede arriba al hacer scroll */
+  top: 0;
+  z-index: 1000;
 }
 
 .logo {
-  display: flex;
+  display: flex; /* Asegura que la imagen se centre si es necesario, aunque no siempre vital */
   justify-content: center;
   align-items: center;
 }
 
 .logo img {
-  height: 70px;
+  height: 45px; /* Reducido para ser más compacto en móvil por defecto */
   width: auto;
   display: block;
-  filter: brightness(1.5); /* Hacer el logo más brillante */
+  filter: brightness(1.5);
 }
 
 .app-name {
   font-family: 'Anton', sans-serif; /* FUENTE ESTILIZADA */
-  font-size: 1.8rem;
+  font-size: 1.5rem; /* Reducido para ser más compacto en móvil por defecto */
   font-weight: normal;
-  margin: 0;
+  margin: 0 0.5rem; /* Margen horizontal para separar del logo/icono */
   white-space: nowrap;
   /* Degradado sutil en tonos claros */
   background: linear-gradient(90deg, #FFFFFF 0%, #D3E0EA 100%);
@@ -99,12 +106,12 @@ body {
   background-clip: text;
   color: transparent;
   display: inline-block;
-  flex-grow: 1;
+  flex-grow: 1; /* Permite que el nombre ocupe el espacio restante */
   text-align: center;
 }
 
 .menu-icon {
-  font-size: 1.5rem;
+  font-size: 1.2rem; /* Reducido para ser más compacto en móvil por defecto */
   cursor: pointer;
   color: #D3E0EA; /* Icono en tono claro */
 }
@@ -246,8 +253,7 @@ button:disabled {
   z-index: 20;
   display: flex;
   justify-content: center;
-  /* CAMBIO CLAVE AQUÍ: Alinea el contenido en la parte superior */
-  align-items: flex-start; /* Antes estaba en 'center' */
+  align-items: flex-start; /* Alinea el contenido del modal en la parte superior */
   padding-top: 20px; /* Agrega un padding superior para un pequeño margen */
   opacity: 0;
   visibility: hidden;
@@ -283,8 +289,6 @@ button:disabled {
 
 .modal.active .modal-content {
     /* Puedes añadir una animación de entrada aquí si lo deseas */
-    /* Por ejemplo: transform: translateY(0); opacity: 1; */
-    /* transition: transform 0.3s ease-out 0.1s, opacity 0.3s ease-out 0.1s; */
 }
 
 .close-btn {
@@ -517,7 +521,7 @@ button:disabled {
 
 /* --- Listas (Participantes y Gastos) --- */
 .list-content {
-  max-height: calc(100vh - 350px);
+  max-height: 250px; /* Altura fija para la lista, permite scroll si hay muchos ítems */
   overflow-y: auto;
   padding-right: 5px;
   margin-bottom: 0;
@@ -556,7 +560,7 @@ button:disabled {
   gap: 0.6rem 1rem; /* row-gap (vertical) column-gap (horizontal) */
   padding-right: 0; /* No necesitamos el padding-right del .list-content general aquí para la grid */
   overflow-y: visible; /* Dejar que los elementos fluyan si es necesario, el scroll lo manejará el padre */
-  max-height: none; /* Dejar que crezca con el contenido */
+  max-height: none; /* Dejar que crezca con el contenido, o definir altura si se prefiere scroll en esta lista */
 }
 
 /* Estilos para cada item de participante (tarjeta rectangular) */
@@ -564,7 +568,7 @@ button:disabled {
   background-color: rgba(13, 23, 41, 0.8); /* Fondo oscuro semi-transparente */
   padding: 0.4rem 0.5rem; /* Ajuste para hacerlos más rectangulares y reducir espacio interno */
   height: 55px; /* Altura fija para hacerlos rectangulares y más compactos */
-  min-height: auto; /* Remover min-height para que 'height' sea el dominante */
+  min-height: auto;
   
   border-radius: 0.8rem;
   display: flex;
@@ -691,28 +695,32 @@ button:disabled {
 /* --- Media Query para Desktop --- */
 @media (min-width: 600px) {
   body {
-    padding: 20px 0;
+    padding: 20px 0; /* Padding vertical en el body para desktop */
+    align-items: center; /* Vuelve a centrar el contenido verticalmente en desktop */
   }
 
   .container {
     padding: 2rem;
-    min-height: calc(100vh - 40px);
+    min-height: calc(100vh - 40px); /* Vuelve a ocupar casi toda la altura en desktop */
+    margin-top: 0; /* Eliminar margen vertical en desktop */
+    margin-bottom: 0;
   }
 
   .header {
-    padding: 1rem 2rem;
+    padding: 1rem 2rem; /* Restaurar padding más grande para desktop */
+    margin-bottom: 1rem;
   }
 
   .logo img {
-    height: 60px;
+    height: 60px; /* Restaurar tamaño de logo más grande para desktop */
   }
 
   .app-name {
-    font-size: 2.5rem;
+    font-size: 2.5rem; /* Restaurar tamaño de fuente de título para desktop */
   }
 
   .menu-icon {
-    font-size: 2.5rem;
+    font-size: 2.5rem; /* Restaurar tamaño de icono para desktop */
   }
 
   .add-form button {
@@ -750,7 +758,7 @@ button:disabled {
   }
 
   .list-content {
-    max-height: none;
+    max-height: none; /* Dejar que crezca con el contenido en desktop */
     overflow-y: visible;
     padding-right: 0;
     margin-bottom: 1rem;
