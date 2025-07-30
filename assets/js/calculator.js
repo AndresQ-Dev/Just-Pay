@@ -134,35 +134,71 @@ class SettlementCalculator {
      * @returns {object} Un objeto con 'html' y 'plainText' del resumen.
      */
     formatSettlementSummary(totalExpenses, transfers) {
-        // --- Versión HTML (para el modal, sin asteriscos) ---
-        let htmlSummary = `<h2>Total de Gastos: $${totalExpenses.toFixed(2)}</h2>`;
+        // --- Versión HTML (para el modal, con estructura mejorada) ---
+        let htmlSummary = `<div class="results-header">
+            <h2>📊 Resumen de Gastos Compartidos</h2>
+        </div>`;
+        
+        htmlSummary += `<div class="results-total">
+            <h3>💰 Total de Gastos: $${totalExpenses.toFixed(2)}</h3>
+        </div>`;
         
         if (transfers.length === 0) {
-            htmlSummary += '<p class="modal-result-text">🎉 ¡Todos los saldos están en cero! No se necesitan transferencias.</p>';
+            htmlSummary += `<div class="results-section">
+                <h3>🎉 ¡Excelente!</h3>
+                <p class="modal-result-text">Todos los saldos están equilibrados. No se necesitan transferencias.</p>
+            </div>`;
         } else {
-            htmlSummary += '<p class="modal-result-text">💸 Transferencias Necesarias para compensar:</p>';
+            htmlSummary += `<div class="results-section">
+                <h3>💸 Transferencias Necesarias</h3>
+                <p class="modal-result-text">Se necesitan ${transfers.length} transferencia${transfers.length > 1 ? 's' : ''}:</p>
+                <div class="transfers-list">`;
 
-            transfers.forEach(t => {
+            transfers.forEach((t, index) => {
                 const displayAmount = t.amount >= 1 ? Math.round(t.amount) : t.amount.toFixed(2);
-                htmlSummary += `  • ${t.from} debe transferir a ${t.to} $${displayAmount}<br>`;
+                htmlSummary += `<div class="transfer-item">
+                    <span class="transfer-number">${index + 1}.</span>
+                    <div class="transfer-description">
+                        <span class="transfer-from">${t.from}</span>
+                        <span class="transfer-arrow">a</span>
+                        <span class="transfer-to">${t.to}</span>
+                    </div>
+                    <span class="transfer-amount">$${displayAmount}</span>
+                </div>`;
             });
+
+            htmlSummary += `</div></div>`;
         }
-        htmlSummary += '<p class="modal-result-text">✨ ¡Cuentas claras, amistades largas!</p>';
+        
+        htmlSummary += `<div class="results-footer">
+            <p class="modal-result-text">✨ ¡Transfiere ahora...!</p>
+        </div>`;
 
         // --- Versión Texto Plano (para copiar/compartir, CON asteriscos para negrita) ---
-        let plainTextSummary = `Total de Gastos: *$${totalExpenses.toFixed(2)}*\n\n`;
+        let plainTextSummary = `📊 *RESUMEN DE GASTOS*
+======================
+
+💰 *TOTAL:* $${totalExpenses.toFixed(2)}
+
+`;
 
         if (transfers.length === 0) {
-            plainTextSummary += '🎉 *¡Todos los saldos están en cero!* No se necesitan transferencias.';
+            plainTextSummary += '🎉 *¡PERFECTO!*\n✅ Todos los saldos equilibrados\n✅ No hay transferencias pendientes';
         } else {
-            plainTextSummary += '💸 *Transferencias Necesarias para compensar:*\n';
+            plainTextSummary += `💸 *TRANSFERENCIAS NECESARIAS*
+Se necesitan *${transfers.length} transferencia${transfers.length > 1 ? 's' : ''}*:
 
-            transfers.forEach(t => {
+`;
+
+            transfers.forEach((t, index) => {
                 const displayAmount = t.amount >= 1 ? Math.round(t.amount) : t.amount.toFixed(2);
-                plainTextSummary += `  • *${t.from}* debe transferir a *${t.to}* *$${displayAmount}*\n`;
+                plainTextSummary += `${index + 1}. *${t.from}* → *${t.to}*
+   💵 $${displayAmount}
+
+`;
             });
         }
-        plainTextSummary += '\n✨ *¡Cuentas claras, amistades largas!*';
+        plainTextSummary += '======================\n✨ *¡Transfiere ahora...!*\n\n🚀 Generado con *Just Pay!*';
 
         return {
             html: htmlSummary,

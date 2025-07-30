@@ -2,12 +2,16 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Just Pay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0d1729">
+    <title>Just Pay!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/styles.css">
 </head>
 <body>
@@ -17,10 +21,10 @@
         <header class="header">
             <div class="header-left">
                 <div class="logo">
-                    <img src="./assets/img/logo.png" alt="JustPay Logo">
+                    <img src="./assets/img/logo.png" alt="Just Pay! Logo">
                 </div>
             </div>
-            <h1 class="app-name">Just Pay</h1>
+            <h1 class="app-name">Just Pay!</h1>
             <div class="header-right">
                 <i class="fas fa-bars menu-icon" id="openMenu"></i>
             </div>
@@ -29,12 +33,12 @@
         <section class="section participants-section">
             <div class="section-header">
                 <h2>Participantes</h2>
-                <button id="openAddParticipantModal" class="add-form">Agregar</button>
+                <button id="openAddParticipantModal" class="add-form" aria-label="Agregar nuevo participante">Agregar</button>
             </div>
-            <div id="participantList" class="list-content">
+            <div id="participantList" class="list-content" role="list" aria-label="Lista de participantes">
                 </div>
-            <div id="emptyParticipantsState" class="empty-state">
-                <i class="fas fa-users-slash empty-icon"></i>
+            <div id="emptyParticipantsState" class="empty-state" role="status" aria-live="polite">
+                <i class="fas fa-users-slash empty-icon" aria-hidden="true"></i>
                 <p>Aún no hay participantes.<br>¡Comienza agregando algunos!</p>
             </div>
         </section>
@@ -42,12 +46,12 @@
         <section class="section expenses-section">
             <div class="section-header">
                 <h2>Gastos</h2>
-                <button id="openAddExpenseModal" class="add-form">Agregar</button>
+                <button id="openAddExpenseModal" class="add-form" aria-label="Agregar nuevo gasto">Agregar</button>
             </div>
-            <div id="expenseList" class="list-content">
+            <div id="expenseList" class="list-content" role="list" aria-label="Lista de gastos">
                 </div>
-            <div id="emptyExpensesState" class="empty-state">
-                <i class="fas fa-receipt empty-icon"></i>
+            <div id="emptyExpensesState" class="empty-state" role="status" aria-live="polite">
+                <i class="fas fa-receipt empty-icon" aria-hidden="true"></i>
                 <p>Aún no hay gastos registrados.<br>¡Añade tus primeros gastos!</p>
             </div>
         </section>
@@ -57,53 +61,91 @@
         </section>
 
         <footer class="footer">
-            <p>&copy; 2025 Just Pay. Todos los derechos reservados.</p>
+            <p>&copy; 2025 Just Pay!. Todos los derechos reservados.</p>
         </footer>
     </div>
 
-    <div id="addParticipantModal" class="modal">
+    <div id="addParticipantModal" class="modal modal-form-type">
         <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Agregar Nuevo Participante</h2>
-            <form id="addParticipantForm" class="modal-form">
-                <input type="text" id="participantName" placeholder="Nombre del participante" required>
-                <button type="submit">Añadir Participante</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="addExpenseModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Agregar Nuevo Gasto</h2>
-            <form id="addExpenseForm" class="modal-form">
-                <input type="text" id="expenseDescription" placeholder="Descripción del gasto (ej. Cena, Cine)" required>
-                <input type="number" id="expenseAmount" placeholder="Monto (ej. 45.50)" step="0.01" min="0.01" required>
-                <select id="expensePayer" required>
-                    <option value="" disabled selected>Selecciona quien pagó</option>
-                    </select>
-
-                <div class="excluded-participants-section">
-                    <h3>¿Quiénes no participan de este gasto?</h3>
-                    <div id="excludedParticipantsList" class="excluded-participants-list">
-                        </div>
-                </div>
-
-                <button type="submit">Añadir Gasto</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="resultsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Resultados del Cálculo</h2>
-            <div id="resultsText">
-                </div>
-            <div class="modal-button-container">
-                <button id="shareWhatsappBtn" class="modal-action-btn"><i class="fab fa-whatsapp"></i> Compartir por WhatsApp</button>
-                <button id="copyResultsBtn" class="modal-action-btn"><i class="far fa-copy"></i> Copiar Resultados</button>
+            <div class="modal-header">
+                <span class="close-btn">&times;</span>
+                <h2>Agregar Nuevo Participante</h2>
             </div>
+            <div class="modal-body">
+                <form id="addParticipantForm" class="modal-form">
+                    <input type="text" id="participantName" placeholder="Nombre del participante" required autocomplete="off" spellcheck="false">
+                    <button type="submit">Añadir Participante</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="addExpenseModal" class="modal modal-form-type">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-btn">&times;</span>
+                <h2>Agregar Nuevo Gasto</h2>
+            </div>
+            <div class="modal-body">
+                <form id="addExpenseForm" class="modal-form">
+                    <input type="text" id="expenseDescription" placeholder="Descripción del gasto (ej. Cena, Cine)" required autocomplete="off" spellcheck="false">
+                    <input type="number" id="expenseAmount" placeholder="Monto (ej. 8000)" step="0.01" min="0.01" required autocomplete="off">
+                    <select id="expensePayer" required>
+                        <option value="" disabled selected>Selecciona quien pagó</option>
+                        </select>
+
+                    <div class="excluded-participants-section">
+                        <h3>¿Quiénes no participan de este gasto?</h3>
+                        <div id="excludedParticipantsList" class="excluded-participants-list">
+                            </div>
+                    </div>
+
+                    <button type="submit">Añadir Gasto</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="resultsModal" class="modal modal-results-type">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-btn">&times;</span>
+                <h2>Resultados del Cálculo</h2>
+            </div>
+            <div class="modal-body">
+                <div id="resultsText" class="results-container">
+                    </div>
+                <div class="modal-button-container">
+                    <button id="shareWhatsappBtn" class="modal-action-btn"><i class="fab fa-whatsapp"></i> Compartir por WhatsApp</button>
+                    <button id="copyResultsBtn" class="modal-action-btn"><i class="far fa-copy"></i> Copiar Resultados</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sistema de FAB (Floating Action Buttons) -->
+    <div class="fab-container" id="fabContainer">
+        <!-- FAB Principal -->
+        <button class="fab main-fab" id="mainFab" aria-label="Menú de acciones rápidas">
+            <i class="fas fa-plus" id="mainFabIcon"></i>
+        </button>
+        
+        <!-- Mini FABs -->
+        <div class="mini-fabs" id="miniFabs">
+            <button class="fab mini-fab" id="addParticipantFab" aria-label="Agregar participante">
+                <i class="fas fa-user-plus"></i>
+                <span class="fab-label">Participante</span>
+            </button>
+            
+            <button class="fab mini-fab" id="addExpenseFab" aria-label="Agregar gasto">
+                <i class="fas fa-receipt"></i>
+                <span class="fab-label">Gasto</span>
+            </button>
+            
+            <button class="fab mini-fab" id="calculateFab" aria-label="Calcular deudas">
+                <i class="fas fa-calculator"></i>
+                <span class="fab-label">Calcular</span>
+            </button>
         </div>
     </div>
 

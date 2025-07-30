@@ -7,6 +7,9 @@
 
 html {
   font-size: 16px; /* Base para la unidad rem */
+  /* Prevenir zoom en iOS al hacer tap en inputs */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
 body {
@@ -22,6 +25,16 @@ body {
   min-height: 100vh;
   position: relative;
   overflow-y: auto; /* Permite el scroll si el contenido desborda */
+  /* Optimizaciones para touch */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Smooth scrolling para mejor UX */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* --- Capa de Fondo (Backdrop) y Contenedor Principal --- */
@@ -94,20 +107,68 @@ body {
 }
 
 .app-name {
-  font-family: 'Anton', sans-serif; /* FUENTE ESTILIZADA */
-  font-size: 1.5rem; /* Reducido para ser más compacto en móvil por defecto */
-  font-weight: normal;
-  margin: 0 0.5rem; /* Margen horizontal para separar del logo/icono */
+  font-family: 'Inter', sans-serif; /* Fuente moderna y limpia */
+  font-size: 1.75rem; 
+  font-weight: 800; /* Extra bold para presencia */
+  margin: 0 0.5rem;
   white-space: nowrap;
-  /* Degradado sutil en tonos claros */
-  background: linear-gradient(90deg, #FFFFFF 0%, #D3E0EA 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
+  letter-spacing: -0.02em; /* Tracking moderno (negativo) */
+  
+  /* Color sólido elegante - blanco puro */
+  color: #ffffff;
+  
+  /* Eliminamos gradientes, usamos color sólido */
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
+  
   display: inline-block;
-  flex-grow: 1; /* Permite que el nombre ocupe el espacio restante */
+  flex-grow: 1;
   text-align: center;
+  
+  /* Sombra sutil y sofisticada */
+  text-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.2);
+  
+  /* Transición moderna */
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  /* Efecto de borde sutil */
+  position: relative;
+}
+
+/* Línea decorativa debajo del nombre */
+.app-name::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.6) 50%, 
+    transparent 100%
+  );
+  transition: width 0.4s ease;
+}
+
+/* Efecto hover minimalista y elegante */
+.app-name:hover {
+  transform: translateY(-1px);
+  color: #f8fafc; /* Ligeramente más claro */
+  
+  text-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Línea aparece en hover */
+.app-name:hover::after {
+  width: 80%;
 }
 
 .menu-icon {
@@ -131,6 +192,14 @@ body {
   flex-direction: column;
 }
 
+.section:hover {
+  border-color: rgba(148, 163, 184, 0.3);
+  box-shadow: 
+    0 15px 20px -5px rgba(0, 0, 0, 0.15),
+    0 6px 8px -2px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
 .section:last-of-type {
     margin-bottom: 0; /* Asegura que la última sección no tenga margen inferior */
 }
@@ -149,7 +218,7 @@ body {
 }
 
 /* ====================================================== */
-/* ESTILO COHESIVO PARA BOTONES "AGREGAR"
+/* ESTILO COHESIVO PARA BOTONES "AGREGAR" - OPTIMIZADO PARA TOUCH
 /* ====================================================== */
 button.add-form {
   /* Degradado del azul del botón principal a un azul oscuro del tema */
@@ -157,6 +226,9 @@ button.add-form {
   border: 1px solid rgba(45, 212, 191, 0.3); /* Borde sutil con el color de acento */
   color: white;
   
+  /* Área táctil mínima de 44px para touch */
+  min-height: 44px;
+  min-width: 44px;
   padding: 0.8em 1.5em;
   border-radius: 50px;
   cursor: pointer;
@@ -166,6 +238,31 @@ button.add-form {
   white-space: nowrap;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   background-size: 100% 100%; /* Para la animación de hover */
+  
+  /* Mejoras para touch */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; /* Previene double-tap zoom */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto ripple para feedback visual en touch */
+button.add-form::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+button.add-form:active::after {
+  width: 300px;
+  height: 300px;
 }
 
 button.add-form:hover:not(:disabled) {
@@ -176,7 +273,7 @@ button.add-form:hover:not(:disabled) {
 }
 
 button.add-form:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98); /* Feedback visual de press */
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -195,6 +292,9 @@ button.add-form:active:not(:disabled) {
   background: linear-gradient(135deg, #29659e 0%, #118AB2 100%);
   border: 2px solid rgba(255, 255, 255, 0.3); /* Borde blanco sutil para el efecto de luz */
   color: #e7e9f0; /* Texto oscuro sobre el acento */
+  
+  /* Área táctil optimizada para móvil */
+  min-height: 56px; /* Área táctil generosa para botón principal */
   padding: 0.9em 1.5em; /* Un poco más de padding para mayor tamaño */
   border-radius: 1.2rem; /* Bordes un poco más redondeados */
   width: 90%; /* Ajustado para que no ocupe el 100% y tenga un poco de margen */
@@ -202,6 +302,7 @@ button.add-form:active:not(:disabled) {
   font-size: 1.4rem; /* Texto ligeramente más grande */
   font-weight: bold;
   cursor: pointer;
+  
   /* Animaciones más pronunciadas */
   transition: all 0.3s ease;
   /* Sombra más compleja para un efecto 3D */
@@ -211,6 +312,31 @@ button.add-form:active:not(:disabled) {
               inset 0 -4px 8px rgba(0, 0, 0, 0.2); /* Sombra inferior interna */
   text-transform: uppercase; /* Para que el texto sea más impactante */
   letter-spacing: 0.05em; /* Espaciado entre letras */
+  
+  /* Optimizaciones para touch */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto ripple para el botón calcular */
+.calculate-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+}
+
+.calculate-btn:active:not(:disabled)::after {
+  width: 400px;
+  height: 400px;
 }
 
 .calculate-btn:hover:not(:disabled) {
@@ -243,7 +369,7 @@ button:disabled {
   transform: none; /* No hay transformación al deshabilitarse */
 }
 
-/* --- Estilos del Modal (pop-up) --- */
+/* --- Estilos del Modal (pop-up) - MEJORADO PARA MÓVIL FULLSCREEN --- */
 .modal {
   position: fixed;
   top: 0;
@@ -254,12 +380,11 @@ button:disabled {
   display: flex;
   justify-content: center;
   align-items: flex-start; /* Alinea el contenido del modal en la parte superior */
-  padding-top: 20px; /* Agrega un padding superior para un pequeño margen */
+  padding: 0; /* Sin padding en móvil para fullscreen */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-  overflow-y: auto; /* Permite el scroll del modal si el contenido es largo */
-  -webkit-overflow-scrolling: touch; /* Mejora el scroll en iOS */
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden; /* Evitar scroll del fondo */
 }
 
 .modal.active {
@@ -268,69 +393,220 @@ button:disabled {
   display: flex;
 }
 
+/* FULLSCREEN EN MÓVIL */
+@media (max-width: 600px) {
+  .modal {
+    align-items: stretch; /* Fullscreen en móvil */
+    padding: 0;
+  }
+  
+  .modal-content {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    border-radius: 0 !important; /* Sin bordes redondeados en fullscreen */
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+    /* Animación de entrada desde abajo en móvil */
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .modal.active .modal-content {
+    transform: translateY(0);
+  }
+  
+  /* Backdrop más sutil en móvil fullscreen */
+  .backdrop.active {
+    background-color: rgba(0, 0, 0, 0.95);
+  }
+}
+
 .modal-content {
-  background-color: rgba(27, 49, 77, 0.8); /* Fondo del modal oscuro semi-transparente */
-  padding: 1.5rem;
+  background-color: rgba(27, 49, 77, 0.95); /* Fondo más sólido */
+  padding: 0; /* Padding manejado por header y body */
   border-radius: 1rem;
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
   width: 90vw;
-  max-width: 350px;
+  max-width: 450px; /* Aumentado para desktop */
   position: relative;
   max-height: 90vh;
-  overflow-y: auto;
-  padding-top: 3rem; /* Espacio para el botón de cierre */
   z-index: 25;
-  backdrop-filter: blur(15px); /* Descomentar si se desea el efecto glass en el modal */
-  -webkit-backdrop-filter: blur(15px); /* Para compatibilidad con Safari */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: 10px; /* Pequeño margen adicional si lo deseas */
-  margin-bottom: 10px; 
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  /* Animación de entrada en desktop */
+  transform: scale(0.9) translateY(-20px);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .modal.active .modal-content {
-    /* Puedes añadir una animación de entrada aquí si lo deseas */
+  transform: scale(1) translateY(0);
+}
+
+/* Header del modal */
+.modal-header {
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  flex-shrink: 0; /* No se encoge en móvil fullscreen */
+}
+
+.modal-header h2 {
+  font-size: 1.5rem;
+  color: #D3E0EA;
+  text-align: center;
+  margin: 0;
+  padding-right: 3rem; /* Espacio para el botón de cierre */
+}
+
+/* Body del modal */
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex-grow: 1; /* Crece para llenar el espacio disponible */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ajustes específicos para móvil fullscreen */
+@media (max-width: 600px) {
+  .modal-header {
+    padding: env(safe-area-inset-top, 20px) 1.5rem 1rem 1.5rem;
+    min-height: calc(env(safe-area-inset-top, 0px) + 80px);
+    display: flex;
+    align-items: center;
+  }
+  
+  .modal-body {
+    padding: 1.5rem;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
+  }
 }
 
 .close-btn {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  font-size: 2rem;
+  top: 50%;
+  right: 1.5rem;
+  transform: translateY(-50%);
+  font-size: 1.8rem;
   cursor: pointer;
   color: #D3E0EA; /* Botón de cierre en tono claro */
-  transition: color 0.2s;
+  transition: color 0.2s, transform 0.2s, background-color 0.2s;
   z-index: 10;
+  
+  /* Área táctil optimizada */
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  
+  /* Optimizaciones touch */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-.close-btn:hover {
+.close-btn:hover,
+.close-btn:focus {
   color: #2DD4BF; /* Color de acento al hacer hover */
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%) scale(1.1);
 }
 
-/* Título dentro del modal (se aplica tanto al modal de formulario como al de resultados) */
-.modal-content h2 {
-    font-size: 1.5rem; /* Ajusta el tamaño si es necesario */
-    color: #D3E0EA;
-    text-align: center;
-    margin-bottom: 1rem;
+.close-btn:active {
+  transform: translateY(-50%) scale(0.95);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 /* Estilos para el formulario dentro del modal (modal de añadir) */
 .modal-form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem; /* Gap aumentado para mejor separación */
 }
 
 .modal-form input,
 .modal-form select {
-  padding: 0.9rem;
+  padding: 1rem; /* Padding aumentado para touch */
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.5rem;
   background-color: rgba(13, 23, 41, 0.8); /* Fondo oscuro para los inputs */
   color: #F0F0F0;
-  font-size: 1rem;
+  font-size: 16px; /* Tamaño mínimo para evitar zoom en iOS */
   width: 100%;
-  transition: background-color 0.2s, border-color 0.2s;
+  min-height: 44px; /* Altura mínima para touch */
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  
+  /* Optimizaciones touch */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Estilos específicos solo para inputs de texto y número */
+.modal-form input[type="text"],
+.modal-form input[type="number"] {
+  /* Bloquear autocomplete y sugerencias solo en inputs */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Estilos específicos para Chrome y navegadores webkit */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  .modal-form select {
+    /* Asegurar que Chrome muestre el select correctamente */
+    background-color: rgba(13, 23, 41, 0.9) !important;
+    -webkit-appearance: menulist;
+    appearance: menulist;
+    -webkit-border-radius: 0.5rem;
+    border-radius: 0.5rem;
+  }
+  
+  .modal-form select:focus {
+    /* Focus específico para webkit */
+    -webkit-appearance: menulist;
+    appearance: menulist;
+  }
+}
+
+/* Fix específico para Chrome en Android */
+@media screen and (max-width: 600px) {
+  .modal-form select {
+    /* Tamaño de fuente más grande para evitar zoom en móvil */
+    font-size: 16px !important;
+    /* Altura mínima para touch en móvil */
+    min-height: 48px;
+    /* Padding ajustado para móvil */
+    padding: 0.8rem 1rem;
+  }
+  
+  .modal-form select option {
+    font-size: 16px;
+    min-height: 40px;
+    padding: 0.8rem;
+  }
+}
+
+/* Estilos específicos para inputs de texto para bloquear autocomplete */
+.modal-form input[type="text"] {
+  /* Bloqueo más agresivo de autocomplete */
+  -webkit-autocomplete: off;
+  -webkit-user-modify: read-write-plaintext-only;
+}
+
+/* Ocultar dropdown de autocomplete en webkit */
+.modal-form input[type="text"]::-webkit-credentials-auto-fill-button,
+.modal-form input[type="text"]::-webkit-strong-password-auto-fill-button {
+  display: none !important;
+}
+
+/* Ocultar sugerencias en Edge */
+.modal-form input[type="text"]::-ms-reveal {
+  display: none;
 }
 
 .modal-form input::placeholder {
@@ -342,6 +618,69 @@ button:disabled {
   background-color: #1E3A8A; /* Un azul más intenso al enfocar */
   border-color: #2DD4BF; /* Borde con color de acento al enfocar */
   outline: none;
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.3); /* Ring focus más visible */
+  transform: scale(1.02); /* Ligero aumento para feedback visual */
+}
+
+/* Animación suave para el focus */
+.modal-form input,
+.modal-form select {
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+/* --- Animaciones de Modal --- */
+
+/* Clase para animación de salida */
+.modal.closing {
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+
+.modal.closing .modal-content {
+  transform: scale(0.95) translateY(-10px);
+  transition: transform 0.2s ease-out;
+}
+
+/* Animación de salida específica para móvil */
+@media (max-width: 600px) {
+  .modal.closing .modal-content {
+    transform: translateY(50px);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 1, 1);
+  }
+}
+
+/* Animaciones para loading states */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.modal-form button:disabled {
+  animation: pulse 1.5s infinite;
+}
+
+/* Animación de éxito para botones */
+@keyframes success-bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.modal-action-btn.success {
+  animation: success-bounce 0.3s ease-out;
+}
+
+/* Mejoras en las transiciones de backdrop */
+.backdrop {
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (max-width: 600px) {
+  .modal-form input:focus,
+  .modal-form select:focus {
+    box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.4); /* Ring más prominente en móvil */
+    transform: scale(1.03); /* Aumento más notable en móvil */
+  }
 }
 
 /* Ocultar las flechas (spin buttons) de los inputs tipo number */
@@ -351,33 +690,96 @@ button:disabled {
   margin: 0;
 }
 
-.modal-form input {
+.modal-form input[type="number"] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
-/* Estilos para el select personalizado */
+/* Estilos para el select personalizado - MEJORADO PARA CHROME */
 .modal-form select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23F0F0F0'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); /* Flecha SVG en blanco */
-  background-repeat: no-repeat;
-  background-position: right 0.9rem center;
-  background-size: 1.2em;
-  padding-right: 2.5rem;
+  /* Restaurar appearance nativa para mejor compatibilidad */
+  -webkit-appearance: menulist;
+  -moz-appearance: menulist;
+  appearance: menulist;
+  
+  /* Personalización que no rompa la funcionalidad */
+  background-color: rgba(13, 23, 41, 0.9) !important; /* Fondo más sólido */
+  color: #F0F0F0 !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important; /* Borde más visible */
+  cursor: pointer;
+  
+  /* Padding específico para select */
+  padding: 1rem 2.5rem 1rem 1rem; /* Espacio para la flecha nativa */
+}
+
+/* Estilos específicos para Chrome */
+@supports (-webkit-appearance: none) {
+  .modal-form select {
+    background-image: none; /* Remover flecha personalizada si existe */
+  }
+}
+
+/* Estilos para las opciones del select */
+.modal-form select option {
+  background-color: rgba(13, 23, 41, 0.95);
+  color: #F0F0F0;
+  padding: 0.5rem;
+  border: none;
+}
+
+/* Hover y focus mejorados para select */
+.modal-form select:hover {
+  border-color: rgba(45, 212, 191, 0.5);
+  background-color: rgba(13, 23, 41, 0.95);
+}
+
+.modal-form select:focus {
+  border-color: #2DD4BF !important;
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.3) !important;
+  outline: none;
+  background-color: rgba(30, 58, 138, 0.8) !important;
 }
 
 .modal-form button {
   background: linear-gradient(135deg, #1C395E 0%, #172D40 100%); /* Degradado sutil en azules oscuros */
   border: none;
   color: white;
-  padding: 0.9em;
+  padding: 1rem; /* Padding aumentado para touch */
   border-radius: 0.5rem;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 16px; /* Tamaño consistente para evitar zoom */
   width: 100%;
+  min-height: 48px; /* Altura mínima para touch */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.05);
+  
+  /* Optimizaciones touch */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto ripple para botones de formulario */
+.modal-form button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+.modal-form button:active::after {
+  width: 300px;
+  height: 300px;
 }
 
 .modal-form button:hover {
@@ -464,44 +866,313 @@ button:disabled {
   cursor: pointer;
 }
 
-/* --- ESTILOS ESPECÍFICOS PARA EL MODAL DE RESULTADOS (NUEVO) --- */
+/* --- ESTILOS ESPECÍFICOS PARA EL MODAL DE RESULTADOS --- */
 
-.modal-result-text {
+.results-container {
   background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro para el texto */
-  padding: 1rem;
-  border-radius: 0.5rem;
-  margin-bottom: 1.5rem;
+  padding: 0.8rem; /* Reducido de 1rem */
+  border-radius: 0.8rem;
+  margin-bottom: 1rem; /* Reducido de 1.5rem */
   white-space: pre-wrap; /* Mantiene saltos de línea y espacios, pero permite que el texto se ajuste */
   word-break: break-word; /* Rompe palabras largas */
-  font-family: 'monospace', monospace; /* Fuente monoespaciada para alineación y legibilidad del código/texto */
-  font-size: 0.95rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
   color: #E0E0E0;
-  max-height: 60vh; /* Limita la altura si el contenido es muy largo */
-  overflow-y: auto; /* Permite el scroll si excede la altura */
+  max-height: none; /* Permitir crecimiento natural */
+  overflow-y: auto;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilos específicos para móvil fullscreen */
+@media (max-width: 600px) {
+  .results-container {
+    /* En móvil fullscreen, permitir que crezca más */
+    max-height: calc(100vh - 300px); /* Espacio para header y botones */
+    font-size: 1rem;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .modal-results-type .modal-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal-results-type .results-container {
+    flex-grow: 1;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Nuevos estilos para el formato mejorado de resultados */
+.results-header {
+  text-align: center;
+  margin-bottom: 0.3rem; /* Reducido de 0.6rem */
+  padding-bottom: 0.3rem; /* Reducido de 0.4rem */
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.results-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.results-date {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #B0B0B0;
+  font-style: italic;
+}
+
+.results-total {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.1));
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 0.6rem;
+  padding: 0.5rem; /* Reducido de 0.6rem */
+  margin-bottom: 0.3rem; /* Reducido de 0.6rem */
+  text-align: center;
+}
+
+.results-total h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #4CAF50;
+}
+
+.results-section {
+  margin-bottom: 0.3rem; /* Reducido de 0.6rem */
+}
+
+.results-section h3 {
+  margin: 0 0 0.3rem 0; /* Reducido de 0.5rem */
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff;
+  border-left: 3px solid #2196F3;
+  padding-left: 0.8rem;
+}
+
+.transfers-list {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0.6rem;
+  padding: 0.6rem; /* Reducido de 0.8rem */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.transfer-item {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0; /* Reducido de 0.6rem */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  justify-content: space-between;
+}
+
+.transfer-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.transfer-number {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  color: white;
+  border-radius: 50%;
+  width: 1.6rem;
+  height: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-right: 0.2rem;
+}
+
+.transfer-description {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.transfer-from {
+  font-weight: bold;
+  color: #E0E0E0;
+  flex-shrink: 0;
+}
+
+.transfer-arrow {
+  color: #B0B0B0;
+  font-size: 0.85rem;
+  font-weight: normal;
+  flex-shrink: 0;
+  font-style: normal;
+  padding: 0;
+}
+
+.transfer-to {
+  font-weight: bold;
+  color: #E0E0E0;
+  flex-shrink: 0;
+}
+
+.transfer-amount {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.1));
+  color: #FFC107;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.4rem;
+  font-weight: bold;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  margin-left: auto;
+  text-align: right;
+}
+
+.results-footer {
+  text-align: center;
+  margin-top: 0.6rem; /* Reducido de 1rem */
+  padding-top: 0.5rem; /* Reducido de 0.8rem */
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-result-text {
+  margin: 0.2rem 0; /* Reducido de 0.4rem */
+  line-height: 1.4;
+  color: #E0E0E0;
+}
+
+/* Adaptaciones móviles para los nuevos estilos */
+@media (max-width: 600px) {
+  .results-header h2 {
+    font-size: 1.15rem;
+  }
+  
+  .results-total h3 {
+    font-size: 1.05rem;
+  }
+  
+  .results-total {
+    padding: 0.4rem; /* Reducido de 0.5rem */
+    margin-bottom: 0.2rem; /* Reducido de 0.5rem */
+  }
+  
+  .results-section {
+    margin-bottom: 0.2rem; /* Reducido de 0.5rem */
+  }
+  
+  .results-section h3 {
+    margin-bottom: 0.2rem; /* Reducido de 0.4rem */
+    font-size: 1rem;
+  }
+  
+  .transfers-list {
+    padding: 0.5rem; /* Reducido de 0.6rem */
+  }
+  
+  .transfer-item {
+    gap: 0.2rem;
+    padding: 0.3rem 0; /* Reducido de 0.5rem */
+    flex-wrap: nowrap; /* Mantener todo en una línea */
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .transfer-description {
+    gap: 0.2rem;
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .transfer-from, .transfer-to {
+    flex-shrink: 0;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .transfer-arrow {
+    flex-shrink: 0;
+    padding: 0;
+  }
+  
+  .transfer-amount {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    margin-left: 0.4rem;
+    text-align: right;
+  }
+  
+  .transfer-number {
+    width: 1.4rem;
+    height: 1.4rem;
+    font-size: 0.7rem;
+  }
+  
+  .results-footer {
+    margin-top: 0.5rem; /* Reducido de 0.8rem */
+    padding-top: 0.4rem; /* Reducido de 0.6rem */
+  }
 }
 
 .modal-button-container {
   display: flex;
-  flex-direction: column; /* Botones apilados en móvil */
-  gap: 1rem;
-  margin-top: 1rem;
+  flex-direction: column; /* Botones apilados por defecto */
+  gap: 0.8rem; /* Reducido de 1rem */
+  margin-top: auto; /* Empuja los botones hacia abajo en fullscreen */
+  flex-shrink: 0; /* No se encogen */
 }
 
 .modal-action-btn {
   background: linear-gradient(135deg, #1C395E 0%, #118AB2 100%); /* Degradado similar al de los botones de acción */
   border: none;
   color: white;
-  padding: 0.8em;
+  padding: 1rem;
   border-radius: 0.8rem;
   cursor: pointer;
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 52px; /* Altura mínima para touch */
+  
+  /* Optimizaciones touch */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto ripple para botones de acción */
+.modal-action-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+.modal-action-btn:active::after {
+  width: 300px;
+  height: 300px;
 }
 
 .modal-action-btn:hover {
@@ -516,6 +1187,26 @@ button:disabled {
 
 .modal-action-btn i {
   margin-right: 0.5rem; /* Espacio entre el icono y el texto */
+}
+
+/* Estilo específico para el botón de WhatsApp */
+#shareWhatsappBtn i.fa-whatsapp {
+  color: #25D366; /* Verde característico de WhatsApp */
+  margin-right: 0.5rem; /* Asegurar consistencia con otros botones */
+}
+
+#shareWhatsappBtn:hover i.fa-whatsapp {
+  color: #1DA851; /* Verde ligeramente más oscuro en hover */
+}
+
+/* Estilo específico para el botón de Copiar */
+#copyResultsBtn i.fa-copy {
+  color: #2DD4BF; /* Color cian/turquesa que combina con el tema */
+  margin-right: 0.5rem; /* Asegurar que tenga el mismo margen que WhatsApp */
+}
+
+#copyResultsBtn:hover i.fa-copy {
+  color: #14B8A6; /* Cian más intenso en hover */
 }
 
 
@@ -563,12 +1254,12 @@ button:disabled {
   max-height: none; /* Dejar que crezca con el contenido, o definir altura si se prefiere scroll en esta lista */
 }
 
-/* Estilos para cada item de participante (tarjeta rectangular) */
+/* Estilos para cada item de participante (tarjeta rectangular) - OPTIMIZADO PARA TOUCH */
 .participant {
   background-color: rgba(13, 23, 41, 0.8); /* Fondo oscuro semi-transparente */
   padding: 0.4rem 0.5rem; /* Ajuste para hacerlos más rectangulares y reducir espacio interno */
-  height: 55px; /* Altura fija para hacerlos rectangulares y más compactos */
-  min-height: auto;
+  height: 60px; /* Altura aumentada para mejor área táctil */
+  min-height: 60px; /* Altura mínima para touch */
   
   border-radius: 0.8rem;
   display: flex;
@@ -578,11 +1269,53 @@ button:disabled {
   font-size: 1.1rem;
   font-weight: 500;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.45);
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
   position: relative;
   margin-bottom: 0; /* El gap de la cuadrícula manejará la separación */
   border: 1px solid rgba(255, 255, 255, 0.05);
   text-align: center; /* Centrar el texto del nombre */
+  
+  /* Optimizaciones para touch y swipe */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-x; /* Permite swipe horizontal */
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* Estado activo/pressed para feedback visual */
+.participant:active {
+  transform: scale(0.98);
+  background-color: rgba(13, 23, 41, 0.9);
+}
+
+/* Indicador visual para swipe */
+.participant::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.8), transparent);
+  transition: left 0.3s ease;
+  border-radius: 0.8rem;
+  z-index: 0;
+}
+
+.participant.swipe-hint::before {
+  left: 100%;
+}
+
+/* Clase para animación de eliminación */
+.participant.removing {
+  animation: slideOutRight 0.3s ease-out forwards;
+}
+
+@keyframes slideOutRight {
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
 
 /* El span del nombre del participante */
@@ -602,25 +1335,49 @@ button:disabled {
   line-height: 1.1; /* Ajustar el line-height si el texto salta de línea */
 }
 
-.participant .remove-btn {
+/* --- ESTILO UNIFICADO PARA BOTONES DE ELIMINAR --- */
+/* Aplicable tanto a participantes (.remove-btn) como a gastos (.delete-btn) */
+.participant .remove-btn,
+.expense-item .delete-btn {
   position: absolute;
-  top: 2px; /* Ajustar posición del botón X */
-  right: 2px; /* Ajustar posición del botón X */
-  font-weight: bold;
+  top: 0.25rem;
+  right: 0.25rem;
+  color: #FF6B6B; /* Solo la X en rojo */
   cursor: pointer;
-  font-size: 1rem; /* Hacer la X un poco más pequeña si es necesario */
-  line-height: 1;
-  padding: 0.05em 0.25em; /* Ajustar padding del botón X */
-  background-color: rgba(255, 255, 255, 0.1); /* Fondo blanco muy sutil */
+  font-size: 1.2rem; /* Tamaño para la X */
+  font-weight: bold;
+  transition: all 0.2s ease;
+  
+  /* Área táctil optimizada */
+  min-width: 28px;
+  min-height: 28px;
+  padding: 0.2rem;
   border-radius: 50%;
-  color: #F0F0F0;
-  transition: background-color 0.2s, color 0.2s;
-  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.1); /* Fondo gris muy sutil */
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Optimizaciones touch */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  z-index: 2; /* Para que esté por encima del contenido */
 }
 
-.participant .remove-btn:hover {
-  color: #FF6B6B; /* Rojo al hacer hover */
-  background-color: rgba(255, 255, 255, 0.2);
+.participant .remove-btn:hover,
+.participant .remove-btn:focus,
+.expense-item .delete-btn:hover,
+.expense-item .delete-btn:focus {
+  color: #E53E3E; /* X en rojo más oscuro al hacer hover */
+  background-color: rgba(255, 255, 255, 0.2); /* Fondo gris un poco más visible */
+  transform: scale(1.1);
+}
+
+.participant .remove-btn:active,
+.expense-item .delete-btn:active {
+  transform: scale(0.95);
+  background-color: rgba(255, 255, 255, 0.3); /* Fondo gris más pronunciado al presionar */
 }
 
 .participant:hover {
@@ -630,33 +1387,120 @@ button:disabled {
 
 .expense-item {
   background-color: rgba(13, 23, 41, 0.8); /* Fondo oscuro semi-transparente */
-  padding: 1rem;
+  padding: 1rem; /* Padding optimizado */
   border-radius: 0.75rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  font-size: 1rem;
+  display: block; /* Cambio a block para layout vertical */
+  position: relative;
+  font-size: 0.95rem;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.45);
   color: #F0F0F0;
   margin-bottom: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  min-height: 70px; /* Altura mínima para touch */
+  
+  /* Optimizaciones para touch y swipe */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-x;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+  overflow: hidden;
+}
+
+/* Bloque de información del gasto (ahora contiene todo) */
+.expense-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-right: 2.5rem; /* Espacio para el botón de eliminar */
+}
+
+.expense-description {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #F0F0F0;
+  line-height: 1.2;
+}
+
+.expense-payer {
+  font-size: 0.9rem;
+  color: #B8C5D1;
+  font-weight: 500;
+}
+
+.expense-excluded {
+  font-size: 0.85rem;
+  color: #98A8B4;
+  font-style: italic;
+}
+
+/* El monto ahora es parte de la información */
+.expense-amount {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #2DD4BF; /* Color de acento para el monto */
+  margin-top: 0.2rem;
+}
+
+/* Estado activo para feedback visual */
+.expense-item:active {
+  transform: scale(0.98);
+  background-color: rgba(13, 23, 41, 0.9);
+}
+
+/* Hover para desktop */
+.expense-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive para móvil */
+@media (max-width: 600px) {
+  .expense-item {
+    padding: 0.8rem;
+  }
+  
+  .expense-info {
+    padding-right: 2rem;
+  }
+  
+  .expense-description {
+    font-size: 1rem;
+  }
+  
+  .expense-amount {
+    font-size: 1.1rem;
+  }
+  
+  .expense-payer,
+  .expense-excluded {
+    font-size: 0.8rem;
+  }
+}
+
+/* Indicador visual para swipe */
+.expense-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.8), transparent);
+  transition: left 0.3s ease;
+  border-radius: 0.75rem;
+  z-index: 0;
+}
+
+.expense-item.swipe-hint::before {
+  left: 100%;
+}
+
+/* Clase para animación de eliminación */
+.expense-item.removing {
+  animation: slideOutRight 0.3s ease-out forwards;
 }
 
 .expense-item:last-child {
   margin-bottom: 0;
-}
-
-.expense-item .delete-btn {
-  color: #FF6B6B; /* Rojo para el botón de eliminar */
-  cursor: pointer;
-  font-size: 1.2rem;
-  transition: color 0.2s;
-}
-
-.expense-item .delete-btn:hover {
-  color: #E53E3E; /* Rojo más oscuro al hacer hover */
 }
 
 /* --- Estados Vacíos --- */
@@ -797,15 +1641,471 @@ button:disabled {
 
   .modal {
     align-items: center; /* Vuelve a centrar en desktop para una mejor UX */
-    padding-top: 0; /* Elimina el padding superior en desktop */
+    padding: 20px; /* Restaurar padding en desktop */
+  }
+  
+  .modal-content {
+    /* Resetear estilos de móvil para desktop */
+    width: 90vw !important;
+    max-width: 500px !important;
+    height: auto !important;
+    max-height: 85vh !important;
+    border-radius: 1rem !important;
+    transform: scale(0.9) translateY(-20px) !important;
+  }
+  
+  .modal.active .modal-content {
+    transform: scale(1) translateY(0) !important;
+  }
+  
+  .modal-header {
+    padding: 1.5rem 1.5rem 1rem 1.5rem !important;
+    min-height: auto !important;
+  }
+  
+  .modal-body {
+    padding: 1.5rem !important;
+    max-height: calc(85vh - 140px);
   }
 
   /* Media Query Específica para los botones del modal de resultados */
   .modal-button-container {
     flex-direction: row; /* Botones en fila en desktop */
     justify-content: space-around;
+    gap: 1.5rem;
   }
+  
   .modal-action-btn {
-    flex-grow: 1; /* Permite que los botones ocupen el espacio disponible equitativamente */
+    flex: 1; /* Permite que los botones ocupen el espacio disponible equitativamente */
+    max-width: 200px;
   }
+  
+  /* Mejoras específicas para modal de resultados en desktop */
+  .results-container {
+    max-height: calc(85vh - 200px);
+    font-size: 1rem;
+    padding: 1.2rem;
+  }
+
+  /* FAB Desktop - Ocultar o hacer más discreto en desktop */
+  .fab-container {
+    display: none; /* Ocultar FABs en desktop */
+  }
+}
+
+/* =============================================== */
+/* SISTEMA DE FAB (FLOATING ACTION BUTTONS) - FASE 3 */
+/* =============================================== */
+
+.fab-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 1.5rem;
+  z-index: 1000;
+  /* Ensure safe area for devices with home indicator */
+  bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+  right: calc(1.5rem + env(safe-area-inset-right, 0px));
+}
+
+/* FAB Base Styles */
+.fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1.4rem;
+  color: white;
+  
+  /* Touch optimizations */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Main FAB */
+.main-fab {
+  background: linear-gradient(135deg, #118AB2 0%, #0A7B8A 100%);
+  box-shadow: 0 8px 25px rgba(17, 138, 178, 0.4);
+  transform: scale(1);
+  z-index: 1001;
+}
+
+.main-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 30px rgba(17, 138, 178, 0.6);
+}
+
+.main-fab:active {
+  transform: scale(0.95);
+}
+
+/* Main FAB Icon Animation */
+#mainFabIcon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-fab.expanded #mainFabIcon {
+  transform: rotate(45deg);
+}
+
+/* Mini FABs Container */
+.mini-fabs {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.8);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.mini-fabs.expanded {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  pointer-events: auto;
+  /* Move up to show all buttons */
+  transform: translateY(-70px) scale(1);
+}
+
+/* Individual Mini FABs */
+.mini-fab {
+  width: 48px;
+  height: 48px;
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, #2DD4BF 0%, #14B8A6 100%);
+  box-shadow: 0 4px 15px rgba(45, 212, 191, 0.4);
+  position: relative;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Staggered animation for mini FABs */
+.mini-fabs.expanded .mini-fab:nth-child(1) {
+  transition-delay: 0.1s;
+  transform: translateY(0);
+}
+
+.mini-fabs.expanded .mini-fab:nth-child(2) {
+  transition-delay: 0.15s;
+  transform: translateY(0);
+}
+
+.mini-fabs.expanded .mini-fab:nth-child(3) {
+  transition-delay: 0.2s;
+  transform: translateY(0);
+}
+
+.mini-fab:hover {
+  transform: scale(1.15) translateY(0);
+  box-shadow: 0 8px 20px rgba(45, 212, 191, 0.6);
+}
+
+.mini-fab:active {
+  transform: scale(0.9) translateY(0);
+}
+
+/* FAB Labels */
+.fab-label {
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-50%) translateX(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mini-fab:hover .fab-label {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Ripple effect for FABs */
+.fab::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+}
+
+.fab:active::after {
+  width: 120px;
+  height: 120px;
+}
+
+/* Backdrop for FAB when expanded (optional overlay) */
+.fab-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 999;
+  pointer-events: none;
+}
+
+.fab-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Special effects for different actions */
+.mini-fab#addParticipantFab {
+  background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.mini-fab#addParticipantFab:hover {
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.6);
+}
+
+.mini-fab#addExpenseFab {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+.mini-fab#addExpenseFab:hover {
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.6);
+}
+
+.mini-fab#calculateFab {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+.mini-fab#calculateFab:hover {
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.6);
+}
+
+/* Animation for FAB entrance */
+@keyframes fabEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.3) rotate(-180deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.fab-container {
+  animation: fabEnter 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
+}
+
+
+
+/* Estilos para el modal de ayuda */
+.modal-help-type .modal-content {
+  max-width: 600px;
+  width: 95vw;
+}
+
+.modal-help-type .modal-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: rgba(13, 23, 41, 0.6);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 1rem;
+}
+
+.shortcut-item kbd {
+  background: linear-gradient(135deg, #2DD4BF 0%, #14B8A6 100%);
+  color: #0A1128;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: fit-content;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.shortcut-item span {
+  color: #E0E0E0;
+  font-size: 0.875rem;
+  flex-grow: 1;
+}
+
+.help-footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: rgba(27, 49, 77, 0.6);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.help-footer p {
+  margin: 0;
+  color: rgba(204, 214, 223, 0.8);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.help-footer i {
+  color: #F59E0B;
+}
+
+/* Feedback visual para shortcuts */
+#shortcut-feedback {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Ajustes responsivos para el modal de ayuda */
+@media (max-width: 600px) {
+  .shortcuts-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .shortcut-item {
+    padding: 0.5rem;
+    gap: 0.75rem;
+  }
+  
+  .shortcut-item kbd {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .shortcut-item span {
+    font-size: 0.8rem;
+  }
+}
+
+/* Mejoras en la sección header para acomodar búsqueda */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .section-header h2 {
+    text-align: center;
+  }
+  
+  .section-header .add-form {
+    order: 2;
+  }
+}
+
+/* Animaciones para filtrado */
+.participant,
+.expense-item {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.participant[style*="none"],
+.expense-item[style*="none"] {
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+/* Estados de loading para auto-save */
+.saving-indicator {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  z-index: 1004;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.saving-indicator.active {
+  opacity: 1;
+}
+
+.saving-indicator i {
+  margin-right: 0.5rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
