@@ -6,8 +6,8 @@
  */
 class SettlementCalculator {
     /**
-     * Calcula los saldos netos de cada participante y determina las transferencias
-     * mínimas necesarias para saldar todas las deudas.
+     * Calcula las transferencias necesarias usando matriz de deudas específicas y neteo bidireccional.
+     * Algoritmo corregido que rastrea deudas por gasto específico y luego optimiza con neteo.
      *
      * @param {string[]} participants - Array de nombres de participantes.
      * @param {Array<object>} expenses - Array de objetos de gastos, cada uno con:
@@ -18,109 +18,160 @@ class SettlementCalculator {
      * @returns {object} Un objeto con:
      * - totalExpenses: Monto total de todos los gastos (number)
      * - transfers: Array de objetos de transferencia optimizados (from, to, amount)
+     * - balances: Map con los saldos finales de cada participante
      * - formattedSummaryHtml: Un string HTML formateado con el resumen para displayResults (sin asteriscos).
      * - formattedSummaryPlainText: Un string de texto plano formateado con el resumen para copiar/compartir (con asteriscos).
      */
     calculateSettlements(participants, expenses) {
-        // 1. Inicializar saldos de cada participante en 0
+        // Validar entrada
+        const validationErrors = this.validateInput(participants, expenses);
+        if (validationErrors.length > 0) {
+            console.error('❌ Errores de validación:', validationErrors);
+            throw new Error(`Errores de validación:\n${validationErrors.join('\n')}`);
+        }
+
+        console.log('\n🎯 === ALGORITMO CORREGIDO: MATRIZ DE DEUDAS + NETEO ===');
+
+        // 1. MATRIZ DE DEUDAS ESPECÍFICAS POR GASTO
+        // Estructura: debtMatrix.get(debtor).get(creditor) = amount
+        const debtMatrix = new Map();
+        participants.forEach(p => {
+            debtMatrix.set(p, new Map());
+            participants.forEach(q => {
+                debtMatrix.get(p).set(q, 0);
+            });
+        });
+
+        console.log('📊 Calculando deudas específicas por cada gasto...');
+
+        let totalExpenses = 0;
+        expenses.forEach((expense, index) => {
+            totalExpenses += expense.amount;
+            const includedParticipants = participants.filter(p => !expense.excluded.includes(p));
+            const perPersonCost = expense.amount / includedParticipants.length;
+            
+            console.log(`\n💰 Gasto ${index + 1}: ${expense.description} - $${expense.amount.toLocaleString()}`);
+            console.log(`   Pagado por: ${expense.payer}`);
+            console.log(`   Excluidos: [${expense.excluded.join(', ') || 'ninguno'}]`);
+            console.log(`   Incluidos: [${includedParticipants.join(', ')}] (${includedParticipants.length} personas)`);
+            console.log(`   Costo por persona: $${perPersonCost.toLocaleString()}`);
+
+            // Cada persona incluida (excepto quien pagó) debe dinero al pagador
+            includedParticipants.forEach(person => {
+                if (person !== expense.payer) {
+                    const currentDebt = debtMatrix.get(person).get(expense.payer);
+                    debtMatrix.get(person).set(expense.payer, currentDebt + perPersonCost);
+                    console.log(`   → ${person} debe a ${expense.payer}: +$${perPersonCost.toLocaleString()}`);
+                }
+            });
+        });
+
+        console.log('\n📋 MATRIZ DE DEUDAS ESPECÍFICAS:');
+        participants.forEach(debtor => {
+            participants.forEach(creditor => {
+                const debt = debtMatrix.get(debtor).get(creditor);
+                if (debt > 0) {
+                    console.log(`   ${debtor} debe a ${creditor}: $${debt.toLocaleString()}`);
+                }
+            });
+        });
+
+        // 2. NETEO BIDIRECCIONAL
+        console.log('\n🔄 Aplicando neteo bidireccional...');
+        const netMatrix = new Map();
+        participants.forEach(p => {
+            netMatrix.set(p, new Map());
+            participants.forEach(q => {
+                netMatrix.get(p).set(q, 0);
+            });
+        });
+
+        participants.forEach(person1 => {
+            participants.forEach(person2 => {
+                if (person1 !== person2) {
+                    const debt1to2 = debtMatrix.get(person1).get(person2);
+                    const debt2to1 = debtMatrix.get(person2).get(person1);
+                    
+                    if (debt1to2 > 0 && debt2to1 > 0) {
+                        // Hay deudas bidireccionales - netear
+                        const netDebt = debt1to2 - debt2to1;
+                        if (netDebt > 0) {
+                            netMatrix.get(person1).set(person2, netDebt);
+                            console.log(`   ${person1} ↔ ${person2}: ${person1} debe $${debt1to2.toLocaleString()}, ${person2} debe $${debt2to1.toLocaleString()} → ${person1} debe $${netDebt.toLocaleString()}`);
+                        } else if (netDebt < 0) {
+                            netMatrix.get(person2).set(person1, -netDebt);
+                            console.log(`   ${person1} ↔ ${person2}: ${person1} debe $${debt1to2.toLocaleString()}, ${person2} debe $${debt2to1.toLocaleString()} → ${person2} debe $${(-netDebt).toLocaleString()}`);
+                        }
+                        // Marcar como procesado
+                        debtMatrix.get(person1).set(person2, 0);
+                        debtMatrix.get(person2).set(person1, 0);
+                    } else if (debt1to2 > 0) {
+                        // Solo deuda unidireccional
+                        netMatrix.get(person1).set(person2, debt1to2);
+                    }
+                }
+            });
+        });
+
+        // 3. GENERAR TRANSFERENCIAS
+        const transfers = [];
+        participants.forEach(debtor => {
+            participants.forEach(creditor => {
+                const amount = netMatrix.get(debtor).get(creditor);
+                if (amount > 0) {
+                    transfers.push({
+                        from: debtor,
+                        to: creditor,
+                        amount: Math.round(amount * 100) / 100
+                    });
+                }
+            });
+        });
+
+        console.log('\n💸 TRANSFERENCIAS FINALES:');
+        transfers.forEach((transfer, i) => {
+            console.log(`   ${i + 1}. ${transfer.from} → ${transfer.to}: $${transfer.amount.toLocaleString()}`);
+        });
+
+        // 4. CALCULAR BALANCES FINALES
         const balances = new Map();
         participants.forEach(p => balances.set(p, 0));
 
-        let totalExpenses = 0; // Para llevar un registro del total de todos los gastos
-
-        // 2. Calcular el saldo individual de cada participante
+        // Calcular lo que pagó cada persona
         expenses.forEach(expense => {
-            const amount = expense.amount;
-            const payer = expense.payer;
-            // Asegurarse de que 'excluded' es un array. Si es nulo o undefined, usar un array vacío.
-            const excluded = expense.excluded || []; 
-
-            totalExpenses += amount; // Sumar el monto del gasto al total general
-
-            // Filtrar participantes activos (aquellos que NO están excluidos de este gasto)
-            // IMPORTANTE: Un participante excluido de un gasto NO comparte el costo de ese gasto.
-            const activeParticipantsForThisExpense = participants.filter(p => !excluded.includes(p));
-
-            // Si no hay participantes activos para este gasto (todos excluidos o lista vacía),
-            // el gasto recae enteramente en el pagador.
-            if (activeParticipantsForThisExpense.length === 0) {
-                // Si esto ocurre, el pagador no tiene a quién cobrarle su parte, por lo tanto,
-                // el balance del pagador no necesita ajuste para este gasto específico aquí,
-                // ya que su saldo no se disminuye por ninguna "parte a deber" a terceros de este gasto.
-                // Simplemente se asume que él cubrió el 100% sin reparto.
-                return; // Pasar al siguiente gasto sin modificar los balances adicionales
-            }
-
-            // Calcular la parte que le corresponde a cada participante activo
-            const sharePerPerson = amount / activeParticipantsForThisExpense.length;
-
-            // Ajustar los balances:
-            // Para cada participante activo, se le resta su "parte ideal" de este gasto.
-            // Esto incluye al pagador, ya que también debe su propia parte.
-            activeParticipantsForThisExpense.forEach(p => {
-                balances.set(p, balances.get(p) - sharePerPerson);
-            });
-
-            // Después de restar la parte a todos los activos,
-            // al pagador se le suma el monto total que desembolsó.
-            // De esta forma, si pagó $100 y le corresponden $25, su saldo final por este gasto será $100 - $25 = +$75.
-            balances.set(payer, balances.get(payer) + amount);
+            const currentBalance = balances.get(expense.payer);
+            balances.set(expense.payer, currentBalance + expense.amount);
         });
 
-
-        // 3. Separar deudores y acreedores
-        const debtors = [];
-        const creditors = [];
-
-        balances.forEach((balance, name) => {
-            const roundedBalance = parseFloat(balance.toFixed(2)); 
-            if (roundedBalance < 0) {
-                debtors.push({ name: name, amount: Math.abs(roundedBalance) }); 
-            } else if (roundedBalance > 0) {
-                creditors.push({ name: name, amount: roundedBalance }); 
-            }
-        });
-
-        // 4. Optimizar las transferencias (algoritmo "greedy")
-        debtors.sort((a, b) => b.amount - a.amount);    
-        creditors.sort((a, b) => b.amount - a.amount);  
-
-        const transfers = []; 
-
-        while (debtors.length > 0 && creditors.length > 0) {
-            const currentDebtor = debtors[0];
-            const currentCreditor = creditors[0];
-
-            const transferAmount = Math.min(currentDebtor.amount, currentCreditor.amount);
-            const roundedTransferAmount = parseFloat(transferAmount.toFixed(2)); 
-
-            if (roundedTransferAmount > 0) { 
-                transfers.push({
-                    from: currentDebtor.name,
-                    to: currentCreditor.name,
-                    amount: roundedTransferAmount
-                });
-            }
+        // Calcular lo que debe cada persona
+        expenses.forEach(expense => {
+            const includedParticipants = participants.filter(p => !expense.excluded.includes(p));
+            const perPersonCost = expense.amount / includedParticipants.length;
             
-            currentDebtor.amount -= transferAmount;
-            currentCreditor.amount -= transferAmount;
+            includedParticipants.forEach(person => {
+                const currentBalance = balances.get(person);
+                balances.set(person, currentBalance - perPersonCost);
+            });
+        });
 
-            const tolerance = 0.01; 
+        console.log('\n📊 BALANCES FINALES:');
+        let totalBalance = 0;
+        participants.forEach(person => {
+            const balance = balances.get(person);
+            totalBalance += balance;
+            console.log(`   ${person}: ${balance >= 0 ? '+' : ''}$${balance.toLocaleString()}`);
+        });
+        console.log(`   SUMA TOTAL: $${totalBalance.toLocaleString()} ${Math.abs(totalBalance) < 0.01 ? '✅' : '❌'}`);
 
-            if (currentDebtor.amount <= tolerance) {
-                debtors.shift();
-            }
-            if (currentCreditor.amount <= tolerance) {
-                creditors.shift();
-            }
-        }
-
-        // 5. Generar el resumen final formateado para HTML y texto plano
+        // 5. Generar el resumen final formateado
         const formattedResults = this.formatSettlementSummary(totalExpenses, transfers);
+
+        console.log('\n🎯 === CÁLCULO COMPLETADO ===\n');
 
         return {
             totalExpenses: parseFloat(totalExpenses.toFixed(2)),
             transfers: transfers,
+            balances: balances,
             formattedSummaryHtml: formattedResults.html,
             formattedSummaryPlainText: formattedResults.plainText
         };
@@ -151,23 +202,32 @@ class SettlementCalculator {
         } else {
             htmlSummary += `<div class="results-section">
                 <h3>💸 Transferencias Necesarias</h3>
-                <p class="modal-result-text">Se necesitan ${transfers.length} transferencia${transfers.length > 1 ? 's' : ''}:</p>
+                <p class="modal-result-text">Se necesitan ${transfers.length} transferencia${transfers.length > 1 ? 's' : ''} para equilibrar los gastos:</p>
                 <div class="transfers-list">`;
 
-            transfers.forEach((t, index) => {
-                const displayAmount = t.amount >= 1 ? Math.round(t.amount) : t.amount.toFixed(2);
+            transfers.forEach((transfer, index) => {
+                // Mostrar con decimales solo si es necesario
+                const displayAmount = transfer.amount % 1 === 0 ? 
+                    `$${transfer.amount.toFixed(0)}` : 
+                    `$${transfer.amount.toFixed(2)}`;
+                
                 htmlSummary += `<div class="transfer-item">
                     <span class="transfer-number">${index + 1}.</span>
                     <div class="transfer-description">
-                        <span class="transfer-from">${t.from}</span>
-                        <span class="transfer-arrow">a</span>
-                        <span class="transfer-to">${t.to}</span>
+                        <span class="transfer-from">${transfer.from}</span>
+                        <span class="transfer-arrow">→</span>
+                        <span class="transfer-to">${transfer.to}</span>
                     </div>
-                    <span class="transfer-amount">$${displayAmount}</span>
+                    <span class="transfer-amount">${displayAmount}</span>
                 </div>`;
             });
 
             htmlSummary += `</div></div>`;
+            
+            // Agregar nota explicativa
+            htmlSummary += `<div class="results-note">
+                <p class="modal-result-text"><small>💡 Estas transferencias minimizan el número de transacciones necesarias para equilibrar todos los gastos entre participantes.</small></p>
+            </div>`;
         }
         
         htmlSummary += `<div class="results-footer">
@@ -190,14 +250,18 @@ Se necesitan *${transfers.length} transferencia${transfers.length > 1 ? 's' : ''
 
 `;
 
-            transfers.forEach((t, index) => {
-                const displayAmount = t.amount >= 1 ? Math.round(t.amount) : t.amount.toFixed(2);
-                plainTextSummary += `${index + 1}. *${t.from}* → *${t.to}*
+            transfers.forEach((transfer, index) => {
+                const displayAmount = transfer.amount % 1 === 0 ? 
+                    transfer.amount.toFixed(0) : 
+                    transfer.amount.toFixed(2);
+                    
+                plainTextSummary += `${index + 1}. *${transfer.from}* → *${transfer.to}*
    💵 $${displayAmount}
 
 `;
             });
         }
+        
         plainTextSummary += '======================\n✨ *¡Transfiere ahora...!*\n\n🚀 Generado con *Just Pay!*';
 
         return {
@@ -205,7 +269,62 @@ Se necesitan *${transfers.length} transferencia${transfers.length > 1 ? 's' : ''
             plainText: plainTextSummary
         };
     }
+
+    /**
+     * Valida los datos de entrada antes de realizar los cálculos
+     */
+    validateInput(participants, expenses) {
+        const errors = [];
+
+        // Validar participantes
+        if (!Array.isArray(participants) || participants.length === 0) {
+            errors.push('Debe haber al menos un participante');
+        }
+
+        if (participants.some(p => !p || typeof p !== 'string' || p.trim() === '')) {
+            errors.push('Todos los participantes deben tener nombres válidos');
+        }
+
+        // Validar gastos
+        if (!Array.isArray(expenses) || expenses.length === 0) {
+            errors.push('Debe haber al menos un gasto');
+        }
+
+        expenses.forEach((expense, index) => {
+            if (!expense.description || expense.description.trim() === '') {
+                errors.push(`Gasto ${index + 1}: La descripción es requerida`);
+            }
+
+            if (!expense.amount || isNaN(expense.amount) || expense.amount <= 0) {
+                errors.push(`Gasto ${index + 1}: El monto debe ser un número positivo`);
+            }
+
+            if (!expense.payer || !participants.includes(expense.payer)) {
+                errors.push(`Gasto ${index + 1}: El pagador debe ser un participante válido`);
+            }
+
+            if (expense.excluded) {
+                const invalidExcluded = expense.excluded.filter(e => !participants.includes(e));
+                if (invalidExcluded.length > 0) {
+                    errors.push(`Gasto ${index + 1}: Participantes excluidos inválidos: ${invalidExcluded.join(', ')}`);
+                }
+
+                // Validar que no se excluyan a todos los participantes
+                const activeParticipants = participants.filter(p => !expense.excluded.includes(p));
+                if (activeParticipants.length === 0) {
+                    errors.push(`Gasto ${index + 1}: No se puede excluir a todos los participantes. Debe haber al menos uno que participe del gasto.`);
+                }
+            }
+        });
+
+        return errors;
+    }
 }
 
-// Exportar una instancia de la clase para que pueda ser utilizada en otros módulos
+// Exportar para uso en navegador (ES6 modules)
 export const calculator = new SettlementCalculator();
+
+// Exportar para uso en Node.js (testing)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { SettlementCalculator };
+}
