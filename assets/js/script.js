@@ -2,6 +2,14 @@
 
 import { calculator } from './calculator.js';
 
+// Función para formatear números con separadores de miles (formato argentino)
+function formatCurrency(amount) {
+    return `$${amount.toLocaleString('es-AR', { 
+        minimumFractionDigits: 2, 
+        maximumFractionDigits: 2 
+    })}`;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     let participants = [];
     let expenses = [];
@@ -458,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="expense-description">${expense.description}</div>
                     <div class="expense-payer">Pagó: ${expense.payer}</div>
                     ${expense.excluded.length > 0 ? `<div class="expense-excluded">Excluidos: ${expense.excluded.join(', ')}</div>` : ''}
-                    <div class="expense-amount">$${expense.amount.toFixed(2)}</div>
+                    <div class="expense-amount">${formatCurrency(expense.amount)}</div>
                 </div>
                 <button class="delete-btn" data-index="${index}">&times;</button>
             `;

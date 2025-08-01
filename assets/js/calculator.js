@@ -1,5 +1,13 @@
 // assets/js/calculator.js
 
+// Función para formatear números con separadores de miles (formato argentino)
+function formatCurrency(amount) {
+    return `$${amount.toLocaleString('es-AR', { 
+        minimumFractionDigits: 2, 
+        maximumFractionDigits: 2 
+    })}`;
+}
+
 /**
  * Clase para manejar la lógica de cálculo de saldos y optimización de transferencias
  * entre participantes de un gasto compartido.
@@ -191,7 +199,7 @@ class SettlementCalculator {
         </div>`;
         
         htmlSummary += `<div class="results-total">
-            <h3>💰 Total de Gastos: $${totalExpenses.toFixed(2)}</h3>
+            <h3>💰 Total de Gastos: ${formatCurrency(totalExpenses)}</h3>
         </div>`;
         
         if (transfers.length === 0) {
@@ -207,9 +215,7 @@ class SettlementCalculator {
 
             transfers.forEach((transfer, index) => {
                 // Mostrar con decimales solo si es necesario
-                const displayAmount = transfer.amount % 1 === 0 ? 
-                    `$${transfer.amount.toFixed(0)}` : 
-                    `$${transfer.amount.toFixed(2)}`;
+                const displayAmount = formatCurrency(transfer.amount);
                 
                 htmlSummary += `<div class="transfer-item">
                     <span class="transfer-number">${index + 1}.</span>
@@ -238,7 +244,7 @@ class SettlementCalculator {
         let plainTextSummary = `📊 *RESUMEN DE GASTOS*
 ======================
 
-💰 *TOTAL:* $${totalExpenses.toFixed(2)}
+💰 *TOTAL:* ${formatCurrency(totalExpenses)}
 
 `;
 
@@ -251,9 +257,7 @@ Se necesitan *${transfers.length} transferencia${transfers.length > 1 ? 's' : ''
 `;
 
             transfers.forEach((transfer, index) => {
-                const displayAmount = transfer.amount % 1 === 0 ? 
-                    transfer.amount.toFixed(0) : 
-                    transfer.amount.toFixed(2);
+                const displayAmount = formatCurrency(transfer.amount).substring(1); // Removemos el $ inicial
                     
                 plainTextSummary += `${index + 1}. *${transfer.from}* → *${transfer.to}*
    💵 $${displayAmount}

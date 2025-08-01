@@ -1396,21 +1396,25 @@ button:disabled {
   color: #F0F0F0;
   margin-bottom: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  min-height: 70px; /* Altura mínima para touch */
+  min-height: auto; /* Cambiar a auto para permitir expansión vertical */
+  height: auto; /* Altura automática basada en contenido */
   
   /* Optimizaciones para touch y swipe */
   -webkit-tap-highlight-color: transparent;
   touch-action: pan-x;
   transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
-  overflow: hidden;
+  overflow: visible; /* Cambiar a visible para evitar cortes */
+  word-wrap: break-word; /* Evitar desbordamiento horizontal de texto largo */
 }
 
 /* Bloque de información del gasto (ahora contiene todo) */
 .expense-info {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem; /* Aumentar ligeramente el espacio entre elementos */
   padding-right: 2.5rem; /* Espacio para el botón de eliminar */
+  min-height: auto; /* Permitir que se ajuste al contenido */
+  width: 100%; /* Asegurar que use todo el ancho disponible */
 }
 
 .expense-description {
@@ -1455,24 +1459,63 @@ button:disabled {
 /* Responsive para móvil */
 @media (max-width: 600px) {
   .expense-item {
-    padding: 0.8rem;
+    padding: 1rem 0.8rem; /* Mantener padding vertical para más espacio */
+    min-height: auto; /* Permitir que se expanda automáticamente */
+    height: auto; /* Altura automática basada en contenido */
   }
   
   .expense-info {
     padding-right: 2rem;
+    gap: 0.6rem; /* Aumentar espacio entre elementos */
+    min-height: auto; /* Permitir expansión vertical */
   }
   
   .expense-description {
     font-size: 1rem;
+    line-height: 1.3; /* Mejorar legibilidad */
+    word-wrap: break-word; /* Evitar desbordamiento horizontal */
+  }
+  
+  .expense-amount {
+    font-size: 1.2rem; /* Mantener tamaño legible */
+    margin-top: 0.3rem; /* Más espacio arriba del monto */
+  }
+  
+  .expense-payer,
+  .expense-excluded {
+    font-size: 0.85rem; /* Ligeramente más grande para mejor legibilidad */
+    line-height: 1.2;
+  }
+  
+  .expense-payer {
+    margin-bottom: 0.2rem; /* Pequeño margen para separar del texto excluido */
+  }
+}
+
+/* Responsive para pantallas móviles muy pequeñas */
+@media (max-width: 480px) {
+  .expense-item {
+    padding: 1.2rem 0.8rem; /* Más padding vertical en pantallas pequeñas */
+  }
+  
+  .expense-info {
+    gap: 0.7rem; /* Más espacio entre elementos en pantallas pequeñas */
+  }
+  
+  .expense-description {
+    font-size: 0.95rem;
+    line-height: 1.4; /* Mejor espaciado de líneas */
   }
   
   .expense-amount {
     font-size: 1.1rem;
+    margin-top: 0.4rem;
   }
   
   .expense-payer,
   .expense-excluded {
     font-size: 0.8rem;
+    line-height: 1.3;
   }
 }
 
