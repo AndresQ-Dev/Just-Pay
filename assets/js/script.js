@@ -115,6 +115,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ====== FUNCIONES DE SWIPE PARA TOUCH ======
     function initSwipeGestures() {
+        // Solo activar swipe en dispositivos móviles/táctiles
+        if (!('ontouchstart' in window) || window.innerWidth >= 768) {
+            return; // No inicializar swipe en desktop
+        }
+        
         // Swipe para participantes
         participantList.addEventListener('touchstart', handleTouchStart, { passive: true });
         participantList.addEventListener('touchmove', handleTouchMove, { passive: false });
@@ -153,7 +158,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Determinar si es un gesto de swipe horizontal
         if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
             isSwipeGesture = true;
-            e.preventDefault(); // Prevenir scroll mientras se hace swipe
+            // Solo prevenir scroll si es claramente un swipe horizontal
+            if (Math.abs(diffX) > Math.abs(diffY) * 2) {
+                e.preventDefault(); // Prevenir scroll solo para swipes claramente horizontales
+            }
             
             // Mostrar hint visual de swipe si se mueve hacia la izquierda
             if (diffX < -50) {
@@ -231,10 +239,14 @@ document.addEventListener('DOMContentLoaded', () => {
         addExpenseFab.addEventListener('click', (e) => {
             e.stopPropagation();
             hapticFeedback('light');
-            if (participants.length > 0) {
+            if (participants.length >= 2) {
                 updatePayerSelect();
                 populateExcludedParticipantsCheckboxes();
                 openModal(addExpenseModal);
+            } else if (participants.length === 1) {
+                // Mostrar feedback si solo hay 1 participante
+                hapticFeedback('heavy');
+                showToast('Necesitas al menos 2 participantes para gastos compartidos');
             } else {
                 // Mostrar feedback visual si no hay participantes
                 hapticFeedback('heavy');
@@ -296,8 +308,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateFABStates() {
-        // Deshabilitar gasto FAB si no hay participantes
-        if (participants.length === 0) {
+        // Deshabilitar gasto FAB si hay menos de 2 participantes
+        if (participants.length < 2) {
             addExpenseFab.style.opacity = '0.5';
             addExpenseFab.style.pointerEvents = 'none';
         } else {
@@ -305,8 +317,8 @@ document.addEventListener('DOMContentLoaded', () => {
             addExpenseFab.style.pointerEvents = 'auto';
         }
 
-        // Deshabilitar calcular FAB si no hay participantes o gastos
-        if (participants.length === 0 || expenses.length === 0) {
+        // Deshabilitar calcular FAB si hay menos de 2 participantes o no hay gastos
+        if (participants.length < 2 || expenses.length === 0) {
             calculateFab.style.opacity = '0.5';
             calculateFab.style.pointerEvents = 'none';
         } else {
@@ -354,11 +366,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderParticipants() {
         participantList.innerHTML = '';
 
-        if (participants.length === 0) {
-            emptyParticipantsState.style.display = 'flex';
-            participantList.style.display = 'none';
+        if (participants.length < 2) {
+            if (participants.length === 0) {
+                emptyParticipantsState.style.display = 'flex';
+                participantList.style.display = 'none';
+            } else {
+                emptyParticipantsState.style.display = 'none';
+                participantList.style.display = 'grid';
+            }
             openAddExpenseModalBtn.disabled = true;
-            return;
+            
+            if (participants.length === 1) {
+                // Si hay solo 1 participante, mostrar en la consola o como toast
+                // que necesita al menos 2 para gastos compartidos
+            }
         } else {
             emptyParticipantsState.style.display = 'none';
             participantList.style.display = 'grid';
@@ -486,6 +507,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addExpense(description, amount, payer, excludedParticipants) {
         if (description && amount > 0 && payer) {
+            // Validar que no se excluyan todos los participantes
+            const participantsInExpense = participants.length - (excludedParticipants ? excludedParticipants.length : 0);
+            
+            if (participantsInExpense <= 0) {
+                // Feedback haptic de error
+                hapticFeedback('heavy');
+                alert('No puedes excluir a todos los participantes del gasto. Al menos uno debe participar.');
+                return;
+            }
+            
             expenses.push({
                 description: description,
                 amount: parseFloat(amount),
@@ -615,23 +646,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderExpenses();
     checkCalculateButtonStatus();
     
-    // ====== INICIALIZACIÓN DE SISTEMAS ======
-    
-    // Inicializar gestos de swipe
-    initSwipeGestures();
-    
-    // ====== SISTEMA FAB - FASE 3 ======
-    initFABSystem();
-    
-    // ====== NAVEGACIÓN POR TECLADO ======
-    initKeyboardNavigation();
-    
-    // ====== CONFIGURACIÓN ANTI-AUTOCOMPLETE ======
-    initAntiAutocomplete();
-    
-    // ====== VERIFICACIÓN DE COMPATIBILIDAD SELECT ======
-    initSelectCompatibility();
-    
     function initSelectCompatibility() {
         // Verificar que el select funcione correctamente en Chrome
         expensePayerSelect.addEventListener('click', (e) => {
@@ -711,11 +725,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'g': // Agregar Gasto
                     e.preventDefault();
                     hapticFeedback('light');
-                    if (participants.length > 0) {
+                    if (participants.length >= 2) {
                         updatePayerSelect();
                         populateExcludedParticipantsCheckboxes();
                         openModal(addExpenseModal);
                         showShortcutFeedback('Agregar Gasto (G)');
+                    } else if (participants.length === 1) {
+                        hapticFeedback('heavy');
+                        showToast('Necesitas al menos 2 participantes para gastos compartidos');
                     } else {
                         hapticFeedback('heavy');
                         showToast('Primero debes agregar participantes');
@@ -953,4 +970,133 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 300);
         }
     }
+    
+    // ====== SISTEMA DE MENÚ HAMBURGUESA ======
+    function initHamburgerMenu() {
+        const hamburgerBtn = document.getElementById('openMenu');
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const closeMenuBtn = document.getElementById('closeMenu');
+        const aboutModal = document.getElementById('aboutModal');
+        const contactModal = document.getElementById('contactModal');
+        
+        // Event listeners para el botón hamburguesa
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            hapticFeedback('light');
+            toggleHamburgerMenu();
+        });
+        
+        // Event listener para el botón de cerrar del menú
+        closeMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            hapticFeedback('light');
+            closeHamburgerMenu();
+        });
+        
+        // Event listeners para los elementos del menú
+        document.getElementById('aboutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            hapticFeedback('light');
+            closeHamburgerMenu();
+            openModal(aboutModal);
+        });
+        
+        document.getElementById('contactBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            hapticFeedback('light');
+            closeHamburgerMenu();
+            openModal(contactModal);
+        });
+        
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (!hamburgerMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                closeHamburgerMenu();
+            }
+        });
+        
+        // Cerrar menú con Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && hamburgerMenu.classList.contains('active')) {
+                closeHamburgerMenu();
+            }
+        });
+    }
+    
+    function toggleHamburgerMenu() {
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const hamburgerBtn = document.getElementById('openMenu');
+        
+        if (hamburgerMenu.classList.contains('active')) {
+            closeHamburgerMenu();
+        } else {
+            openHamburgerMenu();
+        }
+    }
+    
+    function openHamburgerMenu() {
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const hamburgerBtn = document.getElementById('openMenu');
+        
+        hamburgerMenu.classList.add('active');
+        hamburgerBtn.classList.add('active');
+        
+        // Agregar overlay sutil
+        const menuOverlay = document.createElement('div');
+        menuOverlay.id = 'hamburgerOverlay';
+        menuOverlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s;
+        `;
+        document.body.appendChild(menuOverlay);
+        
+        setTimeout(() => {
+            menuOverlay.style.opacity = '1';
+        }, 10);
+        
+        menuOverlay.addEventListener('click', closeHamburgerMenu);
+    }
+    
+    function closeHamburgerMenu() {
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const hamburgerBtn = document.getElementById('openMenu');
+        const menuOverlay = document.getElementById('hamburgerOverlay');
+        
+        hamburgerMenu.classList.remove('active');
+        hamburgerBtn.classList.remove('active');
+        
+        if (menuOverlay) {
+            menuOverlay.style.opacity = '0';
+            setTimeout(() => {
+                menuOverlay.remove();
+            }, 300);
+        }
+    }
+    
+    // ====== INICIALIZACIÓN COMPLETA ======
+    
+    // Inicializar gestos de swipe
+    initSwipeGestures();
+    
+    // Inicializar sistema FAB
+    initFABSystem();
+    
+    // Inicializar navegación por teclado
+    initKeyboardNavigation();
+    
+    // Inicializar configuración anti-autocomplete
+    initAntiAutocomplete();
+    
+    // Inicializar compatibilidad de select
+    initSelectCompatibility();
+    
+    // Inicializar menú hamburguesa
+    initHamburgerMenu();
 });

@@ -17,6 +17,27 @@
 <body>
     <div id="backdrop" class="backdrop"></div>
 
+    <!-- Menú Hamburguesa -->
+    <div id="hamburgerMenu" class="hamburger-menu">
+        <div class="menu-header">
+            <h3>Just Pay!</h3>
+            <button class="menu-close" id="closeMenu">&times;</button>
+        </div>
+        <nav class="menu-nav">
+            <a href="#" class="menu-item" id="aboutBtn">
+                <i class="fas fa-info-circle"></i>
+                <span>Acerca de</span>
+            </a>
+            <a href="#" class="menu-item" id="contactBtn">
+                <i class="fas fa-envelope"></i>
+                <span>Contacto</span>
+            </a>
+        </nav>
+        <div class="menu-footer">
+            <p>&copy; 2025 Just Pay!</p>
+        </div>
+    </div>
+
     <div class="container">
         <header class="header">
             <div class="header-left">
@@ -146,6 +167,83 @@
                 <i class="fas fa-calculator"></i>
                 <span class="fab-label">Calcular</span>
             </button>
+        </div>
+    </div>
+
+    <!-- Modal Acerca de -->
+    <div id="aboutModal" class="modal modal-info-type">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-btn">&times;</span>
+                <h2><i class="fas fa-info-circle"></i> Acerca de Just Pay!</h2>
+            </div>
+            <div class="modal-body">
+                <div class="about-content">
+                    <div class="app-info">
+                        <h3>🎯 ¿Qué es Just Pay!?</h3>
+                        <p>Just Pay! es una aplicación web diseñada para simplificar el cálculo de gastos compartidos entre amigos, familiares o compañeros.</p>
+                        
+                        <h3>✨ Características:</h3>
+                        <ul>
+                            <li>📱 Diseño responsivo para móvil y desktop</li>
+                            <li>🧮 Algoritmo optimizado para minimizar transferencias</li>
+                            <li>💱 Formato de moneda argentino (punto para miles, coma para decimales)</li>
+                            <li>🎨 Interfaz moderna con efectos visuales</li>
+                            <li>📤 Compartir resultados por WhatsApp</li>
+                            <li>⌨️ Atajos de teclado para acciones rápidas</li>
+                        </ul>
+
+                        <h3>🚀 Versión:</h3>
+                        <p><strong>v0.3</strong> - 2025</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Contacto -->
+    <div id="contactModal" class="modal modal-info-type">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-btn">&times;</span>
+                <h2><i class="fas fa-envelope"></i> Contacto</h2>
+            </div>
+            <div class="modal-body">
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>💬 ¿Tienes sugerencias o encontraste un bug?</h3>
+                        <p>Tu feedback es muy valioso para mejorar Just Pay!</p>
+                        
+                        <div class="contact-methods">
+                            <div class="contact-item">
+                                <i class="fab fa-github"></i>
+                                <div>
+                                    <h4>GitHub</h4>
+                                    <p>Reporta bugs o solicita nuevas características</p>
+                                    <a href="https://github.com/AndresQ-Dev/Just-Pay" target="_blank" rel="noopener">github.com/AndresQ-Dev/Just-Pay</a>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <h4>Email</h4>
+                                    <p>Contacto directo para consultas</p>
+                                    <a href="mailto:andresq.dev@gmail.com">andresq.dev@gmail.com</a>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <i class="fas fa-star"></i>
+                                <div>
+                                    <h4>¿Te gusta la app?</h4>
+                                    <p>¡Dale una estrella en GitHub!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

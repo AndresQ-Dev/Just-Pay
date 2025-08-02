@@ -172,7 +172,7 @@ class SettlementCalculator {
         console.log(`   SUMA TOTAL: $${totalBalance.toLocaleString()} ${Math.abs(totalBalance) < 0.01 ? '✅' : '❌'}`);
 
         // 5. Generar el resumen final formateado
-        const formattedResults = this.formatSettlementSummary(totalExpenses, transfers);
+        const formattedResults = this.formatSettlementSummary(totalExpenses, transfers, expenses);
 
         console.log('\n🎯 === CÁLCULO COMPLETADO ===\n');
 
@@ -190,13 +190,37 @@ class SettlementCalculator {
      *
      * @param {number} totalExpenses - El monto total de todos los gastos.
      * @param {Array<object>} transfers - Array de objetos de transferencia optimizados.
+     * @param {Array<object>} expenses - Array de gastos para mostrar el resumen.
      * @returns {object} Un objeto con 'html' y 'plainText' del resumen.
      */
-    formatSettlementSummary(totalExpenses, transfers) {
+    formatSettlementSummary(totalExpenses, transfers, expenses = []) {
         // --- Versión HTML (para el modal, con estructura mejorada) ---
         let htmlSummary = `<div class="results-header">
             <h2>📊 Resumen de Gastos Compartidos</h2>
         </div>`;
+        
+        // Resumen de gastos individuales
+        if (expenses && expenses.length > 0) {
+            htmlSummary += `<div class="results-section">
+                <h3>🧾 Gastos Registrados</h3>
+                <div class="expenses-summary">`;
+            
+            expenses.forEach((expense, index) => {
+                let excludedText = '';
+                if (expense.excluded && expense.excluded.length > 0) {
+                    excludedText = ` <span class="excluded-note">(excluidos: ${expense.excluded.join(', ')})</span>`;
+                }
+                
+                htmlSummary += `<div class="expense-summary-item">
+                    <span class="expense-desc">${expense.description}</span>
+                    <span class="expense-payer">pagó: ${expense.payer}</span>
+                    <span class="expense-amount">${formatCurrency(expense.amount)}</span>
+                    ${excludedText}
+                </div>`;
+            });
+            
+            htmlSummary += `</div></div>`;
+        }
         
         htmlSummary += `<div class="results-total">
             <h3>💰 Total de Gastos: ${formatCurrency(totalExpenses)}</h3>
@@ -214,7 +238,6 @@ class SettlementCalculator {
                 <div class="transfers-list">`;
 
             transfers.forEach((transfer, index) => {
-                // Mostrar con decimales solo si es necesario
                 const displayAmount = formatCurrency(transfer.amount);
                 
                 htmlSummary += `<div class="transfer-item">
@@ -229,22 +252,29 @@ class SettlementCalculator {
             });
 
             htmlSummary += `</div></div>`;
-            
-            // Agregar nota explicativa
-            htmlSummary += `<div class="results-note">
-                <p class="modal-result-text"><small>💡 Estas transferencias minimizan el número de transacciones necesarias para equilibrar todos los gastos entre participantes.</small></p>
-            </div>`;
         }
-        
-        htmlSummary += `<div class="results-footer">
-            <p class="modal-result-text">✨ ¡Transfiere ahora...!</p>
-        </div>`;
 
-        // --- Versión Texto Plano (para copiar/compartir, CON asteriscos para negrita) ---
-        let plainTextSummary = `📊 *RESUMEN DE GASTOS*
-======================
+        // --- Versión Texto Plano (para copiar/compartir) ---
+        let plainTextSummary = `📊 *RESUMEN DE GASTOS COMPARTIDOS*
+=================================
 
-💰 *TOTAL:* ${formatCurrency(totalExpenses)}
+🧾 *GASTOS REGISTRADOS:*
+`;
+
+        if (expenses && expenses.length > 0) {
+            expenses.forEach((expense, index) => {
+                let excludedText = '';
+                if (expense.excluded && expense.excluded.length > 0) {
+                    excludedText = ` (excluidos: ${expense.excluded.join(', ')})`;
+                }
+                plainTextSummary += `${index + 1}. ${expense.description} - ${formatCurrency(expense.amount)}
+   Pagó: ${expense.payer}${excludedText}
+
+`;
+            });
+        }
+
+        plainTextSummary += `� *TOTAL DE GASTOS:* ${formatCurrency(totalExpenses)}
 
 `;
 
@@ -266,7 +296,7 @@ Se necesitan *${transfers.length} transferencia${transfers.length > 1 ? 's' : ''
             });
         }
         
-        plainTextSummary += '======================\n✨ *¡Transfiere ahora...!*\n\n🚀 Generado con *Just Pay!*';
+        plainTextSummary += '=================================\n🚀 Generado con *Just Pay!*';
 
         return {
             html: htmlSummary,

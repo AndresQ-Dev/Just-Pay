@@ -77,9 +77,125 @@ body {
   margin-bottom: 10px; /* Pequeño margen inferior */
 }
 
+/* --- Menú Hamburguesa --- */
+.hamburger-menu {
+  position: fixed;
+  top: 0;
+  right: -350px; /* Oculto inicialmente */
+  width: 300px;
+  height: 100vh;
+  background: linear-gradient(160deg, rgba(13, 23, 41, 0.95), rgba(27, 49, 77, 0.95));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1001;
+  transition: right 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.hamburger-menu.active {
+  right: 0;
+}
+
+.menu-header {
+  padding: 1.5rem 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(27, 49, 77, 0.3);
+}
+
+.menu-header h3 {
+  color: #F0F0F0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.menu-close {
+  background: none;
+  border: none;
+  color: #F0F0F0;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  line-height: 1;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.menu-close:hover {
+  color: #2DD4BF;
+  transform: rotate(90deg);
+}
+
+.menu-nav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  color: #F0F0F0;
+  text-decoration: none;
+  transition: background-color 0.2s, transform 0.2s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.menu-item:hover {
+  background-color: rgba(45, 212, 191, 0.1);
+  transform: translateX(10px);
+}
+
+.menu-item i {
+  margin-right: 1rem;
+  font-size: 1.2rem;
+  color: #2DD4BF;
+  width: 20px;
+  text-align: center;
+}
+
+.menu-item span {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.menu-footer {
+  padding: 1rem 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.menu-footer p {
+  color: rgba(240, 240, 240, 0.6);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* Responsive para móvil */
+@media (max-width: 480px) {
+  .hamburger-menu {
+    width: 280px;
+    right: -280px;
+  }
+  
+  .menu-header {
+    padding: 1.2rem 1rem;
+  }
+  
+  .menu-item {
+    padding: 0.8rem 1rem;
+  }
+}
+
 /* --- Encabezado de la aplicación --- */
 .header {
-  background-color: rgba(27, 49, 77, 0.4);
+  background-color: rgba(27, 49, 77, 0.95); /* Cambiar a fondo casi sólido para mejor legibilidad */
   padding: 0.5rem 0.8rem; /* Reducido para ser más compacto en móvil por defecto */
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 0.8rem; /* Reducir margen inferior */
@@ -811,8 +927,8 @@ button:disabled {
 .excluded-participants-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  max-height: 120px;
+  gap: 0.5rem;
+  max-height: 100px;
   overflow-y: auto;
   padding-right: 5px;
 }
@@ -821,11 +937,12 @@ button:disabled {
   display: flex;
   align-items: center;
   background-color: rgba(13, 23, 41, 0.8); /* Fondo oscuro para los items */
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.4rem;
   cursor: pointer;
   transition: background-color 0.2s;
   color: #F0F0F0;
+  font-size: 0.85rem;
 }
 
 .excluded-participant-item:hover {
@@ -833,21 +950,23 @@ button:disabled {
 }
 
 .excluded-participant-item input {
-  margin-right: 0.5rem;
+  margin-right: 0.4rem;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  width: 1em;
-  height: 1em;
-  border: 2px solid #2DD4BF; /* Borde con color de acento */
-  border-radius: 0.2em;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid #2DD4BF; /* Borde con color de acento */
+  border-radius: 2px;
   background-color: transparent;
   cursor: pointer;
   position: relative;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   transition: background-color 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+  vertical-align: middle;
 }
 
 .excluded-participant-item input:checked {
@@ -857,13 +976,16 @@ button:disabled {
 
 .excluded-participant-item input:checked::after {
   content: '✓';
-  font-size: 0.8em;
+  font-size: 10px;
   color: #0A1128; /* Checkmark en color oscuro */
+  font-weight: bold;
+  line-height: 1;
 }
 
 .excluded-participant-item span {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   cursor: pointer;
+  line-height: 1.2;
 }
 
 /* --- ESTILOS ESPECÍFICOS PARA EL MODAL DE RESULTADOS --- */
@@ -909,8 +1031,8 @@ button:disabled {
 /* Nuevos estilos para el formato mejorado de resultados */
 .results-header {
   text-align: center;
-  margin-bottom: 0.3rem; /* Reducido de 0.6rem */
-  padding-bottom: 0.3rem; /* Reducido de 0.4rem */
+  margin-bottom: 0.5rem; /* Reducido de 0.3rem a algo más compacto */
+  padding-bottom: 0.2rem; /* Reducido de 0.3rem */
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -933,7 +1055,7 @@ button:disabled {
   border: 1px solid rgba(76, 175, 80, 0.3);
   border-radius: 0.6rem;
   padding: 0.5rem; /* Reducido de 0.6rem */
-  margin-bottom: 0.3rem; /* Reducido de 0.6rem */
+  margin-bottom: 0.4rem; /* Reducido de 0.3rem para más espacio con transferencias */
   text-align: center;
 }
 
@@ -945,7 +1067,7 @@ button:disabled {
 }
 
 .results-section {
-  margin-bottom: 0.3rem; /* Reducido de 0.6rem */
+  margin-bottom: 0.4rem; /* Aumentado ligeramente de 0.3rem */
 }
 
 .results-section h3 {
@@ -1049,6 +1171,82 @@ button:disabled {
   color: #E0E0E0;
 }
 
+/* --- Estilos para el resumen de gastos --- */
+.expenses-summary {
+  background: rgba(13, 23, 41, 0.6);
+  border-radius: 0.6rem;
+  padding: 0.8rem;
+  margin-top: 0.4rem; /* Reducido de 0.8rem */
+  border: 1px solid rgba(45, 212, 191, 0.2);
+}
+
+.expense-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.expense-summary-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.expense-desc {
+  color: #F0F0F0;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.expense-payer {
+  color: #2DD4BF;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.expense-amount {
+  color: #FFD700;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.excluded-note {
+  color: #FF6B6B;
+  font-size: 0.8rem;
+  font-style: italic;
+  margin-top: 0.2rem;
+}
+
+/* Responsive para resumen de gastos */
+@media (max-width: 600px) {
+  .expenses-summary {
+    padding: 0.6rem;
+    margin-top: 0.3rem; /* Reducido de 0.6rem para móviles */
+  }
+  
+  .expense-summary-item {
+    gap: 0.2rem;
+    padding: 0.4rem 0;
+  }
+  
+  .expense-desc {
+    font-size: 0.9rem;
+  }
+  
+  .expense-payer {
+    font-size: 0.8rem;
+  }
+  
+  .expense-amount {
+    font-size: 0.95rem;
+  }
+  
+  .excluded-note {
+    font-size: 0.75rem;
+  }
+}
+
 /* Adaptaciones móviles para los nuevos estilos */
 @media (max-width: 600px) {
   .results-header h2 {
@@ -1061,11 +1259,11 @@ button:disabled {
   
   .results-total {
     padding: 0.4rem; /* Reducido de 0.5rem */
-    margin-bottom: 0.2rem; /* Reducido de 0.5rem */
+    margin-bottom: 0.3rem; /* Ajustado para móviles */
   }
   
   .results-section {
-    margin-bottom: 0.2rem; /* Reducido de 0.5rem */
+    margin-bottom: 0.3rem; /* Ajustado para móviles */
   }
   
   .results-section h3 {
@@ -1209,11 +1407,113 @@ button:disabled {
   color: #14B8A6; /* Cian más intenso en hover */
 }
 
+/* --- Modales de Información (Acerca de y Contacto) --- */
+.modal-info-type .modal-content {
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.about-content, .contact-content {
+  color: #F0F0F0;
+  line-height: 1.6;
+}
+
+.about-content h3, .contact-content h3 {
+  color: #2DD4BF;
+  margin-top: 1.5rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.2rem;
+}
+
+.about-content ul {
+  padding-left: 1.2rem;
+  margin: 1rem 0;
+}
+
+.about-content li {
+  margin-bottom: 0.5rem;
+  color: #E2E8F0;
+}
+
+.contact-methods {
+  margin-top: 1.5rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: rgba(27, 49, 77, 0.3);
+  border-radius: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.contact-item:hover {
+  background: rgba(27, 49, 77, 0.5);
+  transform: translateY(-2px);
+}
+
+.contact-item i {
+  color: #2DD4BF;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  margin-top: 0.2rem;
+  min-width: 30px;
+  text-align: center;
+}
+
+.contact-item h4 {
+  color: #F0F0F0;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.contact-item p {
+  color: #B8C5D1;
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.contact-item a {
+  color: #2DD4BF;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.contact-item a:hover {
+  color: #14B8A6;
+  text-decoration: underline;
+}
+
+/* Responsive para modales de información */
+@media (max-width: 600px) {
+  .modal-info-type .modal-content {
+    max-width: 95vw;
+    max-height: 85vh;
+    margin: 1rem;
+  }
+  
+  .contact-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .contact-item i {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+}
+
 
 /* --- Listas (Participantes y Gastos) --- */
 .list-content {
-  max-height: 250px; /* Altura fija para la lista, permite scroll si hay muchos ítems */
-  overflow-y: auto;
+  max-height: none; /* Remover altura máxima fija para permitir crecimiento automático */
+  min-height: 100px; /* Altura mínima para mantener estructura */
+  height: auto; /* Altura automática basada en contenido */
+  overflow-y: visible; /* Permitir que el contenido se muestre completamente */
   padding-right: 5px;
   margin-bottom: 0;
   padding-top: 0;
@@ -1222,24 +1522,64 @@ button:disabled {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  
+  /* Optimizaciones para scroll touch en móviles */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y; /* Permitir solo scroll vertical */
 }
 
-/* Ocultar la barra de desplazamiento si no es necesaria por defecto en el list-content */
-.list-content::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+/* Optimizaciones específicas para móviles */
+@media (max-width: 768px) {
+  .list-content {
+    /* En móviles, permitir scroll si el contenido es muy largo */
+    max-height: 60vh;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    /* Optimizaciones adicionales para touch */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+  
+  /* Mejorar la visibilidad del scroll en móviles */
+  .list-content::-webkit-scrollbar {
+    width: 3px;
+  }
+  
+  .list-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+  
+  .list-content::-webkit-scrollbar-thumb {
+    background: rgba(45, 212, 191, 0.5);
+    border-radius: 2px;
+  }
+  
+  .list-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(45, 212, 191, 0.7);
+  }
 }
-/* Estilos para el track y thumb de la barra de desplazamiento si se hace visible */
-.list-content::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-}
-.list-content::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-}
-.list-content::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
+
+/* Ocultar la barra de desplazamiento en desktop por defecto */
+@media (min-width: 769px) {
+  .list-content::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+  
+  /* Estilos para el track y thumb de la barra de desplazamiento si se hace visible */
+  .list-content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+  }
+  .list-content::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+  }
+  .list-content::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+  }
 }
 
 /* *** ESTILOS PARA LA LISTA DE PARTICIPANTES ESPECÍFICAMENTE *** */
@@ -1288,22 +1628,27 @@ button:disabled {
   background-color: rgba(13, 23, 41, 0.9);
 }
 
-/* Indicador visual para swipe */
-.participant::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.8), transparent);
-  transition: left 0.3s ease;
-  border-radius: 0.8rem;
-  z-index: 0;
-}
+/* Indicador visual para swipe - SOLO EN MÓVILES */
+@media (max-width: 767px) {
+  .participant::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.8), transparent);
+    transition: left 0.3s ease, opacity 0.3s ease;
+    border-radius: 0.8rem;
+    z-index: 0;
+    opacity: 0; /* Oculto por defecto */
+    pointer-events: none; /* No interferir con interacciones */
+  }
 
-.participant.swipe-hint::before {
-  left: 100%;
+  .participant.swipe-hint::before {
+    left: 0;
+    opacity: 1; /* Visible solo cuando se activa el swipe */
+  }
 }
 
 /* Clase para animación de eliminación */
@@ -1403,7 +1748,8 @@ button:disabled {
   -webkit-tap-highlight-color: transparent;
   touch-action: pan-x;
   transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
-  overflow: visible; /* Cambiar a visible para evitar cortes */
+  overflow-x: hidden; /* Solo ocultar desbordamiento horizontal (para pseudo-elementos) */
+  overflow-y: visible; /* Permitir que el contenido se expanda verticalmente */
   word-wrap: break-word; /* Evitar desbordamiento horizontal de texto largo */
 }
 
@@ -1459,82 +1805,118 @@ button:disabled {
 /* Responsive para móvil */
 @media (max-width: 600px) {
   .expense-item {
-    padding: 1rem 0.8rem; /* Mantener padding vertical para más espacio */
+    padding: 1.2rem 0.8rem; /* Más padding vertical para más espacio */
     min-height: auto; /* Permitir que se expanda automáticamente */
     height: auto; /* Altura automática basada en contenido */
+    overflow-x: hidden; /* Solo ocultar horizontal */
+    overflow-y: visible; /* Permitir expansión vertical */
   }
   
   .expense-info {
     padding-right: 2rem;
-    gap: 0.6rem; /* Aumentar espacio entre elementos */
+    gap: 0.8rem; /* Más espacio entre elementos */
     min-height: auto; /* Permitir expansión vertical */
+    display: flex;
+    flex-direction: column;
   }
   
   .expense-description {
     font-size: 1rem;
-    line-height: 1.3; /* Mejorar legibilidad */
+    line-height: 1.4; /* Mejor legibilidad */
     word-wrap: break-word; /* Evitar desbordamiento horizontal */
+    margin-bottom: 0.2rem;
   }
   
   .expense-amount {
-    font-size: 1.2rem; /* Mantener tamaño legible */
-    margin-top: 0.3rem; /* Más espacio arriba del monto */
+    font-size: 1.25rem; /* Mantener tamaño legible */
+    font-weight: bold;
+    margin-top: 0.4rem; /* Más espacio arriba del monto */
+    color: #2DD4BF;
   }
   
   .expense-payer,
   .expense-excluded {
     font-size: 0.85rem; /* Ligeramente más grande para mejor legibilidad */
-    line-height: 1.2;
-  }
-  
-  .expense-payer {
-    margin-bottom: 0.2rem; /* Pequeño margen para separar del texto excluido */
+    line-height: 1.3;
+    margin-bottom: 0.1rem;
   }
 }
 
 /* Responsive para pantallas móviles muy pequeñas */
 @media (max-width: 480px) {
   .expense-item {
-    padding: 1.2rem 0.8rem; /* Más padding vertical en pantallas pequeñas */
+    padding: 1.4rem 0.8rem; /* Aún más padding vertical en pantallas pequeñas */
+    margin-bottom: 1.2rem; /* Más separación entre elementos */
   }
   
   .expense-info {
-    gap: 0.7rem; /* Más espacio entre elementos en pantallas pequeñas */
+    gap: 0.9rem; /* Más espacio entre elementos en pantallas pequeñas */
+    padding-right: 2.2rem; /* Más espacio para el botón */
   }
   
   .expense-description {
     font-size: 0.95rem;
-    line-height: 1.4; /* Mejor espaciado de líneas */
+    line-height: 1.5; /* Mejor espaciado de líneas */
+    margin-bottom: 0.3rem;
   }
   
   .expense-amount {
-    font-size: 1.1rem;
-    margin-top: 0.4rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+    margin-bottom: 0.2rem;
   }
   
   .expense-payer,
   .expense-excluded {
     font-size: 0.8rem;
-    line-height: 1.3;
+    line-height: 1.4;
+    margin-bottom: 0.2rem;
   }
 }
 
-/* Indicador visual para swipe */
-.expense-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.8), transparent);
-  transition: left 0.3s ease;
-  border-radius: 0.75rem;
-  z-index: 0;
+/* Asegurar que los contenedores se expandan correctamente en móvil */
+@media (max-width: 767px) {
+  .section {
+    min-height: auto;
+    height: auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .list-content {
+    max-height: none !important;
+    height: auto !important;
+    min-height: auto;
+    overflow-y: visible !important;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
 }
 
-.expense-item.swipe-hint::before {
-  left: 100%;
+/* Indicador visual para swipe - SOLO EN MÓVILES */
+@media (max-width: 767px) {
+  .expense-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.8), transparent);
+    transition: left 0.3s ease;
+    border-radius: 0.75rem;
+    z-index: 0;
+    opacity: 0; /* Oculto por defecto */
+    pointer-events: none; /* No interferir con interacciones */
+  }
+
+  .expense-item.swipe-hint::before {
+    left: 0;
+    opacity: 1; /* Visible solo cuando se activa el swipe */
+  }
 }
 
 /* Clase para animación de eliminación */
