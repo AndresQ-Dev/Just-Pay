@@ -216,7 +216,7 @@ body {
 }
 
 .logo img {
-  height: 45px; /* Reducido para ser más compacto en móvil por defecto */
+  height: 65px;
   width: auto;
   display: block;
   filter: brightness(1.5);
@@ -224,7 +224,7 @@ body {
 
 .app-name {
   font-family: 'Inter', sans-serif; /* Fuente moderna y limpia */
-  font-size: 1.75rem; 
+  font-size: 1.65rem; 
   font-weight: 800; /* Extra bold para presencia */
   margin: 0 0.5rem;
   white-space: nowrap;
