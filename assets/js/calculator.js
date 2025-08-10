@@ -34,11 +34,9 @@ class SettlementCalculator {
         // Validar entrada
         const validationErrors = this.validateInput(participants, expenses);
         if (validationErrors.length > 0) {
-            console.error('❌ Errores de validación:', validationErrors);
+
             throw new Error(`Errores de validación:\n${validationErrors.join('\n')}`);
         }
-
-        console.log('\n🎯 === ALGORITMO CORREGIDO: MATRIZ DE DEUDAS + NETEO ===');
 
         // 1. MATRIZ DE DEUDAS ESPECÍFICAS POR GASTO
         // Estructura: debtMatrix.get(debtor).get(creditor) = amount
@@ -50,42 +48,33 @@ class SettlementCalculator {
             });
         });
 
-        console.log('📊 Calculando deudas específicas por cada gasto...');
-
         let totalExpenses = 0;
         expenses.forEach((expense, index) => {
             totalExpenses += expense.amount;
             const includedParticipants = participants.filter(p => !expense.excluded.includes(p));
             const perPersonCost = expense.amount / includedParticipants.length;
-            
-            console.log(`\n💰 Gasto ${index + 1}: ${expense.description} - $${expense.amount.toLocaleString()}`);
-            console.log(`   Pagado por: ${expense.payer}`);
-            console.log(`   Excluidos: [${expense.excluded.join(', ') || 'ninguno'}]`);
-            console.log(`   Incluidos: [${includedParticipants.join(', ')}] (${includedParticipants.length} personas)`);
-            console.log(`   Costo por persona: $${perPersonCost.toLocaleString()}`);
 
             // Cada persona incluida (excepto quien pagó) debe dinero al pagador
             includedParticipants.forEach(person => {
                 if (person !== expense.payer) {
                     const currentDebt = debtMatrix.get(person).get(expense.payer);
                     debtMatrix.get(person).set(expense.payer, currentDebt + perPersonCost);
-                    console.log(`   → ${person} debe a ${expense.payer}: +$${perPersonCost.toLocaleString()}`);
+
                 }
             });
         });
 
-        console.log('\n📋 MATRIZ DE DEUDAS ESPECÍFICAS:');
         participants.forEach(debtor => {
             participants.forEach(creditor => {
                 const debt = debtMatrix.get(debtor).get(creditor);
                 if (debt > 0) {
-                    console.log(`   ${debtor} debe a ${creditor}: $${debt.toLocaleString()}`);
+
                 }
             });
         });
 
         // 2. NETEO BIDIRECCIONAL
-        console.log('\n🔄 Aplicando neteo bidireccional...');
+
         const netMatrix = new Map();
         participants.forEach(p => {
             netMatrix.set(p, new Map());
@@ -105,10 +94,10 @@ class SettlementCalculator {
                         const netDebt = debt1to2 - debt2to1;
                         if (netDebt > 0) {
                             netMatrix.get(person1).set(person2, netDebt);
-                            console.log(`   ${person1} ↔ ${person2}: ${person1} debe $${debt1to2.toLocaleString()}, ${person2} debe $${debt2to1.toLocaleString()} → ${person1} debe $${netDebt.toLocaleString()}`);
+
                         } else if (netDebt < 0) {
                             netMatrix.get(person2).set(person1, -netDebt);
-                            console.log(`   ${person1} ↔ ${person2}: ${person1} debe $${debt1to2.toLocaleString()}, ${person2} debe $${debt2to1.toLocaleString()} → ${person2} debe $${(-netDebt).toLocaleString()}`);
+
                         }
                         // Marcar como procesado
                         debtMatrix.get(person1).set(person2, 0);
@@ -136,9 +125,8 @@ class SettlementCalculator {
             });
         });
 
-        console.log('\n💸 TRANSFERENCIAS FINALES:');
         transfers.forEach((transfer, i) => {
-            console.log(`   ${i + 1}. ${transfer.from} → ${transfer.to}: $${transfer.amount.toLocaleString()}`);
+
         });
 
         // 4. CALCULAR BALANCES FINALES
@@ -162,19 +150,15 @@ class SettlementCalculator {
             });
         });
 
-        console.log('\n📊 BALANCES FINALES:');
         let totalBalance = 0;
         participants.forEach(person => {
             const balance = balances.get(person);
             totalBalance += balance;
-            console.log(`   ${person}: ${balance >= 0 ? '+' : ''}$${balance.toLocaleString()}`);
+
         });
-        console.log(`   SUMA TOTAL: $${totalBalance.toLocaleString()} ${Math.abs(totalBalance) < 0.01 ? '✅' : '❌'}`);
 
         // 5. Generar el resumen final formateado
         const formattedResults = this.formatSettlementSummary(totalExpenses, transfers, expenses);
-
-        console.log('\n🎯 === CÁLCULO COMPLETADO ===\n');
 
         return {
             totalExpenses: parseFloat(totalExpenses.toFixed(2)),
@@ -196,13 +180,13 @@ class SettlementCalculator {
     formatSettlementSummary(totalExpenses, transfers, expenses = []) {
         // --- Versión HTML (para el modal, con estructura mejorada) ---
         let htmlSummary = `<div class="results-header">
-            <h2>📊 Resumen de Gastos Compartidos</h2>
+            <h2> Resumen de Gastos Compartidos</h2>
         </div>`;
         
         // Resumen de gastos individuales
         if (expenses && expenses.length > 0) {
             htmlSummary += `<div class="results-section">
-                <h3>🧾 Gastos Registrados</h3>
+                <h3> Gastos Registrados</h3>
                 <div class="expenses-summary">`;
             
             expenses.forEach((expense, index) => {
@@ -223,17 +207,17 @@ class SettlementCalculator {
         }
         
         htmlSummary += `<div class="results-total">
-            <h3>💰 Total de Gastos: ${formatCurrency(totalExpenses)}</h3>
+            <h3> Total de Gastos: ${formatCurrency(totalExpenses)}</h3>
         </div>`;
         
         if (transfers.length === 0) {
             htmlSummary += `<div class="results-section">
-                <h3>🎉 ¡Excelente!</h3>
+                <h3> ¡Excelente!</h3>
                 <p class="modal-result-text">Todos los saldos están equilibrados. No se necesitan transferencias.</p>
             </div>`;
         } else {
             htmlSummary += `<div class="results-section">
-                <h3>💸 Transferencias Necesarias</h3>
+                <h3> Transferencias Necesarias</h3>
                 <p class="modal-result-text">Se necesitan ${transfers.length} transferencia${transfers.length > 1 ? 's' : ''} para equilibrar los gastos:</p>
                 <div class="transfers-list">`;
 
@@ -255,10 +239,10 @@ class SettlementCalculator {
         }
 
         // --- Versión Texto Plano (para copiar/compartir) ---
-        let plainTextSummary = `📊 *RESUMEN DE GASTOS COMPARTIDOS*
+        let plainTextSummary = ` *RESUMEN DE GASTOS COMPARTIDOS*
 =================================
 
-🧾 *GASTOS REGISTRADOS:*
+ *GASTOS REGISTRADOS:*
 `;
 
         if (expenses && expenses.length > 0) {
@@ -274,14 +258,14 @@ class SettlementCalculator {
             });
         }
 
-        plainTextSummary += `� *TOTAL DE GASTOS:* ${formatCurrency(totalExpenses)}
+        plainTextSummary += ` *TOTAL DE GASTOS:* ${formatCurrency(totalExpenses)}
 
 `;
 
         if (transfers.length === 0) {
-            plainTextSummary += '🎉 *¡PERFECTO!*\n✅ Todos los saldos equilibrados\n✅ No hay transferencias pendientes';
+            plainTextSummary += ' *¡PERFECTO!*\n Todos los saldos equilibrados\n No hay transferencias pendientes';
         } else {
-            plainTextSummary += `💸 *TRANSFERENCIAS NECESARIAS*
+            plainTextSummary += ` *TRANSFERENCIAS NECESARIAS*
 Se necesitan *${transfers.length} transferencia${transfers.length > 1 ? 's' : ''}*:
 
 `;
@@ -290,13 +274,13 @@ Se necesitan *${transfers.length} transferencia${transfers.length > 1 ? 's' : ''
                 const displayAmount = formatCurrency(transfer.amount).substring(1); // Removemos el $ inicial
                     
                 plainTextSummary += `${index + 1}. *${transfer.from}* → *${transfer.to}*
-   💵 $${displayAmount}
+    $${displayAmount}
 
 `;
             });
         }
         
-        plainTextSummary += '=================================\n🚀 Generado con *Just Pay!*';
+        plainTextSummary += '=================================\n Generado con *Just Pay!* \nhttps://justpayapp.netlify.app/';
 
         return {
             html: htmlSummary,
