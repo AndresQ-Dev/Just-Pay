@@ -10,14 +10,20 @@
     <title>Just Pay!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/styles.css">
 </head>
 <body>
+    <div id="preloader" class="preloader">
+        <div class="preloader-content">
+            <img src="./assets/img/logo.png" alt="Just Pay! Logo" class="preloader-logo">
+            <h1 class="preloader-title">Just Pay!</h1>
+        </div>
+    </div>
+
     <div id="backdrop" class="backdrop"></div>
 
-    <!-- Menú Hamburguesa -->
     <div id="hamburgerMenu" class="hamburger-menu">
         <div class="menu-header">
             <h3>Just Pay!</h3>
@@ -98,6 +104,9 @@
                     <button type="submit">Añadir Participante</button>
                 </form>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="secondary-btn close-modal-btn">Listo</button>
+            </div>
         </div>
     </div>
 
@@ -109,20 +118,20 @@
             </div>
             <div class="modal-body">
                 <form id="addExpenseForm" class="modal-form">
-                    <input type="text" id="expenseDescription" placeholder="Descripción del gasto (ej. Cena, Cine)" required autocomplete="off" spellcheck="false">
+                    <input type="text" id="expenseDescription" placeholder="Descripción del gasto (ej. Cena)" required autocomplete="off" spellcheck="false">
                     <input type="number" id="expenseAmount" placeholder="Monto (ej. 8000)" step="0.01" min="0.01" required autocomplete="off">
                     <select id="expensePayer" required>
                         <option value="" disabled selected>Selecciona quien pagó</option>
-                        </select>
-
+                    </select>
                     <div class="excluded-participants-section">
                         <h3>¿Quiénes no participan de este gasto?</h3>
-                        <div id="excludedParticipantsList" class="excluded-participants-list">
-                            </div>
+                        <div id="excludedParticipantsList" class="excluded-participants-list"></div>
                     </div>
-
                     <button type="submit">Añadir Gasto</button>
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="secondary-btn close-modal-btn">Listo</button>
             </div>
         </div>
     </div>
@@ -134,8 +143,7 @@
                 <h2>Resultados del Cálculo</h2>
             </div>
             <div class="modal-body">
-                <div id="resultsText" class="results-container">
-                    </div>
+                <div id="resultsText" class="results-container"></div>
                 <div class="modal-button-container">
                     <button id="shareWhatsappBtn" class="modal-action-btn"><i class="fab fa-whatsapp"></i> Compartir</button>
                     <button id="copyResultsBtn" class="modal-action-btn"><i class="far fa-copy"></i> Copiar</button>
@@ -144,25 +152,19 @@
         </div>
     </div>
 
-    <!-- Sistema de FAB (Floating Action Buttons) -->
     <div class="fab-container" id="fabContainer">
-        <!-- FAB Principal -->
         <button class="fab main-fab" id="mainFab" aria-label="Menú de acciones rápidas">
             <i class="fas fa-plus" id="mainFabIcon"></i>
         </button>
-        
-        <!-- Mini FABs -->
         <div class="mini-fabs" id="miniFabs">
             <button class="fab mini-fab" id="addParticipantFab" aria-label="Agregar participante">
                 <i class="fas fa-user-plus"></i>
                 <span class="fab-label">Participante</span>
             </button>
-            
             <button class="fab mini-fab" id="addExpenseFab" aria-label="Agregar gasto">
                 <i class="fas fa-receipt"></i>
                 <span class="fab-label">Gasto</span>
             </button>
-            
             <button class="fab mini-fab" id="calculateFab" aria-label="Calcular deudas">
                 <i class="fas fa-calculator"></i>
                 <span class="fab-label">Calcular</span>
@@ -170,84 +172,12 @@
         </div>
     </div>
 
-    <!-- Modal Acerca de -->
     <div id="aboutModal" class="modal modal-info-type">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close-btn">&times;</span>
-                <h2><i class="fas fa-info-circle"></i> Acerca de Just Pay!</h2>
-            </div>
-            <div class="modal-body">
-                <div class="about-content">
-                    <div class="app-info">
-                        <h3>🎯 ¿Qué es Just Pay!?</h3>
-                        <p>Just Pay! es una aplicación web diseñada para simplificar el cálculo de gastos compartidos entre amigos, familiares o compañeros.</p>
-                        
-                        <h3>✨ Características:</h3>
-                        <ul>
-                            <li>📱 Diseño responsivo para móvil y desktop</li>
-                            <li>🧮 Algoritmo optimizado para minimizar transferencias</li>
-                            <li>💱 Formato de moneda argentino (punto para miles, coma para decimales)</li>
-                            <li>🎨 Interfaz moderna con efectos visuales</li>
-                            <li>📤 Compartir resultados por WhatsApp</li>
-                            <li>⌨️ Atajos de teclado para acciones rápidas</li>
-                        </ul>
-
-                        <h3>🚀 Versión:</h3>
-                        <p><strong>v0.3</strong> - 2025</p>
-                    </div>
-                </div>
-            </div>
         </div>
-    </div>
-
-    <!-- Modal Contacto -->
     <div id="contactModal" class="modal modal-info-type">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close-btn">&times;</span>
-                <h2><i class="fas fa-envelope"></i> Contacto</h2>
-            </div>
-            <div class="modal-body">
-                <div class="contact-content">
-                    <div class="contact-info">
-                        <h3>💬 ¿Tienes sugerencias o encontraste un bug?</h3>
-                        <p>Tu feedback es muy valioso para mejorar Just Pay!</p>
-                        
-                        <div class="contact-methods">
-                            <div class="contact-item">
-                                <i class="fab fa-github"></i>
-                                <div>
-                                    <h4>GitHub</h4>
-                                    <p>Reporta bugs o solicita nuevas características</p>
-                                    <a href="https://github.com/AndresQ-Dev/Just-Pay" target="_blank" rel="noopener">github.com/AndresQ-Dev/Just-Pay</a>
-                                </div>
-                            </div>
-                            
-                            <div class="contact-item">
-                                <i class="fas fa-envelope"></i>
-                                <div>
-                                    <h4>Email</h4>
-                                    <p>Contacto directo para consultas</p>
-                                    <a href="mailto:andresqdev@gmail.com">andresqdev@gmail.com</a>
-                                </div>
-                            </div>
-                            
-                            <div class="contact-item">
-                                <i class="fas fa-star"></i>
-                                <div>
-                                    <h4>¿Te gusta la app?</h4>
-                                    <p>¡Dale una estrella en GitHub!</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-    </div>
 
     <script type="module" src="./assets/js/calculator.js"></script>
-<script type="module" src="./assets/js/script.js"></script>
+    <script type="module" src="./assets/js/script.js"></script>
 </body>
 </html>
