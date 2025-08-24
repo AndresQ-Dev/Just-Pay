@@ -2150,10 +2150,9 @@ button.primary-btn:hover {
    =============================================== */
 .toast-notification {
     position: fixed;
-    bottom: 90px;
-    /* Posicionado sobre el sistema FAB */
+    top: var(--space-xl);       /* <-- CAMBIO: Posicionado arriba */
     left: 50%;
-    transform: translateX(-50%);
+    
     padding: var(--space-md) var(--space-xl);
     border-radius: var(--radius-full);
     color: var(--text-inverse);
@@ -2161,17 +2160,19 @@ button.primary-btn:hover {
     font-weight: var(--font-weight-medium);
     z-index: 2000;
     box-shadow: var(--shadow-lg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(5px);
+
     opacity: 0;
-    transform: translate(-50%, 20px);
+    /* Animación: empieza desplazado hacia arriba y oculto */
+    transform: translate(-50%, -20px); 
     transition: opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;
 }
 
 .toast-notification.show {
     opacity: 1;
-    transform: translate(-50%, 0);
+    /* Animación: se desliza hacia abajo a su posición final */
+    transform: translate(-50%, 0); 
 }
 
 /* Estilos por tipo de notificación */
