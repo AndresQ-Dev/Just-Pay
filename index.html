@@ -1,199 +1,305 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0d1729">
-    <title>Just Pay!</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./assets/css/styles.css">
-</head>
-<body>
-    <div id="preloader" class="preloader">
-        <div class="preloader-content">
-            <img src="./assets/img/logo.png" alt="Just Pay! Logo" class="preloader-logo">
-            <h1 class="preloader-title">Just Pay!</h1>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent">
+        <meta name="theme-color" content="#0d1729">
+        <title>Just Pay!</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+            integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@600;700;800&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet" href="./assets/css/styles.css">
+        <link rel="icon" type="image/png" href="./assets/img/logo.png">
+    </head>
+    <body>
+        <div id="preloader" class="preloader">
+            <div class="preloader-content">
+                <img src="./assets/img/logo.png" alt="Just Pay! Logo"
+                    class="preloader-logo">
+                <h1 class="preloader-title">Just Pay!</h1>
+            </div>
         </div>
-    </div>
 
-    <div id="backdrop" class="backdrop"></div>
+        <div id="backdrop" class="backdrop"></div>
 
-    <div id="hamburgerMenu" class="hamburger-menu">
-        <div class="menu-header">
-            <h3>Menú</h3>
-            <button class="menu-close" id="closeMenu">&times;</button>
+        <div id="hamburgerMenu" class="hamburger-menu">
+            <div class="menu-header">
+                <h3>Menú</h3>
+                <button class="menu-close" id="closeMenu">&times;</button>
+            </div>
+            <nav class="menu-nav">
+                <a href="#" class="menu-item" id="aboutBtn">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Acerca de</span>
+                </a>
+                <a href="#" class="menu-item" id="contactBtn">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contacto</span>
+                </a>
+                <a href="#" class="menu-item" id="helpBtn">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Ayuda</span>
+                </a>
+            </nav>
+            <div class="menu-footer">
+                <p>&copy; 2025 Just Pay!</p>
+            </div>
         </div>
-        <nav class="menu-nav">
-            <a href="#" class="menu-item" id="aboutBtn">
-                <i class="fas fa-info-circle"></i>
-                <span>Acerca de</span>
-            </a>
-            <a href="#" class="menu-item" id="contactBtn">
-                <i class="fas fa-envelope"></i>
-                <span>Contacto</span>
-            </a>
-        </nav>
-        <div class="menu-footer">
-            <p>&copy; 2025 Just Pay!</p>
-        </div>
-    </div>
 
-    <div class="container">
-        <header class="header">
-            <div class="header-left">
-                <div class="logo">
-                    <img src="./assets/img/logo.png" alt="Just Pay! Logo">
+        <div class="container">
+            <header class="header">
+                <div class="header-left">
+                    <div class="logo">
+                        <img src="./assets/img/logo.png" alt="Just Pay! Logo">
+                    </div>
+                </div>
+                <h1 class="app-name">Just Pay!</h1>
+                <div class="header-right">
+                    <i class="fas fa-bars menu-icon" id="openMenu"></i>
+                </div>
+            </header>
+
+            <div class="tab-container">
+                <button class="tab-btn active" data-target="participantsPanel">
+                    <i class="fas fa-users"></i> Participantes <span
+                        id="participantsCount">(0)</span>
+                </button>
+                <button class="tab-btn" data-target="expensesPanel">
+                    <i class="fas fa-receipt"></i> Gastos <span
+                        id="expensesCount">(0)</span>
+                </button>
+            </div>
+
+            <main class="tab-content">
+                <section id="participantsPanel" class="tab-panel active">
+                    <div class="section-header">
+                        <h2>Lista de Participantes</h2>
+                    </div>
+                    <div id="participantList" class="list-content"
+                        role="list"></div>
+                    <div id="emptyParticipantsState" class="empty-state"
+                        role="status">
+                        <i class="fas fa-users-slash empty-icon"></i>
+                        <p>Aún no hay participantes.<br>¡Comienza agregando
+                            algunos!</p>
+                    </div>
+                </section>
+
+                <section id="expensesPanel" class="tab-panel">
+                    <div class="section-header">
+                        <h2>Lista de Gastos</h2>
+                    </div>
+                    <div id="expenseList" class="list-content"
+                        role="list"></div>
+                    <div id="emptyExpensesState" class="empty-state"
+                        role="status">
+                        <i class="fas fa-receipt empty-icon"></i>
+                        <p>Aún no hay gastos registrados.<br>¡Añade tus primeros
+                            gastos!</p>
+                    </div>
+                </section>
+            </main>
+
+            <div class="action-bar">
+                <div class="action-bar-total">
+                    <span>Total Gastado:</span>
+                    <span id="totalExpensesText">$0,00</span>
+                </div>
+                <button id="calculateBtn" class="calculate-btn"
+                    disabled>Calcular</button>
+            </div>
+
+            <footer class="footer">
+                <p>&copy; 2025 Just Pay!. Todos los derechos reservados.</p>
+            </footer>
+        </div>
+
+        <div id="addParticipantModal" class="modal modal-form-type">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close-btn">&times;</span>
+                    <h2>Agregar Participante</h2>
+                </div>
+                <div class="modal-body">
+                    <form id="addParticipantForm" class="modal-form">
+                        <input type="text" id="participantName"
+                            placeholder="Nombre del participante" required
+                            autocomplete="off" spellcheck="false">
+                        <button type="submit" class="primary-btn">Añadir
+                            Participante</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                        class="secondary-btn close-modal-btn">Listo</button>
                 </div>
             </div>
-            <h1 class="app-name">Just Pay!</h1>
-            <div class="header-right">
-                <i class="fas fa-bars menu-icon" id="openMenu"></i>
-            </div>
-        </header>
+        </div>
 
-        <div class="tab-container">
-            <button class="tab-btn active" data-target="participantsPanel">
-                <i class="fas fa-users"></i> Participantes <span id="participantsCount">(0)</span>
+        <div id="addExpenseModal" class="modal modal-form-type">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close-btn">&times;</span>
+                    <h2>Agregar Gasto</h2>
+                </div>
+                <div class="modal-body">
+                    <form id="addExpenseForm" class="modal-form">
+                        <input type="text" id="expenseDescription"
+                            placeholder="Descripción (ej. Cena)" required
+                            autocomplete="off" spellcheck="false">
+                        <input type="number" id="expenseAmount"
+                            placeholder="Monto (ej. 8000)" step="0.01"
+                            min="0.01" required autocomplete="off">
+                        <select id="expensePayer" required>
+                            <option value disabled selected>Selecciona quien
+                                pagó</option>
+                        </select>
+                        <div class="excluded-participants-section">
+                            <h3>¿Quiénes no participan de este gasto?</h3>
+                            <div id="excludedParticipantsList"
+                                class="excluded-participants-list"></div>
+                        </div>
+                        <button type="submit" class="primary-btn">Añadir
+                            Gasto</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                        class="secondary-btn close-modal-btn">Listo</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsModal" class="modal modal-results-type">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close-btn">&times;</span>
+                    <h2>Resultados del Cálculo</h2>
+                </div>
+                <div class="modal-body">
+                    <div id="resultsText" class="results-container"></div>
+                    <div class="modal-button-container">
+                        <button id="shareWhatsappBtn"
+                            class="modal-action-btn"><i
+                                class="fab fa-whatsapp"></i> Compartir</button>
+                        <button id="copyResultsBtn" class="modal-action-btn"><i
+                                class="far fa-copy"></i> Copiar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="aboutModal" class="modal modal-info-type">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close-btn">&times;</span>
+                    <h2><i class="fas fa-info-circle"></i> Acerca de Just
+                        Pay!</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Just Pay! es una herramienta sencilla para calcular y
+                        dividir gastos de forma justa y rápida.</p>
+
+                    <div class="info-card-text">
+                        <p><strong>Desarrollado por:</strong> OneDev</p>
+                        <p><strong>Versión:</strong> 1.2 (Agosto 2025)</p>
+                    </div>
+
+                    <div class="info-card-logo">
+                        <a href="https://github.com/AndresQ-Dev/Just-Pay"
+                            target="_blank" aria-label="Ver en GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="contactModal" class="modal modal-info-type">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close-btn">&times;</span>
+                    <h2><i class="fas fa-envelope"></i> Contacto y
+                        Sugerencias</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Tu opinión es importante. Si tienes ideas para mejorar la
+                        app o encontraste un error, no dudes en
+                        contactarnos.</p>
+                    <div class="info-card">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Correo Electrónico</h4>
+                            <a
+                                href="mailto:soporte@devworks.com">soporte@devworks.com</a>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-bug"></i>
+                        <div>
+                            <h4>Reportar un Error</h4>
+                            <a
+                                href="https://github.com/AndresQ-Dev/Just-Pay/issues"
+                                target="_blank">Abrir un issue en GitHub</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="helpModal" class="modal modal-info-type">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close-btn">&times;</span>
+                    <h2><i class="fas fa-question-circle"></i> ¿Cómo usar Just
+                        Pay!?</h2>
+                </div>
+                <div class="modal-body">
+                    <ol class="help-steps">
+                        <li>
+                            <h4><span>1</span>Añade Participantes</h4>
+                            <p>Ve a la pestaña "Participantes" y usa el botón
+                                <b>+</b> para agregar a todas las personas.</p>
+                        </li>
+                        <li>
+                            <h4><span>2</span>Registra los Gastos</h4>
+                            <p>En la pestaña "Gastos", usa el botón <b>+</b>
+                                para añadir cada gasto, indicando quién
+                                pagó.</p>
+                        </li>
+                        <li>
+                            <h4><span>3</span>Calcula los Totales</h4>
+                            <p>Cuando termines, presiona el botón
+                                <b>"Calcular"</b> en la barra inferior.</p>
+                        </li>
+                        <li>
+                            <h4><span>4</span>Comparte los Resultados</h4>
+                            <p>La app te mostrará quién le debe a quién. ¡Usa
+                                los botones para copiar o compartir!</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="fab-container" id="fabContainer">
+            <button id="fabAdd" class="fab" aria-label="Agregar">
+                <i class="fas fa-plus"></i>
             </button>
-            <button class="tab-btn" data-target="expensesPanel">
-                <i class="fas fa-receipt"></i> Gastos <span id="expensesCount">(0)</span>
-            </button>
         </div>
 
-        <main class="tab-content">
-            <section id="participantsPanel" class="tab-panel active">
-                <div class="section-header">
-                    <h2>Lista de Participantes</h2>
-                    <!-- <button id="openAddParticipantModal" class="add-form" aria-label="Agregar nuevo participante">Agregar</button> -->
-                </div>
-                <div id="participantList" class="list-content" role="list"></div>
-                <div id="emptyParticipantsState" class="empty-state" role="status">
-                    <i class="fas fa-users-slash empty-icon"></i>
-                    <p>Aún no hay participantes.<br>¡Comienza agregando algunos!</p>
-                </div>
-            </section>
-
-            <section id="expensesPanel" class="tab-panel">
-                <div class="section-header">
-                    <h2>Lista de Gastos</h2>
-                </div>
-                <div id="expenseList" class="list-content" role="list"></div>
-                <div id="emptyExpensesState" class="empty-state" role="status">
-                    <i class="fas fa-receipt empty-icon"></i>
-                    <p>Aún no hay gastos registrados.<br>¡Añade tus primeros gastos!</p>
-                </div>
-            </section>
-        </main>
-        
-        <div class="action-bar">
-            <div class="action-bar-total">
-                <span>Total Gastado:</span>
-                <span id="totalExpensesText">$0,00</span>
-            </div>
-            <button id="calculateBtn" class="calculate-btn" disabled>Calcular</button>
-        </div>
-
-        <footer class="footer">
-            <p>&copy; 2025 Just Pay!. Todos los derechos reservados.</p>
-        </footer>
-    </div>
-
-    <div id="addParticipantModal" class="modal modal-form-type">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close-btn">&times;</span>
-                <h2>Agregar Participante</h2>
-            </div>
-            <div class="modal-body">
-                <form id="addParticipantForm" class="modal-form">
-                    <input type="text" id="participantName" placeholder="Nombre del participante" required autocomplete="off" spellcheck="false">
-                    <button type="submit" class="primary-btn">Añadir Participante</button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="secondary-btn close-modal-btn">Listo</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="addExpenseModal" class="modal modal-form-type">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="close-btn">&times;</span>
-            <h2>Agregar Gasto</h2>
-        </div>
-        <div class="modal-body">
-            <form id="addExpenseForm" class="modal-form">
-                <input type="text" id="expenseDescription" placeholder="Descripción (ej. Cena)" required autocomplete="off" spellcheck="false">
-                <input type="number" id="expenseAmount" placeholder="Monto (ej. 8000)" step="0.01" min="0.01" required autocomplete="off">
-                <select id="expensePayer" required>
-                    <option value="" disabled selected>Selecciona quien pagó</option>
-                </select>
-                <div class="excluded-participants-section">
-                    <h3>¿Quiénes no participan de este gasto?</h3>
-                    <div id="excludedParticipantsList" class="excluded-participants-list"></div>
-                </div>
-
-                <button type="submit" class="primary-btn">Añadir Gasto</button>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="secondary-btn close-modal-btn">Listo</button>
-        </div>
-    </div>
-</div>
-
-    <div id="resultsModal" class="modal modal-results-type">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close-btn">&times;</span>
-                <h2>Resultados del Cálculo</h2>
-            </div>
-            <div class="modal-body">
-                <div id="resultsText" class="results-container"></div>
-                <div class="modal-button-container">
-                    <button id="shareWhatsappBtn" class="modal-action-btn"><i class="fab fa-whatsapp"></i> Compartir</button>
-                    <button id="copyResultsBtn" class="modal-action-btn"><i class="far fa-copy"></i> Copiar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="aboutModal" class="modal modal-info-type">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close-btn">&times;</span>
-                <h2><i class="fas fa-info-circle"></i> Acerca de Just Pay!</h2>
-            </div>
-            <div class="modal-body">
-                </div>
-        </div>
-    </div>
-
-    <div id="contactModal" class="modal modal-info-type">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close-btn">&times;</span>
-                <h2><i class="fas fa-envelope"></i> Contacto</h2>
-            </div>
-            <div class="modal-body">
-                </div>
-        </div>
-    </div>
-    
-    <div class="fab-container" id="fabContainer">
-        <button id="fabAdd" class="fab" aria-label="Agregar">
-            <i class="fas fa-plus"></i>
-        </button>
-    </div>
-
-    <script type="module" src="./assets/js/calculator.js"></script>
-    <script type="module" src="./assets/js/script.js"></script>
-</body>
+        <script type="module" src="./assets/js/calculator.js"></script>
+        <script type="module" src="./assets/js/script.js"></script>
+    </body>
 </html>

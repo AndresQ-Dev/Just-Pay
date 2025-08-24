@@ -212,16 +212,35 @@ document.addEventListener('DOMContentLoaded', () => {
     function copiarResultados() { const t = document.getElementById('resultsText')?.dataset.plainText || ''; navigator.clipboard.writeText(t).then(() => mostrarNotificacion('¡Copiado!', 'success')).catch(() => mostrarNotificacion('No se pudo copiar.', 'error')); }
     
     function inicializarMenuHamburguesa() {
-        const openMenuBtn = document.getElementById('openMenu');
-        const closeMenuBtn = document.getElementById('closeMenu');
-        const hamburgerMenu = document.getElementById('hamburgerMenu');
-        const abrirMenu = () => hamburgerMenu.classList.add('active');
-        const cerrarMenu = () => hamburgerMenu.classList.remove('active');
-        openMenuBtn.addEventListener('click', abrirMenu);
-        closeMenuBtn.addEventListener('click', cerrarMenu);
-        document.getElementById('aboutBtn')?.addEventListener('click', (e) => { e.preventDefault(); cerrarMenu(); abrirModal('aboutModal'); });
-        document.getElementById('contactBtn')?.addEventListener('click', (e) => { e.preventDefault(); cerrarMenu(); abrirModal('contactModal'); });
-    }
+    const openMenuBtn = document.getElementById('openMenu');
+    const closeMenuBtn = document.getElementById('closeMenu');
+    const hamburgerMenu = document.getElementById('hamburgerMenu');
+    
+    const abrirMenu = () => hamburgerMenu.classList.add('active');
+    const cerrarMenu = () => hamburgerMenu.classList.remove('active');
+
+    openMenuBtn.addEventListener('click', abrirMenu);
+    closeMenuBtn.addEventListener('click', cerrarMenu);
+    
+    document.getElementById('aboutBtn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        cerrarMenu();
+        abrirModal('aboutModal');
+    });
+
+    document.getElementById('contactBtn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        cerrarMenu();
+        abrirModal('contactModal');
+    });
+
+    // AÑADIR ESTE BLOQUE PARA EL NUEVO BOTÓN
+    document.getElementById('helpBtn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        cerrarMenu();
+        abrirModal('helpModal');
+    });
+}
 
     inicializarApp();
 });

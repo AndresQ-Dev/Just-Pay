@@ -2296,3 +2296,100 @@ button.primary-btn:hover {
     transform: none;
     box-shadow: none;
 }
+
+/* ==========================================================
+   ESTILOS PARA MODALES DE INFORMACIÓN (CORREGIDO)
+   ========================================================== */
+
+/* Bloque para el texto en "Acerca de" */
+.info-card-text {
+    background: var(--surface-secondary);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    margin-top: var(--space-lg);
+    border: 1px solid var(--border-light);
+}
+
+/* Espacio entre los párrafos dentro del bloque de texto */
+.info-card-text p {
+    margin-bottom: var(--space-md);
+}
+.info-card-text p:last-child {
+    margin-bottom: 0;
+}
+
+/* Bloque para el logo de GitHub */
+.info-card-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: var(--space-md);
+    padding: var(--space-sm);
+    border: 1px solid var(--border-light);
+}
+
+.info-card-logo i {
+    font-size: 2rem;
+    color: var(--text-primary);
+    transition: transform var(--transition-fast);
+}
+
+.info-card-logo i:hover {
+    transform: scale(1.1);
+}
+
+/* Estilos generales para las tarjetas de "Contacto" */
+.info-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    background: var(--surface-secondary);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    margin-top: var(--space-lg);
+    border: 1px solid var(--border-light);
+}
+
+.info-card i {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.info-card-logo a {
+text-decoration: none; /* Elimina el subrayado del enlace */
+}
+
+/* Estilos para el modal de Ayuda (se mantienen) */
+.help-steps {
+    list-style: none;
+    padding: 0;
+}
+.help-steps li {
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--divider);
+}
+.help-steps li:last-child {
+    border-bottom: none;
+}
+.help-steps h4 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    font-size: 1.1rem;
+    margin-bottom: var(--space-xs);
+}
+.help-steps h4 span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-gradient);
+    color: var(--text-inverse);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 0.9rem;
+}
+.help-steps p {
+    padding-left: calc(24px + var(--space-md));
+    color: var(--text-secondary);
+}
