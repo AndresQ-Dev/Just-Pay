@@ -2,36 +2,16 @@
 
 import { calculadora } from './calculator.js';
 
-/**
- * Formatea un número como moneda en formato argentino (ej. $1.234,56).
- */
-function formatearMoneda(monto) {
-    return `$${monto.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-}
-
-/**
- * Sanitiza una cadena de texto para prevenir XSS.
- */
-function sanitizarHTML(texto) {
-    const temp = document.createElement('div');
-    temp.textContent = texto;
-    return temp.innerHTML;
-}
-
-/**
- * Muestra una notificación toast en la pantalla.
- */
+function formatearMoneda(monto) { return `$${monto.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; }
+function sanitizarHTML(texto) { const temp = document.createElement('div'); temp.textContent = texto; return temp.innerHTML; }
 function mostrarNotificacion(mensaje, tipo = 'info') {
     const notificacionExistente = document.querySelector('.toast-notification');
     if (notificacionExistente) notificacionExistente.remove();
-
     const notificacion = document.createElement('div');
     notificacion.className = `toast-notification ${tipo}`;
     notificacion.textContent = mensaje;
     document.body.appendChild(notificacion);
-
     setTimeout(() => notificacion.classList.add('show'), 10);
-
     setTimeout(() => {
         notificacion.classList.remove('show');
         notificacion.addEventListener('transitionend', () => notificacion.remove());
@@ -39,12 +19,12 @@ function mostrarNotificacion(mensaje, tipo = 'info') {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // ====================================================
-    //              ESTADO Y ELEMENTOS DEL DOM
-    // ====================================================
     let participantes = [];
     let gastos = [];
 
+    // --- Referencias al DOM ---
+    const backdrop = document.getElementById('backdrop');
+    const calculateBtn = document.getElementById('calculateBtn');
     const participantList = document.getElementById('participantList');
     const addParticipantForm = document.getElementById('addParticipantForm');
     const participantNameInput = document.getElementById('participantName');
@@ -56,368 +36,187 @@ document.addEventListener('DOMContentLoaded', () => {
     const expensePayerSelect = document.getElementById('expensePayer');
     const excludedParticipantsList = document.getElementById('excludedParticipantsList');
     const emptyExpensesState = document.getElementById('emptyExpensesState');
-    const calculateBtn = document.getElementById('calculateBtn');
-    const addParticipantModal = document.getElementById('addParticipantModal');
-    const addExpenseModal = document.getElementById('addExpenseModal');
-    const resultsModal = document.getElementById('resultsModal');
-    const backdrop = document.getElementById('backdrop');
+    const participantsCountSpan = document.getElementById('participantsCount');
+    const expensesCountSpan = document.getElementById('expensesCount');
+    const totalExpensesText = document.getElementById('totalExpensesText');
     
-    // ====================================================
-    //                   INICIALIZACIÓN
-    // ====================================================
-    inicializarApp();
-
+    // --- Lógica de Inicialización ---
     function inicializarApp() {
         const preloader = document.getElementById('preloader');
         const container = document.querySelector('.container');
-        setTimeout(() => {
-            preloader.classList.add('hidden');
-            container.classList.add('loaded');
-        }, 3000);
+        setTimeout(() => { preloader.classList.add('hidden'); container.classList.add('loaded'); }, 3000);
         cargarDatos();
         configurarEventListeners();
         mostrarParticipantes();
         mostrarGastos();
-        verificarEstadoBotonCalcular();
     }
     
-    // ====================================================
-    //      PERSISTENCIA DE DATOS (LocalStorage)
-    // ====================================================
-    function guardarDatos() {
-        try {
-            localStorage.setItem('justPayParticipantes', JSON.stringify(participantes));
-            localStorage.setItem('justPayGastos', JSON.stringify(gastos));
-        } catch (error) {
-            console.error("Error al guardar datos:", error);
-            mostrarNotificacion("No se pudieron guardar los datos.", "error");
-        }
-    }
-
-    function cargarDatos() {
-        try {
-            const participantesGuardados = localStorage.getItem('justPayParticipantes');
-            const gastosGuardados = localStorage.getItem('justPayGastos');
-            if (participantesGuardados) participantes = JSON.parse(participantesGuardados);
-            if (gastosGuardados) gastos = JSON.parse(gastosGuardados);
-        } catch (error) {
-            console.error("Error al cargar datos:", error);
-            participantes = [];
-            gastos = [];
-            mostrarNotificacion("Datos corruptos, se ha reseteado la sesión.", "error");
-        }
-    }
+    // --- Lógica de Datos ---
+    function guardarDatos() { try { localStorage.setItem('justPayParticipantes', JSON.stringify(participantes)); localStorage.setItem('justPayGastos', JSON.stringify(gastos)); } catch (e) { console.error("Error al guardar:", e); } }
+    function cargarDatos() { try { const p = localStorage.getItem('justPayParticipantes'); if (p) participantes = JSON.parse(p); const g = localStorage.getItem('justPayGastos'); if (g) gastos = JSON.parse(g); } catch (e) { console.error("Error al cargar:", e); } }
     
-    // ====================================================
-    //               MANEJO DE EVENTOS
-    // ====================================================
+    // --- Lógica de Eventos ---
     function configurarEventListeners() {
-        document.querySelectorAll('.close-btn').forEach(b => b.addEventListener('click', cerrarTodosLosModales));
-        document.querySelectorAll('.close-modal-btn').forEach(b => b.addEventListener('click', cerrarTodosLosModales));
+        document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => cambiarPestana(b.dataset.target)));
+        document.querySelectorAll('.close-btn, .close-modal-btn').forEach(b => b.addEventListener('click', cerrarTodosLosModales));
         backdrop.addEventListener('click', cerrarTodosLosModales);
 
-        document.getElementById('openAddParticipantModal').addEventListener('click', () => abrirModal(addParticipantModal));
-        document.getElementById('openAddExpenseModal').addEventListener('click', () => {
-            actualizarSelectPagador();
-            popularCheckboxesExcluidos();
-            abrirModal(addExpenseModal);
-        });
+        // AHORA EL BOTÓN FLOTANTE (+) MANEJA AMBAS ACCIONES
+        document.getElementById('fabAdd').addEventListener('click', handleFabClick);
+        
+        // Ya no necesitamos un listener para el botón de la cabecera de participantes
+        // document.getElementById('openAddParticipantModal').addEventListener('click', () => abrirModal('addParticipantModal'));
         
         addParticipantForm.addEventListener('submit', manejarSubmitParticipante);
         addExpenseForm.addEventListener('submit', manejarSubmitGasto);
         calculateBtn.addEventListener('click', calcularGastos);
-        document.getElementById('shareWhatsappBtn').addEventListener('click', compartirResultadosWhatsapp);
-        document.getElementById('copyResultsBtn').addEventListener('click', copiarResultados);
-        
-        inicializarSistemaFAB();
+        document.getElementById('shareWhatsappBtn')?.addEventListener('click', compartirResultadosWhatsapp);
+        document.getElementById('copyResultsBtn')?.addEventListener('click', copiarResultados);
         inicializarMenuHamburguesa();
     }
-    
-    // ====================================================
-    //               MANEJO DE MODALES
-    // ====================================================
-    function abrirModal(modal) {
-        modal.classList.add('active');
-        backdrop.classList.add('active');
-        setTimeout(() => {
-            const input = modal.querySelector('input[type="text"], input[type="number"]');
-            if (input) input.focus();
-        }, 150);
+
+    // --- Lógica de la Interfaz (UI) ---
+    function cambiarPestana(targetId) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === targetId));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.target === targetId));
+        // Ya no es necesario mostrar/ocultar el FAB
     }
 
-    function cerrarModal(modal) {
-        modal.classList.remove('active');
-        // *** FIX: Asegurarse de que el backdrop siempre se cierre con el modal ***
-        if (!document.querySelector('.modal.active')) {
-            backdrop.classList.remove('active');
+    function handleFabClick() {
+        const participantsPanel = document.getElementById('participantsPanel');
+        if (participantsPanel.classList.contains('active')) {
+            // Si estamos en la pestaña de participantes, abrir el modal de participantes
+            abrirModal('addParticipantModal');
+        } else {
+            // Si estamos en la pestaña de gastos, abrir el modal de gastos
+            actualizarSelectPagador();
+            popularCheckboxesExcluidos();
+            abrirModal('addExpenseModal');
         }
     }
 
-    function cerrarTodosLosModales() {
-        document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
-        backdrop.classList.remove('active');
-    }
+    function actualizarContadores() { participantsCountSpan.textContent = `(${participantes.length})`; expensesCountSpan.textContent = `(${gastos.length})`; }
+    function actualizarTotalGastosBarra() { const total = gastos.reduce((sum, gasto) => sum + gasto.amount, 0); totalExpensesText.textContent = formatearMoneda(total); }
     
-    // ====================================================
-    //            LÓGICA DE PARTICIPANTES
-    // ====================================================
+    function abrirModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+        backdrop.classList.add('active');
+        modal.classList.add('active');
+        setTimeout(() => { const input = modal.querySelector('input[type="text"], input[type="number"]'); if (input) input.focus(); }, 150);
+    }
+    function cerrarTodosLosModales() { document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active')); backdrop.classList.remove('active'); }
+    
     function mostrarParticipantes() {
         participantList.innerHTML = '';
-        const hayParticipantes = participantes.length > 0;
-        
-        emptyParticipantsState.style.display = hayParticipantes ? 'none' : 'flex';
-        participantList.style.display = hayParticipantes ? 'grid' : 'none';
-        document.getElementById('openAddExpenseModal').disabled = participantes.length < 2;
-
-        participantes.forEach((nombre, indice) => {
+        const hay = participantes.length > 0;
+        emptyParticipantsState.style.display = hay ? 'none' : 'flex';
+        participantes.forEach((nombre, i) => {
             const div = document.createElement('div');
             div.className = 'participant';
-            div.innerHTML = `<span>${sanitizarHTML(nombre)}</span><button class="remove-btn" data-index="${indice}">&times;</button>`;
+            div.innerHTML = `<span>${sanitizarHTML(nombre)}</span><button class="remove-btn" data-index="${i}">&times;</button>`;
+            div.querySelector('.remove-btn').addEventListener('click', () => eliminarParticipante(i));
             participantList.appendChild(div);
         });
-        
-        participantList.querySelectorAll('.remove-btn').forEach(btn => btn.addEventListener('click', (e) => eliminarParticipante(e.target.dataset.index)));
-
         actualizarSelectPagador();
         verificarEstadoBotonCalcular();
+        actualizarContadores();
     }
     
     function agregarParticipante(nombre) {
-        if (participantes.find(p => p.toLowerCase() === nombre.toLowerCase())) {
-            mostrarNotificacion('Este participante ya existe.', 'error');
-            participantNameInput.focus();
-            return;
-        }
-        
+        if (participantes.find(p => p.toLowerCase() === nombre.toLowerCase())) { mostrarNotificacion('Este participante ya existe.', 'error'); participantNameInput.focus(); return; }
         participantes.push(nombre);
         guardarDatos();
         mostrarParticipantes();
         mostrarNotificacion('¡Participante añadido!', 'success');
-
-        // *** NUEVO FLUJO: Limpiar y enfocar para el siguiente ***
         participantNameInput.value = '';
         participantNameInput.focus();
     }
-
     function eliminarParticipante(indice) {
-        const participanteEliminado = participantes[indice];
+        const pEliminado = participantes[indice];
         participantes.splice(indice, 1);
-        gastos = gastos.filter(gasto => gasto.payer !== participanteEliminado);
+        gastos = gastos.filter(g => g.payer !== pEliminado);
         guardarDatos();
         mostrarParticipantes();
         mostrarGastos();
         mostrarNotificacion('Participante eliminado.', 'info');
     }
+    function manejarSubmitParticipante(e) { e.preventDefault(); const n = sanitizarHTML(participantNameInput.value.trim()); if (n) agregarParticipante(n); else mostrarNotificacion('El nombre no puede estar vacío.', 'error'); }
     
-    function manejarSubmitParticipante(e) {
-        e.preventDefault();
-        const nombre = sanitizarHTML(participantNameInput.value.trim());
-        if (nombre) {
-            agregarParticipante(nombre);
-        } else {
-            mostrarNotificacion('El nombre no puede estar vacío.', 'error');
-        }
-    }
-    
-    // ====================================================
-    //                 LÓGICA DE GASTOS
-    // ====================================================
     function mostrarGastos() {
         expenseList.innerHTML = '';
-        const hayGastos = gastos.length > 0;
-
-        emptyExpensesState.style.display = hayGastos ? 'none' : 'flex';
-        expenseList.style.display = hayGastos ? 'block' : 'none';
-
-        gastos.forEach((gasto, indice) => {
+        const hay = gastos.length > 0;
+        emptyExpensesState.style.display = hay ? 'none' : 'flex';
+        gastos.forEach((gasto, i) => {
             const div = document.createElement('div');
             div.className = 'expense-item';
             const excluidos = gasto.excluded.length > 0 ? `<div class="expense-excluded">Excluidos: ${gasto.excluded.map(sanitizarHTML).join(', ')}</div>` : '';
-            div.innerHTML = `
-                <div class="expense-info">
-                    <div class="expense-description">${sanitizarHTML(gasto.description)}</div>
-                    <div class="expense-payer">Pagó: ${sanitizarHTML(gasto.payer)}</div>
-                    ${excluidos}
-                </div>
-                <div class="expense-amount">${formatearMoneda(gasto.amount)}</div>
-                <button class="delete-btn" data-index="${indice}">&times;</button>
-            `;
+            div.innerHTML = `<div class="expense-info"><div class="expense-description">${sanitizarHTML(gasto.description)}</div><div class="expense-payer">Pagó: ${sanitizarHTML(gasto.payer)}</div>${excluidos}</div><div class="expense-amount">${formatearMoneda(gasto.amount)}</div><button class="delete-btn" data-index="${i}">&times;</button>`;
+            div.querySelector('.delete-btn').addEventListener('click', () => eliminarGasto(i));
             expenseList.appendChild(div);
         });
-
-        expenseList.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', e => eliminarGasto(e.target.dataset.index)));
         verificarEstadoBotonCalcular();
+        actualizarContadores();
+        actualizarTotalGastosBarra();
     }
     
-    function agregarGasto(descripcion, monto, pagador, excluidos) {
-        const participantesEnGasto = participantes.length - (excluidos ? excluidos.length : 0);
-        if (participantesEnGasto <= 0) {
-            mostrarNotificacion('No puedes excluir a todos los participantes.', 'error');
-            return;
-        }
-
-        gastos.push({ 
-            description: descripcion, 
-            amount: parseFloat(monto), 
-            payer: pagador, 
-            excluded: excluidos || [] 
-        });
-        
+    function agregarGasto(desc, monto, pagador, excluidos) {
+        if (participantes.length - (excluidos ? excluidos.length : 0) <= 0) { mostrarNotificacion('No puedes excluir a todos.', 'error'); return; }
+        if (participantes.length < 2) { mostrarNotificacion('Necesitas al menos 2 participantes.', 'error'); return; }
+        gastos.push({ description: desc, amount: parseFloat(monto), payer: pagador, excluded: excluidos || [] });
         guardarDatos();
         mostrarGastos();
         mostrarNotificacion('¡Gasto añadido!', 'success');
-
-        // *** NUEVO FLUJO: Limpiar y enfocar para el siguiente ***
         addExpenseForm.reset();
         popularCheckboxesExcluidos();
         expenseDescriptionInput.focus();
     }
-
-    function eliminarGasto(indice) {
-        gastos.splice(indice, 1);
-        guardarDatos();
-        mostrarGastos();
-        mostrarNotificacion('Gasto eliminado.', 'info');
-    }
-
+    function eliminarGasto(indice) { gastos.splice(indice, 1); guardarDatos(); mostrarGastos(); mostrarNotificacion('Gasto eliminado.', 'info'); }
     function manejarSubmitGasto(e) {
         e.preventDefault();
-        const descripcion = sanitizarHTML(expenseDescriptionInput.value.trim());
-        const monto = parseFloat(expenseAmountInput.value);
-        const pagador = expensePayerSelect.value;
-        const checkboxesExcluidos = document.querySelectorAll('#excludedParticipantsList input:checked');
-        const excluidos = Array.from(checkboxesExcluidos).map(cb => cb.value);
-        
-        if (descripcion && monto > 0 && pagador) {
-            agregarGasto(descripcion, monto, pagador, excluidos);
-        } else {
-            mostrarNotificacion('Por favor, completa todos los campos del gasto.', 'error');
-        }
+        const d = sanitizarHTML(expenseDescriptionInput.value.trim());
+        const m = parseFloat(expenseAmountInput.value);
+        const p = expensePayerSelect.value;
+        const ex = Array.from(document.querySelectorAll('#excludedParticipantsList input:checked')).map(cb => cb.value);
+        if (d && m > 0 && p) agregarGasto(d, m, p, ex);
+        else mostrarNotificacion('Completa todos los campos.', 'error');
     }
 
     function actualizarSelectPagador() {
         expensePayerSelect.innerHTML = '<option value="" disabled selected>Selecciona quien pagó</option>';
-        participantes.forEach(nombre => {
-            const option = document.createElement('option');
-            option.value = nombre;
-            option.textContent = nombre;
-            expensePayerSelect.appendChild(option);
-        });
+        participantes.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; expensePayerSelect.appendChild(o); });
     }
-
     function popularCheckboxesExcluidos() {
         excludedParticipantsList.innerHTML = '';
-        if (participantes.length === 0) return;
-        participantes.forEach(nombre => {
-            const item = document.createElement('label');
-            item.className = 'excluded-participant-item';
-            item.innerHTML = `<input type="checkbox" value="${nombre}"><span>${sanitizarHTML(nombre)}</span>`;
-            excludedParticipantsList.appendChild(item);
-        });
+        participantes.forEach(n => { const i = document.createElement('label'); i.className = 'excluded-participant-item'; i.innerHTML = `<input type="checkbox" value="${n}"><span>${sanitizarHTML(n)}</span>`; excludedParticipantsList.appendChild(i); });
     }
 
-    // ====================================================
-    //            LÓGICA DE CÁLCULO Y RESULTADOS
-    // ====================================================
-    function verificarEstadoBotonCalcular() {
-        calculateBtn.disabled = !(participantes.length >= 2 && gastos.length >= 1);
-    }
-
+    function verificarEstadoBotonCalcular() { calculateBtn.disabled = !(participantes.length >= 2 && gastos.length >= 1); }
     function calcularGastos() {
         if (calculateBtn.disabled) return;
-        try {
-            const resultados = calculadora.calcularLiquidaciones(participantes, gastos);
-            mostrarResultados(resultados.formattedSummaryHtml, resultados.formattedSummaryPlainText);
-        } catch (error) {
-            console.error(error);
-            mostrarNotificacion("Error al calcular. Revisa los datos.", "error");
-        }
+        try { const res = calculadora.calcularLiquidaciones(participantes, gastos); mostrarResultados(res.formattedSummaryHtml, res.formattedSummaryPlainText); }
+        catch (e) { console.error(e); mostrarNotificacion("Error al calcular.", "error"); }
     }
-
-    function mostrarResultados(html, textoPlano) {
-        document.getElementById('resultsText').innerHTML = html;
-        document.getElementById('resultsText').dataset.plainText = textoPlano;
-        abrirModal(resultsModal);
+    function mostrarResultados(html, texto) {
+        const resModal = document.getElementById('resultsModal');
+        resModal.querySelector('#resultsText').innerHTML = html;
+        resModal.querySelector('#resultsText').dataset.plainText = texto;
+        abrirModal('resultsModal');
     }
-
-    function compartirResultadosWhatsapp() {
-        const texto = document.getElementById('resultsText').dataset.plainText;
-        window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank');
-    }
-
-    function copiarResultados() {
-        const texto = document.getElementById('resultsText').dataset.plainText;
-        navigator.clipboard.writeText(texto)
-            .then(() => mostrarNotificacion('¡Resultados copiados!', 'success'))
-            .catch(() => mostrarNotificacion('No se pudo copiar el texto.', 'error'));
-    }
-
-    // ====================================================
-    //        SISTEMAS AUXILIARES (FAB, MENÚ)
-    // ====================================================
-    function inicializarSistemaFAB() {
-        const mainFab = document.getElementById('mainFab');
-        const miniFabs = document.getElementById('miniFabs');
-        const fabContainer = document.getElementById('fabContainer');
-        
-        mainFab.addEventListener('click', (e) => {
-            e.stopPropagation();
-            miniFabs.classList.toggle('expanded');
-        });
-        
-        document.addEventListener('click', (e) => {
-            if (!fabContainer.contains(e.target) && miniFabs.classList.contains('expanded')) {
-                miniFabs.classList.remove('expanded');
-            }
-        });
-        
-        document.getElementById('addParticipantFab').addEventListener('click', () => {
-            abrirModal(addParticipantModal);
-            miniFabs.classList.remove('expanded');
-        });
-
-        document.getElementById('addExpenseFab').addEventListener('click', () => {
-            if (participantes.length >= 2) {
-                actualizarSelectPagador();
-                popularCheckboxesExcluidos();
-                abrirModal(addExpenseModal);
-            } else {
-                mostrarNotificacion("Necesitas al menos 2 participantes.", "error");
-            }
-            miniFabs.classList.remove('expanded');
-        });
-        
-        document.getElementById('calculateFab').addEventListener('click', () => {
-            if (!calculateBtn.disabled) {
-                calcularGastos();
-            } else {
-                mostrarNotificacion("Añade participantes y gastos para calcular.", "error");
-            }
-            miniFabs.classList.remove('expanded');
-        });
-    }
-
+    function compartirResultadosWhatsapp() { const t = document.getElementById('resultsText')?.dataset.plainText || ''; window.open(`https://wa.me/?text=${encodeURIComponent(t)}`, '_blank'); }
+    function copiarResultados() { const t = document.getElementById('resultsText')?.dataset.plainText || ''; navigator.clipboard.writeText(t).then(() => mostrarNotificacion('¡Copiado!', 'success')).catch(() => mostrarNotificacion('No se pudo copiar.', 'error')); }
+    
     function inicializarMenuHamburguesa() {
         const openMenuBtn = document.getElementById('openMenu');
         const closeMenuBtn = document.getElementById('closeMenu');
         const hamburgerMenu = document.getElementById('hamburgerMenu');
-        
         const abrirMenu = () => hamburgerMenu.classList.add('active');
         const cerrarMenu = () => hamburgerMenu.classList.remove('active');
-
         openMenuBtn.addEventListener('click', abrirMenu);
         closeMenuBtn.addEventListener('click', cerrarMenu);
-        
-        document.getElementById('aboutBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            cerrarMenu();
-            abrirModal(document.getElementById('aboutModal'));
-        });
-
-        document.getElementById('contactBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            cerrarMenu();
-            abrirModal(document.getElementById('contactModal'));
-        });
+        document.getElementById('aboutBtn')?.addEventListener('click', (e) => { e.preventDefault(); cerrarMenu(); abrirModal('aboutModal'); });
+        document.getElementById('contactBtn')?.addEventListener('click', (e) => { e.preventDefault(); cerrarMenu(); abrirModal('contactModal'); });
     }
+
+    inicializarApp();
 });

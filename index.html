@@ -26,7 +26,7 @@
 
     <div id="hamburgerMenu" class="hamburger-menu">
         <div class="menu-header">
-            <h3>Just Pay!</h3>
+            <h3>Menú</h3>
             <button class="menu-close" id="closeMenu">&times;</button>
         </div>
         <nav class="menu-nav">
@@ -57,35 +57,47 @@
             </div>
         </header>
 
-        <section class="section participants-section">
-            <div class="section-header">
-                <h2>Participantes</h2>
-                <button id="openAddParticipantModal" class="add-form" aria-label="Agregar nuevo participante">Agregar</button>
-            </div>
-            <div id="participantList" class="list-content" role="list" aria-label="Lista de participantes">
-                </div>
-            <div id="emptyParticipantsState" class="empty-state" role="status" aria-live="polite">
-                <i class="fas fa-users-slash empty-icon" aria-hidden="true"></i>
-                <p>Aún no hay participantes.<br>¡Comienza agregando algunos!</p>
-            </div>
-        </section>
+        <div class="tab-container">
+            <button class="tab-btn active" data-target="participantsPanel">
+                <i class="fas fa-users"></i> Participantes <span id="participantsCount">(0)</span>
+            </button>
+            <button class="tab-btn" data-target="expensesPanel">
+                <i class="fas fa-receipt"></i> Gastos <span id="expensesCount">(0)</span>
+            </button>
+        </div>
 
-        <section class="section expenses-section">
-            <div class="section-header">
-                <h2>Gastos</h2>
-                <button id="openAddExpenseModal" class="add-form" aria-label="Agregar nuevo gasto">Agregar</button>
-            </div>
-            <div id="expenseList" class="list-content" role="list" aria-label="Lista de gastos">
+        <main class="tab-content">
+            <section id="participantsPanel" class="tab-panel active">
+                <div class="section-header">
+                    <h2>Lista de Participantes</h2>
+                    <!-- <button id="openAddParticipantModal" class="add-form" aria-label="Agregar nuevo participante">Agregar</button> -->
                 </div>
-            <div id="emptyExpensesState" class="empty-state" role="status" aria-live="polite">
-                <i class="fas fa-receipt empty-icon" aria-hidden="true"></i>
-                <p>Aún no hay gastos registrados.<br>¡Añade tus primeros gastos!</p>
-            </div>
-        </section>
+                <div id="participantList" class="list-content" role="list"></div>
+                <div id="emptyParticipantsState" class="empty-state" role="status">
+                    <i class="fas fa-users-slash empty-icon"></i>
+                    <p>Aún no hay participantes.<br>¡Comienza agregando algunos!</p>
+                </div>
+            </section>
 
-        <section class="calculate-section">
-            <button id="calculateBtn" class="calculate-btn" disabled>Calcular Gastos</button>
-        </section>
+            <section id="expensesPanel" class="tab-panel">
+                <div class="section-header">
+                    <h2>Lista de Gastos</h2>
+                </div>
+                <div id="expenseList" class="list-content" role="list"></div>
+                <div id="emptyExpensesState" class="empty-state" role="status">
+                    <i class="fas fa-receipt empty-icon"></i>
+                    <p>Aún no hay gastos registrados.<br>¡Añade tus primeros gastos!</p>
+                </div>
+            </section>
+        </main>
+        
+        <div class="action-bar">
+            <div class="action-bar-total">
+                <span>Total Gastado:</span>
+                <span id="totalExpensesText">$0,00</span>
+            </div>
+            <button id="calculateBtn" class="calculate-btn" disabled>Calcular</button>
+        </div>
 
         <footer class="footer">
             <p>&copy; 2025 Just Pay!. Todos los derechos reservados.</p>
@@ -96,12 +108,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close-btn">&times;</span>
-                <h2>Agregar Nuevo Participante</h2>
+                <h2>Agregar Participante</h2>
             </div>
             <div class="modal-body">
                 <form id="addParticipantForm" class="modal-form">
                     <input type="text" id="participantName" placeholder="Nombre del participante" required autocomplete="off" spellcheck="false">
-                    <button type="submit">Añadir Participante</button>
+                    <button type="submit" class="primary-btn">Añadir Participante</button>
                 </form>
             </div>
             <div class="modal-footer">
@@ -111,30 +123,31 @@
     </div>
 
     <div id="addExpenseModal" class="modal modal-form-type">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close-btn">&times;</span>
-                <h2>Agregar Nuevo Gasto</h2>
-            </div>
-            <div class="modal-body">
-                <form id="addExpenseForm" class="modal-form">
-                    <input type="text" id="expenseDescription" placeholder="Descripción del gasto (ej. Cena)" required autocomplete="off" spellcheck="false">
-                    <input type="number" id="expenseAmount" placeholder="Monto (ej. 8000)" step="0.01" min="0.01" required autocomplete="off">
-                    <select id="expensePayer" required>
-                        <option value="" disabled selected>Selecciona quien pagó</option>
-                    </select>
-                    <div class="excluded-participants-section">
-                        <h3>¿Quiénes no participan de este gasto?</h3>
-                        <div id="excludedParticipantsList" class="excluded-participants-list"></div>
-                    </div>
-                    <button type="submit">Añadir Gasto</button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="secondary-btn close-modal-btn">Listo</button>
-            </div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close-btn">&times;</span>
+            <h2>Agregar Gasto</h2>
+        </div>
+        <div class="modal-body">
+            <form id="addExpenseForm" class="modal-form">
+                <input type="text" id="expenseDescription" placeholder="Descripción (ej. Cena)" required autocomplete="off" spellcheck="false">
+                <input type="number" id="expenseAmount" placeholder="Monto (ej. 8000)" step="0.01" min="0.01" required autocomplete="off">
+                <select id="expensePayer" required>
+                    <option value="" disabled selected>Selecciona quien pagó</option>
+                </select>
+                <div class="excluded-participants-section">
+                    <h3>¿Quiénes no participan de este gasto?</h3>
+                    <div id="excludedParticipantsList" class="excluded-participants-list"></div>
+                </div>
+
+                <button type="submit" class="primary-btn">Añadir Gasto</button>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="secondary-btn close-modal-btn">Listo</button>
         </div>
     </div>
+</div>
 
     <div id="resultsModal" class="modal modal-results-type">
         <div class="modal-content">
@@ -152,30 +165,33 @@
         </div>
     </div>
 
-    <div class="fab-container" id="fabContainer">
-        <button class="fab main-fab" id="mainFab" aria-label="Menú de acciones rápidas">
-            <i class="fas fa-plus" id="mainFabIcon"></i>
-        </button>
-        <div class="mini-fabs" id="miniFabs">
-            <button class="fab mini-fab" id="addParticipantFab" aria-label="Agregar participante">
-                <i class="fas fa-user-plus"></i>
-                <span class="fab-label">Participante</span>
-            </button>
-            <button class="fab mini-fab" id="addExpenseFab" aria-label="Agregar gasto">
-                <i class="fas fa-receipt"></i>
-                <span class="fab-label">Gasto</span>
-            </button>
-            <button class="fab mini-fab" id="calculateFab" aria-label="Calcular deudas">
-                <i class="fas fa-calculator"></i>
-                <span class="fab-label">Calcular</span>
-            </button>
+    <div id="aboutModal" class="modal modal-info-type">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-btn">&times;</span>
+                <h2><i class="fas fa-info-circle"></i> Acerca de Just Pay!</h2>
+            </div>
+            <div class="modal-body">
+                </div>
         </div>
     </div>
 
-    <div id="aboutModal" class="modal modal-info-type">
-        </div>
     <div id="contactModal" class="modal modal-info-type">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-btn">&times;</span>
+                <h2><i class="fas fa-envelope"></i> Contacto</h2>
+            </div>
+            <div class="modal-body">
+                </div>
         </div>
+    </div>
+    
+    <div class="fab-container" id="fabContainer">
+        <button id="fabAdd" class="fab" aria-label="Agregar">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
 
     <script type="module" src="./assets/js/calculator.js"></script>
     <script type="module" src="./assets/js/script.js"></script>
