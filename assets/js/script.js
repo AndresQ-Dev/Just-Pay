@@ -83,17 +83,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleFabClick() {
-        const participantsPanel = document.getElementById('participantsPanel');
-        if (participantsPanel.classList.contains('active')) {
-            // Si estamos en la pestaña de participantes, abrir el modal de participantes
-            abrirModal('addParticipantModal');
-        } else {
-            // Si estamos en la pestaña de gastos, abrir el modal de gastos
+    const participantsPanel = document.getElementById('participantsPanel');
+    if (participantsPanel.classList.contains('active')) {
+        // Si estamos en la pestaña de participantes, siempre se puede agregar
+        abrirModal('addParticipantModal');
+    } else {
+        // Si estamos en la pestaña de gastos, VALIDAMOS PRIMERO
+        if (participantes.length >= 2) {
             actualizarSelectPagador();
             popularCheckboxesExcluidos();
             abrirModal('addExpenseModal');
+        } else {
+            // Si no hay suficientes, mostramos una notificación
+            mostrarNotificacion('Necesitas al menos 2 participantes para agregar un gasto.', 'error');
         }
     }
+}
 
     function actualizarContadores() { participantsCountSpan.textContent = `(${participantes.length})`; expensesCountSpan.textContent = `(${gastos.length})`; }
     function actualizarTotalGastosBarra() { const total = gastos.reduce((sum, gasto) => sum + gasto.amount, 0); totalExpensesText.textContent = formatearMoneda(total); }
