@@ -114,7 +114,7 @@ class CalculadoraLiquidaciones {
      */
     formatearResumenLiquidacion(totalGastos, transferencias, gastos = []) {
         // --- Versión HTML (para el modal) ---
-        let resumenHtml = `<div class="results-header"><h2>Resumen de Gastos Compartidos</h2></div>`;
+        let resumenHtml = ``;
         
         if (gastos && gastos.length > 0) {
             resumenHtml += `<div class="results-section"><h3>Gastos Registrados</h3><div class="expenses-summary">`;
@@ -152,7 +152,7 @@ class CalculadoraLiquidaciones {
         resumenHtml += `<p class="results-footer-text">Generado con Just Pay!</p>`;
 
         // --- Versión Texto Plano (para copiar/compartir) ---
-        let resumenTextoPlano = `*RESUMEN DE GASTOS COMPARTIDOS*\n=================================\n\n*GASTOS REGISTRADOS:*\n`;
+        let resumenTextoPlano = `*GASTOS REGISTRADOS:*\n`;
 
         if (gastos && gastos.length > 0) {
             gastos.forEach((gasto, i) => {
