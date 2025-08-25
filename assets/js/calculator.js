@@ -172,7 +172,7 @@ class CalculadoraLiquidaciones {
             });
         }
         
-        resumenTextoPlano += '=================================\nGenerado con *Just Pay!*';
+        resumenTextoPlano += '=================================\nGenerado con *Just Pay!*\nhttps://justpayapp.netlify.app/';
 
         return {
             html: resumenHtml,
