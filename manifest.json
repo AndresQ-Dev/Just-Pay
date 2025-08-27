@@ -4,7 +4,7 @@
   "description": "Una app simple para dividir gastos.",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#f1f5f9",
+  "background_color": "#764ba2",
   "theme_color": "#667eea",
   "icons": [
     {
