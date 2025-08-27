@@ -389,12 +389,25 @@ main.tab-content {
 /* === FOOTER === */
 .footer {
     text-align: center;
-    padding: var(--space-xl);
-    color: var(--text-muted);
-    background: var(--surface-secondary);
-    border-top: 1px solid var(--divider);
-    margin-top: auto;
+    padding: var(--space-lg);
+    color: var(--text-inverse);
+    font-size: 0.8rem;
     flex-shrink: 0;
+    background: var(--primary-gradient);
+    position: relative; /* <-- AÑADIR: Necesario para posicionar la forma */
+    overflow: hidden;   /* <-- AÑADIR: Recorta la parte del círculo que se sale */
+}
+
+/* Forma redondeada decorativa para el footer */
+.footer::before {
+    content: '';
+    position: absolute;
+    bottom: -50%; /* Posición en la parte inferior */
+    left: -20%;   /* Posición a la izquierda */
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.1); /* Color semitransparente */
+    border-radius: 50%; /* Lo convierte en un círculo */
 }
 
 .footer p {
