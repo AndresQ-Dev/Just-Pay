@@ -212,10 +212,12 @@ body {
 }
 
 .tab-content {
-    flex: 1;
+    /* flex: 1; */
     /* Permite que el contenido ocupe el espacio restante */
     overflow-y: auto;
     /* Permite scroll solo en el contenido si es necesario */
+    padding: 0 var(--space-md);
+    padding-bottom: 80px; 
 }
 
 .tab-panel {
