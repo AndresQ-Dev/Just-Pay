@@ -198,10 +198,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function verificarEstadoBotonCalcular() { calculateBtn.disabled = !(participantes.length >= 2 && gastos.length >= 1); }
     function calcularGastos() {
-        if (calculateBtn.disabled) return;
-        try { const res = calculadora.calcularLiquidaciones(participantes, gastos); mostrarResultados(res.formattedSummaryHtml, res.formattedSummaryPlainText); }
-        catch (e) { console.error(e); mostrarNotificacion("Error al calcular.", "error"); }
-    }
+    if (calculateBtn.disabled || calculateBtn.classList.contains('loading')) return;
+
+    // Iniciar la animación
+    calculateBtn.classList.add('loading');
+    calculateBtn.disabled = true;
+
+    // Simular un pequeño retraso para que la animación sea visible
+    setTimeout(() => {
+        try {
+            const resultados = calculadora.calcularLiquidaciones(participantes, gastos);
+            mostrarResultados(resultados.formattedSummaryHtml, resultados.formattedSummaryPlainText);
+        } catch (error) {
+            console.error(error);
+            mostrarNotificacion("Error al calcular. Revisa los datos.", "error");
+        } finally {
+            // Detener la animación, sin importar si hubo éxito o error
+            calculateBtn.classList.remove('loading');
+            // Habilitar el botón solo si las condiciones se cumplen
+            verificarEstadoBotonCalcular();
+        }
+    }, 1200); // 750 milisegundos de animación
+}
     function mostrarResultados(html, texto) {
         const resModal = document.getElementById('resultsModal');
         resModal.querySelector('#resultsText').innerHTML = html;
