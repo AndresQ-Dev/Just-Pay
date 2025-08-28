@@ -2241,22 +2241,17 @@ button.primary-btn:hover {
 /* === FLOATING ACTION BUTTON (FAB) === */
 .fab-container {
     position: absolute; /* Asegúrate de que sea absolute */
-    bottom: var(--space-xl); /* Valor para móviles, si quieres que cambie en desktop, lo pones dentro del @media */
-    right: var(--space-lg);  /* Valor para móviles */
+    bottom: calc(var(--space-xl) + 100px); /* <-- CAMBIADO: Subimos el FAB 80px más */
+    /* Puedes ajustar '80px' a un valor diferente si lo necesitas más alto o más bajo */
+    right: var(--space-lg); /* O el valor que desees para el margen derecho en móvil */
     z-index: 1000;
+}
 
-    @media (min-width: 768px) {
-        /* Aquí es donde ajustamos para desktop */
-        bottom: calc(var(--space-xl) * 2); /* Moverlo más arriba (ej. el doble del espacio base) */
-        right: calc(50% - (var(--max-width) / 2) + var(--space-xxl)); /* Moverlo más a la derecha */
-        /*
-         Explicación de 'right':
-         - 50%: Centro de la pantalla.
-         - -(var(--max-width) / 2): Mueve al borde derecho del contenedor.
-         - + var(--space-xxl): Añade un margen aún mayor hacia la derecha para alejarlo.
-                               Asegúrate de que var(--space-xxl) esté definido en tus variables.
-                               Si no, puedes usar un valor fijo como 40px o 50px.
-        */
+/* Las reglas para desktop dentro del media query no necesitan cambio */
+@media (min-width: 768px) {
+    .fab-container {
+        bottom: calc(var(--space-xl) * 2);
+        right: calc(50% - (var(--max-width) / 2) + var(--space-xxl));
     }
 }
 
