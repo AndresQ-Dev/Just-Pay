@@ -217,7 +217,7 @@ body {
     overflow-y: auto;
     /* Permite scroll solo en el contenido si es necesario */
     padding: 0 var(--space-md);
-    padding-bottom: 80px; 
+    padding-bottom: 160px;
 }
 
 .tab-panel {
@@ -396,20 +396,26 @@ main.tab-content {
     font-size: 0.8rem;
     flex-shrink: 0;
     background: var(--primary-gradient);
-    position: relative; /* <-- AÑADIR: Necesario para posicionar la forma */
-    overflow: hidden;   /* <-- AÑADIR: Recorta la parte del círculo que se sale */
+    position: relative;
+    /* <-- AÑADIR: Necesario para posicionar la forma */
+    overflow: hidden;
+    /* <-- AÑADIR: Recorta la parte del círculo que se sale */
 }
 
 /* Forma redondeada decorativa para el footer */
 .footer::before {
     content: '';
     position: absolute;
-    bottom: -50%; /* Posición en la parte inferior */
-    left: -20%;   /* Posición a la izquierda */
+    bottom: -50%;
+    /* Posición en la parte inferior */
+    left: -20%;
+    /* Posición a la izquierda */
     width: 200px;
     height: 200px;
-    background: rgba(255, 255, 255, 0.1); /* Color semitransparente */
-    border-radius: 50%; /* Lo convierte en un círculo */
+    background: rgba(255, 255, 255, 0.1);
+    /* Color semitransparente */
+    border-radius: 50%;
+    /* Lo convierte en un círculo */
 }
 
 .footer p {
@@ -437,6 +443,52 @@ main.tab-content {
     }
 }
 
+/* ===============================================
+   FIX DEFINITIVO PARA BOTONES DE ACCIÓN EN MODAL
+   =============================================== */
+
+.modal-button-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Dos columnas de igual tamaño */
+    gap: var(--space-md);
+    /* Espacio entre los botones */
+    margin-top: var(--space-lg);
+}
+
+.modal-action-btn {
+    /* --- La Clave para la Alineación --- */
+    display: flex;
+    align-items: center;
+    /* Centra verticalmente el ícono y el texto */
+    justify-content: center;
+    /* Centra horizontalmente el ícono y el texto */
+
+    /* --- Estilos para Apariencia Uniforme --- */
+    width: 100%;
+    height: 48px;
+    padding: var(--space-sm) var(--space-md);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 0.9375rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-inverse);
+    cursor: pointer;
+    text-decoration: none;
+    /* Si alguno es un enlace */
+    transition: all var(--transition-fast);
+}
+
+.modal-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Espacio entre el ícono y el texto */
+.modal-action-btn i {
+    margin-right: var(--space-sm);
+}
+
 /* === RESPONSIVE DESIGN === */
 
 /* Desktop Styles */
@@ -446,10 +498,10 @@ main.tab-content {
         margin: 0 auto;
     }
 
-    .modal-content {
+    /* .modal-content {
         width: 450px;
-        max-width: 85vw;
-    }
+        max-width: 520px;
+    } */
 
     .section {
         margin: var(--space-xl) var(--space-lg);
@@ -468,6 +520,7 @@ main.tab-content {
 
     .modal-content {
         width: 500px;
+        max-width: 580px;
     }
 
     .section {
@@ -475,7 +528,7 @@ main.tab-content {
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 900px) {
     :root {
         --space-sm: 0.375rem;
         --space-md: 0.75rem;
@@ -506,8 +559,8 @@ main.tab-content {
     }
 
     .modal-content {
-        width: 100%;
-        max-width: none;
+        max-width: 90vh;
+        max-width: 400px;
         border-radius: var(--radius-xl) var(--radius-xl) 0 0;
         margin-top: 0;
     }
@@ -555,15 +608,16 @@ main.tab-content {
     }
 
     .transfer-description {
-        flex-basis: 100%;
-        /* Ocupa toda la primera línea, forzando al monto a bajar */
-        white-space: nowrap;
-        /* Evita que "Nombre -> Nombre" se parta en dos líneas */
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        /* Ocupa el espacio disponible */
+        flex-shrink: 1;
+        /* Permite que se encoja si no hay espacio */
+        min-width: 0;
+        /* Truco de Flexbox para que el encogimiento funcione correctamente */
         overflow: hidden;
-        /* Oculta el texto que se desborda */
-        text-overflow: ellipsis;
-        /* Muestra "..." si los nombres son muy largos */
-        font-weight: var(--font-weight-medium);
+        /* Oculta cualquier contenido que se desborde */
     }
 
     .transfer-amount {
@@ -579,39 +633,7 @@ main.tab-content {
 
 }
 
-@media (min-width: 481px) and (max-width: 900px) {
-    .transfer-item {
-        display: flex;
-        flex-direction: row; /* Asegura que esté en una fila */
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .transfer-description {
-        flex-grow: 1;
-        flex-shrink: 1;
-        min-width: 0;
-        
-        /* Permite que el texto se divida en varias líneas en los espacios */
-        white-space: normal; 
-        
-        /* Si una sola palabra (sin espacios) es demasiado larga, 
-           permite que se rompa para evitar el desborde */
-        overflow-wrap: break-word; 
-        word-break: break-word; /* Compatibilidad extra para navegadores */
-    }
-
-    .transfer-amount {
-        flex-shrink: 0; /* EVITA que el monto se encoja o se rompa */
-        padding-left: var(--space-md); /* Mantiene un espacio con los nombres */
-        
-        /* Reseteamos los estilos de la vista móvil */
-        text-align: right;
-        font-size: 1rem;
-        font-weight: var(--font-weight-bold);
-        padding-top: 0;
-    }
-}
+/*
 
 @media (max-width: 360px) {
     .header {
@@ -636,6 +658,7 @@ main.tab-content {
         font-size: 1rem;
     }
 }
+    */
 
 /* === DARK MODE SUPPORT === */
 @media (prefers-color-scheme: dark) {
@@ -927,7 +950,9 @@ select:focus {
         border: 1px solid #ccc;
         break-inside: avoid;
     }
-} /* <-- CORREGIDO: Se cierra solo con una llave } */
+}
+
+/* <-- CORREGIDO: Se cierra solo con una llave } */
 
 
 /* === REGLA RESTAURADA: Faltaba el selector ".add-form" === */
@@ -939,7 +964,9 @@ select:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-} /* <-- CORREGIDO: Esta llave ahora cierra la regla ".add-form" */
+}
+
+/* <-- CORREGIDO: Esta llave ahora cierra la regla ".add-form" */
 
 
 .add-form:hover {
@@ -1166,12 +1193,15 @@ select:focus {
     display: none;
 }
 
-/* === SISTEMA FAB === */
+/* ===============================================
+   SISTEMA FAB (SIMPLIFICADO Y CORRECTO)
+   =============================================== */
+
 .fab-container {
-    position: fixed;
+    position: absolute; /* Se posiciona relativo al .container */
     bottom: var(--space-xl);
     right: var(--space-lg);
-    z-index: 1000;
+    z-index: 100;
 }
 
 .fab {
@@ -1185,73 +1215,14 @@ select:focus {
     justify-content: center;
     box-shadow: var(--shadow-fab);
     transition: all var(--transition-normal);
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     color: var(--text-inverse);
-    position: relative;
-    overflow: hidden;
-}
-
-.main-fab {
     background: var(--primary-gradient);
-    z-index: 1001;
 }
 
-.main-fab:hover {
+.fab:hover {
     transform: scale(1.1) rotate(90deg);
-}
-
-.mini-fabs {
-    position: absolute;
-    bottom: 70px;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-lg);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px);
-    transition: all var(--transition-normal);
-}
-
-.mini-fabs.expanded {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.mini-fab {
-    width: 48px;
-    height: 48px;
-    font-size: 1rem;
-    background: var(--success-gradient);
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.mini-fab:hover {
-    transform: scale(1.1);
-}
-
-.fab-label {
-    position: absolute;
-    right: 60px;
-    background: var(--surface-overlay);
-    color: var(--text-inverse);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
-    font-size: 0.8125rem;
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateX(10px);
-    transition: all var(--transition-fast);
-    pointer-events: none;
-    backdrop-filter: blur(10px);
-}
-
-.mini-fab:hover .fab-label {
-    opacity: 1;
-    transform: translateX(0);
+    box-shadow: var(--shadow-lg);
 }
 
 /* === MODALES === */
@@ -1263,15 +1234,20 @@ select:focus {
     height: 100%;
     background: var(--surface-overlay);
     z-index: 1010;
-    opacity: 0; /* Empieza transparente */
-    transition: opacity var(--transition-normal); /* Animación de fundido */
+    opacity: 0;
+    /* Empieza transparente */
+    transition: opacity var(--transition-normal);
+    /* Animación de fundido */
     pointer-events: none;
     backdrop-filter: blur(4px);
 }
+
 .backdrop.active {
-    opacity: 1; /* Se vuelve opaco */
+    opacity: 1;
+    /* Se vuelve opaco */
     pointer-events: auto;
 }
+
 .modal {
     position: fixed;
     top: 0;
@@ -1283,13 +1259,14 @@ select:focus {
     align-items: center;
     justify-content: center;
     padding: var(--space-lg);
-    
+
     /* La clave de la transición */
     opacity: 0;
     visibility: hidden;
     transition: opacity var(--transition-normal), visibility var(--transition-normal);
     pointer-events: none;
 }
+
 .modal.active {
     opacity: 1;
     visibility: visible;
@@ -1322,9 +1299,14 @@ select:focus {
     background: var(--surface-elevated);
     border-radius: var(--radius-2xl);
     box-shadow: var(--shadow-xl);
-    max-width: 90vw;
-    width: 400px;
-    transform: scale(0.95); /* Empieza un poco más pequeño */
+
+    /* --- INICIO DEL CAMBIO DEFINITIVO --- */
+    width: 100%;
+    /* Ocupa el espacio disponible */
+    max-width: 90vh;
+    /* Ancho máximo por defecto (igual que .container) */
+
+    transform: scale(0.95);
     transition: transform var(--transition-normal);
     display: flex;
     flex-direction: column;
@@ -1333,7 +1315,8 @@ select:focus {
 }
 
 .modal.active .modal-content {
-    transform: scale(1); /* Vuelve a su tamaño normal con una animación */
+    transform: scale(1);
+    /* Vuelve a su tamaño normal con una animación */
 }
 
 .modal-header {
@@ -1567,8 +1550,12 @@ button.primary-btn:hover {
 
 .transfer-from,
 .transfer-to {
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary);
+    white-space: nowrap;
+    /* Impide que el nombre se divida en varias líneas */
+    overflow: hidden;
+    /* Oculta el texto del nombre si es muy largo */
+    text-overflow: ellipsis;
+    /* Muestra "..." si el nombre es demasiado largo para el espacio */
 }
 
 .transfer-arrow {
@@ -1742,7 +1729,7 @@ button.primary-btn:hover {
 }
 
 /* 4) Estética app nativa en móvil */
-@media (max-width: 480px) {
+@media (max-width: 900px) {
     body {
         background: var(--surface-primary);
         /* Fondo limpio tipo app */
@@ -2036,7 +2023,7 @@ button.primary-btn:hover {
 }
 
 /* Pequeños ajustes móviles */
-@media (max-width: 480px) {
+@media (max-width: 900px) {
     .modal-content {
         width: 100%;
         max-width: 100%;
@@ -2166,9 +2153,10 @@ button.primary-btn:hover {
    =============================================== */
 .toast-notification {
     position: fixed;
-    top: var(--space-xl);       /* <-- CAMBIO: Posicionado arriba */
+    top: var(--space-xl);
+    /* <-- CAMBIO: Posicionado arriba */
     left: 50%;
-    
+
     padding: var(--space-md) var(--space-xl);
     border-radius: var(--radius-full);
     color: var(--text-inverse);
@@ -2181,7 +2169,7 @@ button.primary-btn:hover {
 
     opacity: 0;
     /* Animación: empieza desplazado hacia arriba y oculto */
-    transform: translate(-50%, -20px); 
+    transform: translate(-50%, -20px);
     transition: opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;
 }
@@ -2189,7 +2177,7 @@ button.primary-btn:hover {
 .toast-notification.show {
     opacity: 1;
     /* Animación: se desliza hacia abajo a su posición final */
-    transform: translate(-50%, 0); 
+    transform: translate(-50%, 0);
 }
 
 /* Estilos por tipo de notificación */
@@ -2242,18 +2230,24 @@ button.primary-btn:hover {
 
 /* === FLOATING ACTION BUTTON (FAB) === */
 .fab-container {
-    position: absolute; /* Asegúrate de que sea absolute */
-    bottom: calc(var(--space-xl) + 100px); /* <-- CAMBIADO: Subimos el FAB 80px más */
+    position: absolute;
+    /* Asegúrate de que sea absolute */
+    bottom: calc(var(--space-xl) + 100px);
+    /* <-- CAMBIADO: Subimos el FAB 80px más */
     /* Puedes ajustar '80px' a un valor diferente si lo necesitas más alto o más bajo */
-    right: var(--space-lg); /* O el valor que desees para el margen derecho en móvil */
+    right: var(--space-lg);
+    /* O el valor que desees para el margen derecho en móvil */
     z-index: 1000;
 }
 
 /* Las reglas para desktop dentro del media query no necesitan cambio */
 @media (min-width: 768px) {
     .fab-container {
-        bottom: calc(var(--space-xl) * 2);
-        right: calc(50% - (var(--max-width) / 2) + var(--space-xxl));
+        .fab-container {
+            /* Calculamos la posición para que se alinee con el borde del contenedor */
+            right: calc(50% - 260px);
+            /* 260px es la mitad del max-width de 520px del container */
+        }
     }
 }
 
@@ -2326,7 +2320,8 @@ button.primary-btn:hover {
    ESTILOS PARA SPINNER DE CARGA EN BOTÓN
    =============================================== */
 .calculate-btn .spinner {
-    display: none; /* Oculto por defecto */
+    display: none;
+    /* Oculto por defecto */
     width: 20px;
     height: 20px;
     border: 3px solid rgba(255, 255, 255, 0.3);
@@ -2336,16 +2331,20 @@ button.primary-btn:hover {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Estado de carga del botón */
 .calculate-btn.loading .spinner {
-    display: block; /* Muestra el spinner */
+    display: block;
+    /* Muestra el spinner */
 }
 
 .calculate-btn.loading .btn-text {
-    display: none; /* Oculta el texto */
+    display: none;
+    /* Oculta el texto */
 }
 
 /* ==========================================================
@@ -2365,6 +2364,7 @@ button.primary-btn:hover {
 .info-card-text p {
     margin-bottom: var(--space-md);
 }
+
 .info-card-text p:last-child {
     margin-bottom: 0;
 }
@@ -2407,7 +2407,8 @@ button.primary-btn:hover {
 }
 
 .info-card-logo a {
-text-decoration: none; /* Elimina el subrayado del enlace */
+    text-decoration: none;
+    /* Elimina el subrayado del enlace */
 }
 
 /* Estilos para el modal de Ayuda (se mantienen) */
@@ -2415,13 +2416,16 @@ text-decoration: none; /* Elimina el subrayado del enlace */
     list-style: none;
     padding: 0;
 }
+
 .help-steps li {
     padding: var(--space-md) 0;
     border-bottom: 1px solid var(--divider);
 }
+
 .help-steps li:last-child {
     border-bottom: none;
 }
+
 .help-steps h4 {
     display: flex;
     align-items: center;
@@ -2429,6 +2433,7 @@ text-decoration: none; /* Elimina el subrayado del enlace */
     font-size: 1.1rem;
     margin-bottom: var(--space-xs);
 }
+
 .help-steps h4 span {
     display: inline-flex;
     align-items: center;
@@ -2440,7 +2445,47 @@ text-decoration: none; /* Elimina el subrayado del enlace */
     height: 24px;
     font-size: 0.9rem;
 }
+
 .help-steps p {
     padding-left: calc(24px + var(--space-md));
     color: var(--text-secondary);
+}
+
+
+/* ==========================================================
+   FIX DEFINITIVO PARA ANCHO DE MODAL Y CONTENEDOR
+   ========================================================== */
+
+/* --- Base (Móvil) --- */
+.container {
+    max-width: 420px;
+}
+
+.modal-content {
+    width: 100%;
+    /* Hace que el modal sea flexible */
+    max-width: 420px;
+}
+
+/* --- Tablet --- */
+@media (min-width: 768px) {
+
+    .container,
+    .modal-content {
+        max-width: 520px;
+    }
+}
+
+/* --- Escritorio --- */
+@media (min-width: 1024px) {
+
+    .container,
+    .modal-content {
+        max-width: 580px;
+    }
+
+    .fab-container {
+        right: calc(50% - 290px);
+        /* 290px es la mitad de 580px */
+    }
 }
