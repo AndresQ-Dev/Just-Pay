@@ -1512,7 +1512,7 @@ button.primary-btn:hover {
 
 .results-total {
     background: var(--success-gradient);
-    color: var(--text-inverse);
+    /* color: var(--text-inverse); */
     padding: var(--space-lg);
     border-radius: var(--radius-lg);
     text-align: center;
