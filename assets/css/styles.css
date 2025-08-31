@@ -660,7 +660,16 @@ main.tab-content {
 }
     */
 
-/* === DARK MODE SUPPORT === */
+/* ===============================================
+   FIX PARA TEXTO EN MODO CLARO
+   =============================================== */
+@media (prefers-color-scheme: light) {
+    .results-total h3 {
+        color: var(--text-primary) !important; /* Fuerza el texto a ser oscuro */
+    }
+}
+
+    /* === DARK MODE SUPPORT === */
 @media (prefers-color-scheme: dark) {
     :root {
         --surface-primary: #1e293b;
@@ -1512,7 +1521,7 @@ button.primary-btn:hover {
 
 .results-total {
     background: var(--success-gradient);
-    /* color: var(--text-inverse); */
+    color: var(--text-inverse);
     padding: var(--space-lg);
     border-radius: var(--radius-lg);
     text-align: center;
