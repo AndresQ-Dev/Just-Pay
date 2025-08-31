@@ -497,19 +497,15 @@ main.tab-content {
         max-width: 520px;
         margin: 0 auto;
     }
-
-    /* .modal-content {
-        width: 450px;
-        max-width: 520px;
-    } */
-
+    
     .section {
         margin: var(--space-xl) var(--space-lg);
     }
 
     .fab-container {
+        /* Ajustamos la posición para que se alinee con el contenedor */
+        right: calc(50% - 260px - var(--space-lg)); /* 260px es la mitad de 520px */
         bottom: var(--space-2xl);
-        right: var(--space-2xl);
     }
 }
 
@@ -525,6 +521,10 @@ main.tab-content {
 
     .section {
         margin: var(--space-2xl) var(--space-xl);
+    }
+
+    .fab-container {
+        right: calc(50% - 290px - var(--space-lg)); /* 290px es la mitad de 580px */
     }
 }
 
@@ -1207,8 +1207,8 @@ select:focus {
    =============================================== */
 
 .fab-container {
-    position: absolute; /* Se posiciona relativo al .container */
-    bottom: var(--space-xl);
+    position: absolute;
+    bottom: 85px; /* <-- AUMENTADO: Un valor fijo para asegurar el espacio sobre la barra de acción */
     right: var(--space-lg);
     z-index: 100;
 }
@@ -2494,7 +2494,7 @@ button.primary-btn:hover {
     }
 
     .fab-container {
-        right: calc(50% - 290px);
-        /* 290px es la mitad de 580px */
+        right: calc(50% - 290px - var(--space-lg)); /* Ajusta la posición horizontal */
+        bottom: var(--space-2xl); /* AÑADIDO: Sube el botón verticalmente */
     }
 }
