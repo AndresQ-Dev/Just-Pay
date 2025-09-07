@@ -987,7 +987,10 @@ select:focus {
     transform: translateY(0);
 }
 
-/* === CONTENIDO DE LISTAS === */
+/* ===============================================
+   CONTENIDO DE LISTAS (CON HOVER UNIFICADO)
+   =============================================== */
+
 .list-content {
     padding: 0;
 }
@@ -1009,31 +1012,43 @@ select:focus {
     border-bottom: none;
 }
 
-.participant:hover,
-.expense-item:hover {
-    background-color: var(--surface-secondary);
-}
+/* --- INICIO DEL CÓDIGO CORREGIDO PARA EL HOVER --- */
 
-.participant::before {
+/* 1. Define la barra lateral para AMBOS y la mantiene oculta */
+.participant::before,
+.expense-item::before {
     content: '';
     position: absolute;
     left: 0;
     top: 0;
     bottom: 0;
     width: 4px;
-    background: var(--primary-gradient);
     transform: scaleY(0);
     transition: transform var(--transition-fast);
+    transform-origin: center;
 }
 
-.participant:hover::before,
-.expense-item::before {
-    transform: scaleY(1);
+/* 2. Define el color de cada barra */
+.participant::before {
+    background: var(--primary-gradient);
 }
-
 .expense-item::before {
     background: var(--secondary-gradient);
 }
+
+/* 3. Al pasar el mouse sobre CUALQUIERA de los dos, la barra aparece */
+.participant:hover::before,
+.expense-item:hover::before {
+    transform: scaleY(1);
+}
+
+/* 4. Cambia el fondo de toda la fila al pasar el mouse */
+.participant:hover,
+.expense-item:hover {
+    background-color: var(--surface-secondary);
+}
+
+/* --- FIN DEL CÓDIGO CORREGIDO PARA EL HOVER --- */
 
 .participant span,
 .expense-item .expense-info {
@@ -1091,7 +1106,6 @@ select:focus {
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
-
 /* === BOTONES DE ELIMINACIÓN === */
 .remove-btn,
 .delete-btn {
