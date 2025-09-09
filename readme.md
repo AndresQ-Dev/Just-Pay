@@ -1,4 +1,4 @@
-# ✨ Just Pay! - ¡La app para que las cuentas claras conserven la amistad! ✨
+# ✨ Just Pay! - ¡Una app para despreocuparte de las cuentas...! ✨
 
 <div align="center">
     <img src="./assets/img/logo.png" alt="Logo de Just Pay!" width="300">
@@ -52,7 +52,6 @@ Este proyecto fue construido desde cero utilizando tecnologías web modernas par
 * **JavaScript (ES6+):** Es el cerebro de la aplicación. Se usó JavaScript "vanilla" (puro, sin frameworks) para:
     * Manipulación dinámica del DOM.
     * Manejo de todos los eventos e interacciones del usuario.
-    * Organización del código en **Módulos JS** (`import`/`export`) para separar la lógica de cálculo de la interfaz.
 
 ### Funcionalidades Web Modernas
 * **Progressive Web App (PWA):** La aplicación cuenta con un **Web App Manifest (`manifest.json`)** que permite:
@@ -61,4 +60,4 @@ Este proyecto fue construido desde cero utilizando tecnologías web modernas par
 * **Web Storage API (`localStorage`):** Para **guardar automáticamente** la sesión del usuario (participantes y gastos) en el navegador, evitando la pérdida de datos al recargar o cerrar la pestaña.
 * **Clipboard API:** Implementada en el botón "Copiar" para una funcionalidad moderna y segura de copiado al portapapeles.
 
-¡Gracias por usar Just Pay! Ahora, a disfrutar sin preocuparse por las cuentas. 😉
+¡Gracias por usar Just Pay! 😉
