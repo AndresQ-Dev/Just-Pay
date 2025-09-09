@@ -1,5 +1,3 @@
-// assets/js/script.js
-
 import { calculadora } from './calculator.js';
 
 function formatearMoneda(monto) { return `$${monto.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; }
@@ -64,8 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // AHORA EL BOTÓN FLOTANTE (+) MANEJA AMBAS ACCIONES
         document.getElementById('fabAdd').addEventListener('click', handleFabClick);
         
-        // Ya no necesitamos un listener para el botón de la cabecera de participantes
-        // document.getElementById('openAddParticipantModal').addEventListener('click', () => abrirModal('addParticipantModal'));
         
         addParticipantForm.addEventListener('submit', manejarSubmitParticipante);
         addExpenseForm.addEventListener('submit', manejarSubmitGasto);
@@ -85,10 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleFabClick() {
     const participantsPanel = document.getElementById('participantsPanel');
     if (participantsPanel.classList.contains('active')) {
-        // Si estamos en la pestaña de participantes, siempre se puede agregar
         abrirModal('addParticipantModal');
     } else {
-        // Si estamos en la pestaña de gastos, VALIDAMOS PRIMERO
         if (participantes.length >= 2) {
             actualizarSelectPagador();
             popularCheckboxesExcluidos();
@@ -218,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Habilitar el botón solo si las condiciones se cumplen
             verificarEstadoBotonCalcular();
         }
-    }, 1200); // 750 milisegundos de animación
+    }, 800);
 }
     function mostrarResultados(html, texto) {
         const resModal = document.getElementById('resultsModal');
@@ -252,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
         abrirModal('contactModal');
     });
 
-    // AÑADIR ESTE BLOQUE PARA EL NUEVO BOTÓN
+    
     document.getElementById('helpBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
         cerrarMenu();

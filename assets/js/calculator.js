@@ -1,7 +1,5 @@
-// assets/js/calculator.js
-
 /**
- * Formatea un número como moneda en formato argentino (ej. $1.234,56).
+ * Formatea un número como moneda en formato argentino (ej. de 12345.67 a un string así: $12.345,67).
  * @param {number} monto - La cantidad a formatear.
  * @returns {string} El monto formateado como string.
  */
@@ -18,8 +16,6 @@ function formatearMoneda(monto) {
 class CalculadoraLiquidaciones {
     /**
      * Calcula las transferencias mínimas necesarias para saldar todas las deudas.
-     * Este algoritmo calcula los saldos finales de cada persona y luego utiliza un
-     * método "codicioso" (greedy) para liquidar las deudas de la forma más eficiente.
      *
      * @param {string[]} participantes - Array de nombres de participantes.
      * @param {Array<object>} gastos - Array de objetos de gastos.
