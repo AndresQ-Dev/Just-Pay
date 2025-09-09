@@ -1,8 +1,4 @@
-/* =====================================================
-   JUST PAY! - MODERN MOBILE-FIRST INTERFACE
-   ===================================================== */
-
-/* === RESET Y VARIABLES CSS === */
+/*RESET Y VARIABLES CSS*/
 :root {
     /* Colores principales */
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -64,7 +60,7 @@
     --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* === RESET Y BASE === */
+/*RESET Y BASE*/
 * {
     box-sizing: border-box;
     margin: 0;
@@ -96,7 +92,7 @@ body {
     user-select: none;
 }
 
-/* === CONTENEDOR PRINCIPAL === */
+/*CONTENEDOR PRINCIPAL*/
 .container {
     width: 100%;
     max-width: 420px;
@@ -112,7 +108,7 @@ body {
     min-height: calc(100vh - 1rem);
 }
 
-/* === HEADER MODERNO === */
+/*HEADER MODERNO*/
 .header {
     background: var(--primary-gradient);
     padding: var(--space-lg);
@@ -213,21 +209,17 @@ body {
 
 .tab-content {
     /* flex: 1; */
-    /* Permite que el contenido ocupe el espacio restante */
     overflow-y: auto;
-    /* Permite scroll solo en el contenido si es necesario */
     padding: 0 var(--space-md);
     padding-bottom: 160px;
 }
 
 .tab-panel {
     display: none;
-    /* Ocultar paneles por defecto */
 }
 
 .tab-panel.active {
     display: block;
-    /* Mostrar solo el panel activo */
 }
 
 /* Ocultar las secciones originales que ahora son paneles */
@@ -248,7 +240,7 @@ main.tab-content {
     padding: 0 var(--space-md);
 }
 
-/* === ÁREA DE CONTENIDO === */
+/*ÁREA DE CONTENIDO*/
 .main-content {
     flex: 1;
     display: flex;
@@ -256,7 +248,7 @@ main.tab-content {
     overflow-y: auto;
 }
 
-/* === SECCIONES MODERNAS === */
+/*SECCIONES MODERNAS*/
 .section {
     background: var(--surface-primary);
     margin: var(--space-lg);
@@ -300,7 +292,7 @@ main.tab-content {
     content: '💰';
 }
 
-/* === BOTONES MODERNOS === */
+/*BOTONES*/
 .add-form {
     background: var(--success-gradient);
     color: var(--text-inverse);
@@ -388,7 +380,7 @@ main.tab-content {
     backdrop-filter: blur(2px);
 }
 
-/* === FOOTER === */
+/*FOOTER*/
 .footer {
     text-align: center;
     padding: var(--space-lg);
@@ -397,9 +389,7 @@ main.tab-content {
     flex-shrink: 0;
     background: var(--primary-gradient);
     position: relative;
-    /* <-- AÑADIR: Necesario para posicionar la forma */
     overflow: hidden;
-    /* <-- AÑADIR: Recorta la parte del círculo que se sale */
 }
 
 /* Forma redondeada decorativa para el footer */
@@ -407,22 +397,18 @@ main.tab-content {
     content: '';
     position: absolute;
     bottom: -50%;
-    /* Posición en la parte inferior */
     left: -20%;
-    /* Posición a la izquierda */
     width: 200px;
     height: 200px;
     background: rgba(255, 255, 255, 0.1);
-    /* Color semitransparente */
     border-radius: 50%;
-    /* Lo convierte en un círculo */
 }
 
 .footer p {
     font-size: 0.8125rem;
 }
 
-/* === ANIMACIONES Y EFECTOS === */
+/*ANIMACIONES Y EFECTOS*/
 .swipe-hint {
     transform: translateX(-10px);
     background-color: rgba(248, 113, 113, 0.1) !important;
@@ -434,7 +420,7 @@ main.tab-content {
     transition: all var(--transition-normal);
 }
 
-/* === ESTADOS DE HOVER GLOBALES === */
+/*ESTADOS DE HOVER GLOBALES*/
 @media (hover: hover) {
 
     .participant:hover,
@@ -444,7 +430,7 @@ main.tab-content {
 }
 
 /* ===============================================
-   FIX DEFINITIVO PARA BOTONES DE ACCIÓN EN MODAL
+   FIX PARA BOTONES DE ACCIÓN EN MODAL
    =============================================== */
 
 .modal-button-container {
@@ -457,14 +443,9 @@ main.tab-content {
 }
 
 .modal-action-btn {
-    /* --- La Clave para la Alineación --- */
     display: flex;
     align-items: center;
-    /* Centra verticalmente el ícono y el texto */
     justify-content: center;
-    /* Centra horizontalmente el ícono y el texto */
-
-    /* --- Estilos para Apariencia Uniforme --- */
     width: 100%;
     height: 48px;
     padding: var(--space-sm) var(--space-md);
@@ -475,7 +456,6 @@ main.tab-content {
     color: var(--text-inverse);
     cursor: pointer;
     text-decoration: none;
-    /* Si alguno es un enlace */
     transition: all var(--transition-fast);
 }
 
@@ -489,7 +469,7 @@ main.tab-content {
     margin-right: var(--space-sm);
 }
 
-/* === RESPONSIVE DESIGN === */
+/*RESPONSIVE DESIGN*/
 
 /* Desktop Styles */
 @media (min-width: 768px) {
@@ -503,8 +483,8 @@ main.tab-content {
     }
 
     .fab-container {
-        /* Ajustamos la posición para que se alinee con el contenedor */
-        right: calc(50% - 260px - var(--space-lg)); /* 260px es la mitad de 520px */
+        /* Ajusto la posición para que se alinee con el contenedor */
+        right: calc(50% - 260px - var(--space-lg));
         bottom: var(--space-2xl);
     }
 }
@@ -524,7 +504,7 @@ main.tab-content {
     }
 
     .fab-container {
-        right: calc(50% - 290px - var(--space-lg)); /* 290px es la mitad de 580px */
+        right: calc(50% - 290px - var(--space-lg));
     }
 }
 
@@ -599,77 +579,40 @@ main.tab-content {
     .transfer-item {
         display: flex;
         flex-wrap: wrap;
-        /* Permite que los elementos se reordenen en varias líneas */
         align-items: center;
         row-gap: 0;
-        /* Sin espacio extra entre las filas */
         padding-bottom: var(--space-sm);
-        /* Espacio debajo de cada transferencia */
     }
 
     .transfer-description {
         display: flex;
         align-items: center;
         flex-grow: 1;
-        /* Ocupa el espacio disponible */
         flex-shrink: 1;
-        /* Permite que se encoja si no hay espacio */
         min-width: 0;
-        /* Truco de Flexbox para que el encogimiento funcione correctamente */
         overflow: hidden;
-        /* Oculta cualquier contenido que se desborde */
     }
 
     .transfer-amount {
         flex-basis: 100%;
-        /* Ocupa toda la segunda línea */
         text-align: right;
-        /* Alinea el monto a la derecha, que se ve más limpio */
         padding-top: var(--space-xs);
-        /* Pequeño espacio superior */
         font-size: 1.2rem;
         font-weight: var(--font-weight-bold);
     }
 
 }
 
-/*
-
-@media (max-width: 360px) {
-    .header {
-        padding: var(--space-md);
-    }
-
-    .section {
-        margin: var(--space-sm);
-    }
-
-    .section-header {
-        padding: var(--space-md);
-    }
-
-    .participant,
-    .expense-item {
-        padding: var(--space-md);
-    }
-
-    .calculate-btn {
-        min-width: 180px;
-        font-size: 1rem;
-    }
-}
-    */
-
 /* ===============================================
-   FIX PARA TEXTO EN MODO CLARO
+   PARA TEXTO EN MODO CLARO
    =============================================== */
 @media (prefers-color-scheme: light) {
     .results-total h3 {
-        color: var(--text-primary) !important; /* Fuerza el texto a ser oscuro */
+        color: var(--text-primary) !important;
     }
 }
 
-    /* === DARK MODE SUPPORT === */
+    /* SUPPORT DARK MODE*/
 @media (prefers-color-scheme: dark) {
     :root {
         --surface-primary: #1e293b;
@@ -695,7 +638,7 @@ main.tab-content {
     }
 }
 
-/* === UTILIDADES === */
+/*UTILIDADES*/
 .sr-only {
     position: absolute;
     width: 1px;
@@ -708,7 +651,7 @@ main.tab-content {
     border: 0;
 }
 
-/* === FOCUS STATES === */
+/*FOCUS STATES*/
 *:focus {
     outline: 2px solid #667eea;
     outline-offset: 2px;
@@ -721,7 +664,7 @@ select:focus {
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
 }
 
-/* === LOADING STATES === */
+/*LOADING STATES*/
 .loading {
     opacity: 0.6;
     pointer-events: none;
@@ -743,7 +686,7 @@ select:focus {
     }
 }
 
-/* === TOAST NOTIFICATIONS === */
+/*TOAST NOTIFICATIONS*/
 #toast {
     position: fixed;
     bottom: 120px;
@@ -764,7 +707,7 @@ select:focus {
     box-shadow: var(--shadow-lg);
 }
 
-/* === SHORTCUTS FEEDBACK === */
+/*SHORTCUTS FEEDBACK*/
 #shortcut-feedback {
     position: fixed;
     top: var(--space-xl);
@@ -785,7 +728,7 @@ select:focus {
     box-shadow: var(--shadow-xl);
 }
 
-/* === HELP MODAL === */
+/*HELP MODAL*/
 .modal-help-type .shortcuts-grid {
     display: grid;
     gap: var(--space-md);
@@ -830,7 +773,7 @@ select:focus {
     margin: 0;
 }
 
-/* === ABOUT & CONTACT MODALS === */
+/*ABOUT & CONTACT MODALS*/
 .about-content,
 .contact-content {
     line-height: 1.6;
@@ -919,7 +862,7 @@ select:focus {
     text-decoration: underline;
 }
 
-/* === SCROLLBAR CUSTOMIZATION === */
+/*SCROLLBAR CUSTOMIZATION*/
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -940,7 +883,7 @@ select:focus {
     background: var(--text-muted);
 }
 
-/* === PRINT STYLES === */
+/*PRINT STYLES*/
 @media print {
     body {
         background: white;
@@ -961,10 +904,9 @@ select:focus {
     }
 }
 
-/* <-- CORREGIDO: Se cierra solo con una llave } */
 
 
-/* === REGLA RESTAURADA: Faltaba el selector ".add-form" === */
+/*REGLA RESTAURADA*/
 .add-form {
     box-shadow: var(--shadow-sm);
     text-transform: uppercase;
@@ -974,9 +916,6 @@ select:focus {
     align-items: center;
     justify-content: center;
 }
-
-/* <-- CORREGIDO: Esta llave ahora cierra la regla ".add-form" */
-
 
 .add-form:hover {
     transform: translateY(-1px);
@@ -1012,7 +951,7 @@ select:focus {
     border-bottom: none;
 }
 
-/* --- INICIO DEL CÓDIGO CORREGIDO PARA EL HOVER --- */
+/*CóDIGO CORREGIDO PARA EL HOVER */
 
 /* 1. Define la barra lateral para AMBOS y la mantiene oculta */
 .participant::before,
@@ -1048,7 +987,6 @@ select:focus {
     background-color: var(--surface-secondary);
 }
 
-/* --- FIN DEL CÓDIGO CORREGIDO PARA EL HOVER --- */
 
 .participant span,
 .expense-item .expense-info {
@@ -1057,7 +995,7 @@ select:focus {
     color: var(--text-primary);
 }
 
-/* === INFORMACIÓN DE GASTOS === */
+/*INFORMACIÓN DE GASTOS*/
 .expense-info {
     flex: 1;
     display: flex;
@@ -1106,7 +1044,7 @@ select:focus {
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
-/* === BOTONES DE ELIMINACIÓN === */
+/*BOTONES DE ELIMINACIÓN*/
 .remove-btn,
 .delete-btn {
     background: none;
@@ -1131,7 +1069,7 @@ select:focus {
     transform: scale(1.1);
 }
 
-/* === ESTADOS VACÍOS === */
+/*ESTADOS VACÍOS*/
 .empty-state {
     text-align: center;
     padding: var(--space-2xl);
@@ -1158,7 +1096,7 @@ select:focus {
     max-width: 250px;
 }
 
-/* === SECCIÓN DE CÁLCULO === */
+/*SECCIÓN DE CÁLCULO*/
 .calculate-section {
     padding: var(--space-lg);
     display: flex;
@@ -1217,12 +1155,12 @@ select:focus {
 }
 
 /* ===============================================
-   SISTEMA FAB (SIMPLIFICADO Y CORRECTO)
+   SISTEMA FAB
    =============================================== */
 
 .fab-container {
     position: absolute;
-    bottom: 85px; /* <-- AUMENTADO: Un valor fijo para asegurar el espacio sobre la barra de acción */
+    bottom: 85px;
     right: var(--space-lg);
     z-index: 100;
 }
@@ -1248,7 +1186,7 @@ select:focus {
     box-shadow: var(--shadow-lg);
 }
 
-/* === MODALES === */
+/*MODALES*/
 .backdrop {
     position: fixed;
     top: 0;
@@ -1283,7 +1221,6 @@ select:focus {
     justify-content: center;
     padding: var(--space-lg);
 
-    /* La clave de la transición */
     opacity: 0;
     visibility: hidden;
     transition: opacity var(--transition-normal), visibility var(--transition-normal);
@@ -1323,11 +1260,8 @@ select:focus {
     border-radius: var(--radius-2xl);
     box-shadow: var(--shadow-xl);
 
-    /* --- INICIO DEL CAMBIO DEFINITIVO --- */
     width: 100%;
-    /* Ocupa el espacio disponible */
     max-width: 90vh;
-    /* Ancho máximo por defecto (igual que .container) */
 
     transform: scale(0.95);
     transition: transform var(--transition-normal);
@@ -1385,7 +1319,7 @@ select:focus {
     overflow-y: auto;
 }
 
-/* === FORMULARIOS === */
+/*FORMULARIOS*/
 .modal-form {
     display: flex;
     flex-direction: column;
@@ -1464,7 +1398,7 @@ button.primary-btn:hover {
     box-shadow: var(--shadow-lg);
 }
 
-/* === SECCIÓN DE EXCLUIDOS === */
+/*SECCIÓN DE EXCLUIDOS*/
 .excluded-participants-section {
     margin-top: var(--space-lg);
     padding-top: var(--space-lg);
@@ -1505,7 +1439,7 @@ button.primary-btn:hover {
     cursor: pointer;
 }
 
-/* === RESULTADOS === */
+/*RESULTADOS*/
 .results-container {
     max-height: 60vh;
     overflow-y: auto;
@@ -1639,7 +1573,7 @@ button.primary-btn:hover {
     box-shadow: var(--shadow-md);
 }
 
-/* === MENÚ HAMBURGUESA === */
+/*MENÚ HAMBURGUESA*/
 .hamburger-menu {
     background: rgba(15, 23, 42, 0.95);
     backdrop-filter: blur(20px);
@@ -1709,14 +1643,12 @@ button.primary-btn:hover {
     transition: all var(--transition-fast);
 }
 
-/* === Ajustes solicitados === */
+/*Ajustes*/
 
 /* 1) Asegurar visibilidad de botones "Agregar" en header de sección */
 .section-header .add-form {
     transform: none !important;
-    /* antes estaba desplazado y oculto */
     opacity: 1 !important;
-    /* visible siempre */
     box-shadow: var(--shadow-sm);
     min-height: 36px;
     display: flex;
@@ -1727,9 +1659,7 @@ button.primary-btn:hover {
 /* 2) Modal de resultados - solo un scroll general */
 .modal.modal-results-type .modal-body {
     overflow-y: auto;
-    /* Solo el contenedor general scrollea */
     max-height: 70vh;
-    /* Altura controlada en móviles */
 }
 
 .modal.modal-results-type .results-container {
@@ -1813,7 +1743,7 @@ button.primary-btn:hover {
     box-shadow: var(--shadow-md);
 }
 
-/* === Mejoras de legibilidad para modal de resultados === */
+/*Mejoras de legibilidad para modal de resultados*/
 .modal.modal-results-type .modal-body {
     padding: var(--space-lg);
     display: flex;
@@ -1941,11 +1871,6 @@ button.primary-btn:hover {
     margin-top: var(--space-md);
 }
 
-
-/* =====================================================
-   FIX: Modal resultados — scroll único, botones al final
-   ===================================================== */
-
 /* Asegurar que la estructura del modal use flex-column para fijar header y que el body haga scroll */
 .modal-content {
     display: flex;
@@ -1992,7 +1917,7 @@ button.primary-btn:hover {
     overflow: visible !important;
 }
 
-/* Mostrar excluidos en línea aparte (si no está definido ya) */
+/* Mostrar excluidos en línea aparte*/
 .expense-summary-item .excluded-note {
     display: block;
     margin-top: 6px;
@@ -2009,10 +1934,9 @@ button.primary-btn:hover {
     overflow: visible;
 }
 
-/* Asegurar que los botones estén en el flujo (al final del contenido) y no flotando */
+/* Asegurar que los botones estén en el flujo y no flotando */
 .modal-button-container {
     margin-top: 0;
-    /* no usar margin-top: auto ni posicionamientos absolutos */
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-md);
@@ -2031,7 +1955,7 @@ button.primary-btn:hover {
     position: relative;
 }
 
-/* === MODAL DE RESULTADOS - ESTILOS DE ÍCONOS EN BOTONES === */
+/* MODAL DE RESULTADOS - ESTILOS DE ÍCONOS EN BOTONES*/
 #resultsModal .modal-button-container .modal-action-btn i {
     background-color: transparent !important;
 }
@@ -2295,7 +2219,7 @@ button.primary-btn:hover {
     box-shadow: var(--shadow-lg);
 }
 
-/* === BARRA DE ACCIÓN INFERIOR === */
+/* BARRA DE ACCIÓN INFERIOR */
 .action-bar {
     display: flex;
     justify-content: space-between;
@@ -2339,9 +2263,6 @@ button.primary-btn:hover {
     box-shadow: none;
 }
 
-/* ===============================================
-   ESTILOS PARA SPINNER DE CARGA EN BOTÓN
-   =============================================== */
 .calculate-btn .spinner {
     display: none;
     /* Oculto por defecto */
@@ -2370,9 +2291,6 @@ button.primary-btn:hover {
     /* Oculta el texto */
 }
 
-/* ==========================================================
-   ESTILOS PARA MODALES DE INFORMACIÓN (CORREGIDO)
-   ========================================================== */
 
 /* Bloque para el texto en "Acerca de" */
 .info-card-text {
@@ -2431,7 +2349,6 @@ button.primary-btn:hover {
 
 .info-card-logo a {
     text-decoration: none;
-    /* Elimina el subrayado del enlace */
 }
 
 /* Estilos para el modal de Ayuda (se mantienen) */
@@ -2476,7 +2393,7 @@ button.primary-btn:hover {
 
 
 /* ==========================================================
-   FIX DEFINITIVO PARA ANCHO DE MODAL Y CONTENEDOR
+   ANCHO DE MODAL Y CONTENEDOR GENERAl
    ========================================================== */
 
 /* --- Base (Móvil) --- */
@@ -2508,7 +2425,7 @@ button.primary-btn:hover {
     }
 
     .fab-container {
-        right: calc(50% - 290px - var(--space-lg)); /* Ajusta la posición horizontal */
-        bottom: var(--space-2xl); /* AÑADIDO: Sube el botón verticalmente */
+        right: calc(50% - 290px - var(--space-lg));
+        bottom: var(--space-2xl); 
     }
 }
