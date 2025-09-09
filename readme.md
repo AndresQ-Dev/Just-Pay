@@ -29,6 +29,15 @@ Esta app hace el trabajo sucio por ti: registra quién pagó la birra y quién l
 3.  **¡Calcula!:** Toca el botón **"Calcular"** en la barra inferior.
 4.  **¡Listo!:** La app te muestra el resultado para que todos se pongan al día.
 
+## ¿Cómo Funciona el Cálculo?
+¿Te preguntas cómo la app reduce un montón de deudas a unas pocas transferencias? No es magia, usamos un algoritmo de optimización de deudas.
+
+Calcula el Balance Final: Primero, la app olvida los gastos individuales y calcula el balance neto de cada persona en el evento. Averigua quién pagó de más (acreedores) y quién pagó de menos (deudores).
+
+Encuentra la Ruta Más Corta: Luego, en lugar de crear un desorden de pagos cruzados (que Juan le pague a Ana para que Ana le pague a Carlos), el algoritmo encuentra la forma más directa y con la menor cantidad de transferencias para que los deudores paguen a los acreedores.
+
+¡El resultado es la solución más eficiente para que todos queden a mano y sin complicaciones!
+
 ## 🛠️ Tecnologías y Características
 
 Este proyecto fue construido desde cero utilizando tecnologías web modernas para asegurar una experiencia de usuario rápida, responsiva y funcional.
